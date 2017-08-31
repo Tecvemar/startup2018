@@ -102,3 +102,4 @@ ENV/
 
 # Private data
 data/
+code/globals.py
