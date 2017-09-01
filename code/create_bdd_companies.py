@@ -6,16 +6,6 @@ from psycopg2 import connect
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from definitions import dbdata
 
-databases = (
-    'barcelona',
-    'guayana',
-    'monagas',
-    'valencia',
-    'barquisimeto',
-    'falcon',
-    'orinoco',
-    )
-
 con = connect(host=dbdata['host'], dbname='postgres',
               user=dbdata['postgresql_login'],
               password=dbdata['postgresql_password'])
@@ -24,7 +14,7 @@ con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 cur = con.cursor()
 
-for db in databases:
+for db in dbdata['databases']:
     dbdata.update({'database_name': db})
 
     print """DROP DATABASE %(database_name)s""" % dbdata
