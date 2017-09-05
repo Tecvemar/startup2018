@@ -2,8 +2,9 @@
 
 #~ Postgesql user and other private data
 dbdata = {
-    'dbgen': '',
+    'dbgen': 'bdd_ref',
     'host': 'localhost',
+    'rpc_port': 8069,
     'openerp': {
         'login': '',
         'password': '',
@@ -13,9 +14,16 @@ dbdata = {
         'password': '',
         },
     'config_file': '',
-    'backup_file': '',
-    'server_path': '',
-    'addons_path': '',
+    'backup_file': '../data/common/dbgen.backup',
+    'server_path': '~/instancias/produccion/server/bin/',
+    'addons_path': '~/instancias/produccion/modulos/',
+    'databases': ('barcelona',
+                  'guayana',
+                  'monagas',
+                  'valencia',
+                  'barquisimeto',
+                  'falcon',
+                  'orinoco')
     }
 
 #~ To simply params use
