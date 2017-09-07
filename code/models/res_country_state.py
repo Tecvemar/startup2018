@@ -1,13 +1,11 @@
 # -*- encoding: utf-8 -*-
-import csv
+#~ import csv
+from csv2open import csv_2_openerp
 
 
-def common_res_country_state(lnk):
-    res_country_state = csv.DictReader(
-        open('../data/common/res_country_state.csv'))
-    for state in res_country_state:
-        state_id = lnk.execute(
-            'res.country.state', 'search', [('name', '=', state['name']),
-                                            ('country_id', '=', 229)])
-        if not state_id:
-            lnk.execute('res.country.state', 'create', state)
+def load_res_country_state(lnk):
+    c2o = csv_2_openerp(
+        '../data/common/res_country_state.csv', 'res.country.state', lnk)
+    c2o.set_search_fields(['name', 'country_id'])
+    c2o.set_integer_fields(['country_id'])
+    c2o.process_csv()
