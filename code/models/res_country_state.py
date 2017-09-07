@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-#~ import csv
 from csv2open import csv_2_openerp
 
 
