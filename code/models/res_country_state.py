@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-from definitions import dbdata
 import csv
 
 
