@@ -12,9 +12,9 @@ lnk_dbgen = openerp_link(
 
 print 'Cargando datos comunes...'
 
-models.common_res_users(lnk_dbgen)
+models.load_res_users(lnk_dbgen)
 models.load_res_country_state(lnk_dbgen)
-models.common_product_product_features(lnk_dbgen)
+models.load_product_product_features(lnk_dbgen)
 
 
 

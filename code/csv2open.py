@@ -46,7 +46,6 @@ class csv_2_openerp(object):
         search_args = []
         for field in self.search_fields:
             search_args.append((field, '=', item[field]))
-        print search_args
         item_ids = self.lnk.execute(
             self.model, 'search', search_args)
         return item_ids

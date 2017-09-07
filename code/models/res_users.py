@@ -3,7 +3,7 @@ from definitions import dbdata
 import csv
 
 
-def common_res_users(lnk):
+def load_res_users(lnk):
     admin_id = lnk.execute(
         'res.users', 'search', [('login', '=', dbdata['openerp_login'])])
     admin_id = admin_id and len(admin_id) == 1 and admin_id[0] or None
