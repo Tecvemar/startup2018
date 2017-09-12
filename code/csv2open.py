@@ -29,7 +29,7 @@ class csv_2_openerp(object):
             for f in self.integer_fields:
                 item[f] = int(item[f])
             for f in self.boolean_fields:
-                item[f] = item[f] == 't'
+                item[f] = item[f] == 't' or item[f] == 'True'
             for f in self.float_fields:
                 item[f] = float(item[f])
             for f in self.relational_fields:

@@ -70,7 +70,7 @@ module_list = [
     'stock',
     'tcv_account',
     'tcv_account_management',
-    'tcv_account_sync',
+    #~ 'tcv_account_sync',
     'tcv_account_voucher',
     'tcv_account_voucher_extra_wkf',
     'tcv_advance',
