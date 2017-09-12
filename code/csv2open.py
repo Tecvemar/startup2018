@@ -11,6 +11,7 @@ class csv_2_openerp(object):
         self.lnk = lnk
         self.search_fields = []
         self.integer_fields = []
+        self.boolean_fields = []
         self.float_fields = []
         self.relational_fields = []
         self.relations = []
@@ -24,13 +25,15 @@ class csv_2_openerp(object):
         for item in csv_reader:
             for f in self.integer_fields:
                 item[f] = int(item[f])
+            for f in self.boolean_fields:
+                item[f] = item[f] == 't'
             for f in self.float_fields:
                 item[f] = float(item[f])
             for f in self.relational_fields:
                 value = self.find_duplicated(
                     item[f], self.relations[f]['model'],
                     self.relations[f]['search_fields'])
-                item[f] = value and len(value) == 1 and value[0] or None
+                item[f] = value and len(value) == 1 and value[0] or 0
             res.append(item)
         return res
 
@@ -46,12 +49,21 @@ class csv_2_openerp(object):
 
     def set_integer_fields(self, fields_list):
         '''
-        fields_list: A list of file namesto be converted to int value
+        fields_list: A list of file names o be converted to int value
         Sample:
             csv_2_openerp.set_integer_fields(['pieces'])
         '''
         self.integer_fields = []
         self.integer_fields.extend(fields_list)
+
+    def set_boolean_fields(self, fields_list):
+        '''
+        fields_list: A list of file names to be converted to bool value
+        Sample:
+            csv_2_openerp.set_integer_fields(['pieces'])
+        '''
+        self.boolean_fields = []
+        self.boolean_fields.extend(fields_list)
 
     def set_float_fields(self, fields_list):
         '''
