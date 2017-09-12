@@ -5,10 +5,13 @@ import csv
 class csv_2_openerp(object):
 
     def __init__(self, csv_file, model, lnk):
+        '''
+        '''
         print 'Cargando: %s...' % (model)
         self.csv_file = csv_file
         self.model = model
         self.lnk = lnk
+        self.update_records = False
         self.search_fields = []
         self.integer_fields = []
         self.boolean_fields = []
@@ -110,5 +113,10 @@ class csv_2_openerp(object):
     def process_csv(self):
         self.load_csv()
         for item in self.csv_data:
-            if not self.find_duplicated(item):
+            item_ids = self.find_duplicated(item)
+            print item_ids
+            if not item_ids:
+                print item
                 self.lnk.execute(self.model, 'create', item)
+            elif self.update_records and len(item_ids) == 1:
+                self.lnk.execute(self.model, 'write', item_ids, item)
