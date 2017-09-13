@@ -6,7 +6,9 @@ def load_account_tax(lnk):
 
     c2o = csv_2_openerp(
         '../data/common/account_tax.csv', 'account.tax', lnk)
+
     c2o.set_search_fields(['name'])
+
     c2o.set_float_fields(['amount',
                           'base_sign',
                           'ref_base_sign',
@@ -20,6 +22,7 @@ def load_account_tax(lnk):
                             'include_base_amount'])
 
     c2o.set_integer_fields(['sequence'])
+
     c2o.set_relational_fields([
         ('wh_vat_collected_account_id', 'account_account', ['code']),
         ('account_collected_id', 'account_account', ['code']),
