@@ -21,4 +21,5 @@ print 'Cargando datos comunes...'
 #~ models.update_res_currency(lnk_dbgen)
 #~ models.update_res_company(lnk_dbgen)
 #~ models.load_account_account(lnk_dbgen)
-models.load_account_payment_term(lnk_dbgen)
+#~ models.load_account_payment_term(lnk_dbgen)
+models.load_account_payment_term_line(lnk_dbgen)
