@@ -3,7 +3,7 @@ from csv2open import csv_2_openerp
 
 
 def load_account_payment_term_line(lnk):
-    #~ payment term table
+    #~ payment term table line
     c2o = csv_2_openerp(
         '../data/common/account_payment_term_line.csv',
         'account.payment.term.line', lnk)
