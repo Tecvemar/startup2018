@@ -18,5 +18,6 @@ print 'Cargando datos comunes...'
 #~ models.load_res_partner_title(lnk_dbgen)
 #~ models.load_product_uom(lnk_dbgen)
 #~ models.load_account_account_type(lnk_dbgen)
+models.update_res_currency(lnk_dbgen)
 #~ models.update_res_company(lnk_dbgen)
-models.load_account_account(lnk_dbgen)
+#~ models.load_account_account(lnk_dbgen)

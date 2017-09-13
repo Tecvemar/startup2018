@@ -70,7 +70,7 @@ class csv_2_openerp(object):
 
     def set_float_fields(self, fields_list):
         '''
-        fields_list: A list of file namesto be converted to float value
+        fields_list: A list of file names to be converted to float value
         Sample:
             csv_2_openerp.set_float_fields(['amount'])
         '''
@@ -114,9 +114,7 @@ class csv_2_openerp(object):
         self.load_csv()
         for item in self.csv_data:
             item_ids = self.find_duplicated(item)
-            print item_ids
             if not item_ids:
-                print item
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)

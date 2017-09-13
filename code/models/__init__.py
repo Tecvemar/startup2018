@@ -6,3 +6,4 @@ from product_uom import load_product_uom
 from account_account_type import load_account_account_type
 from account_account import load_account_account
 from res_company import update_res_company
+from res_currency import update_res_currency
