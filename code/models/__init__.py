@@ -9,3 +9,4 @@ from res_company import update_res_company
 from res_currency import update_res_currency
 from account_payment_term import load_account_payment_term
 from account_payment_term_line import load_account_payment_term_line
+from tcv_bank_list import load_tcv_bank_list
