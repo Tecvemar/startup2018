@@ -18,6 +18,7 @@ class csv_2_openerp(object):
         self.float_fields = []
         self.relational_fields = []
         self.relations = []
+        self.search_cache = {}
 
     def load_csv(self):
         self.csv_data = self.format_csv_data(
@@ -106,8 +107,15 @@ class csv_2_openerp(object):
                 search_args.append((field, '=', item[field]))
             else:
                 search_args.append((field, '=', item))
+        cache_key = '%s%s' % (
+            model,
+            str(search_args).strip('[]').replace("'", '').replace(', ', ''))
+        if cache_key in self.search_cache:
+            return self.search_cache[cache_key]
         item_ids = self.lnk.execute(
             model, 'search', search_args)
+        if item_ids:
+            self.search_cache[cache_key] = item_ids
         return item_ids
 
     def process_csv(self):
@@ -118,3 +126,6 @@ class csv_2_openerp(object):
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)
+
+    def execute(self, model, action, *args):
+        self.lnk.execute(model, action, *args)
