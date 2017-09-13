@@ -125,5 +125,3 @@ os.system('python oerp_ws.py '
             + '--modules=%s ' % MODULES
             + ' %s ' % ACTION
             )
-
-
