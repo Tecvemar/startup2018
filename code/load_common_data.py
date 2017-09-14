@@ -25,4 +25,5 @@ print 'Cargando datos comunes...'
 #~ models.load_account_payment_term_line(lnk_dbgen)
 #~ models.load_tcv_bank_list(lnk_dbgen)
 #~ models.load_l10n_ut(lnk_dbgen)
-models.load_account_tax(lnk_dbgen)
+#~ models.load_account_tax(lnk_dbgen)
+models.load_account_journal(lnk_dbgen)

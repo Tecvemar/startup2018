@@ -12,3 +12,4 @@ from account_payment_term_line import load_account_payment_term_line
 from tcv_bank_list import load_tcv_bank_list
 from l10n_ut import load_l10n_ut
 from account_tax import load_account_tax
+from account_journal import load_account_journal
