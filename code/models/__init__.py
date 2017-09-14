@@ -14,3 +14,4 @@ from l10n_ut import load_l10n_ut
 from account_tax import load_account_tax
 from account_journal import load_account_journal
 from product_category import load_product_category
+from product_product_tile_format import load_product_product_tile_format

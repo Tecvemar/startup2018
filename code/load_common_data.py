@@ -27,4 +27,5 @@ print 'Cargando datos comunes...'
 #~ models.load_l10n_ut(lnk_dbgen)
 #~ models.load_account_tax(lnk_dbgen)
 #~ models.load_account_journal(lnk_dbgen)
-models.load_product_category(lnk_dbgen)
+#~ models.load_product_category(lnk_dbgen)
+models.load_product_product_tile_format(lnk_dbgen)
