@@ -18,3 +18,4 @@ from product_product_tile_format import load_product_product_tile_format
 from stock_journal import load_stock_journal
 from tcv_stock_changes_method import load_tcv_stock_changes_method
 from product_product import load_product_product
+from res_partner import load_res_partnert
