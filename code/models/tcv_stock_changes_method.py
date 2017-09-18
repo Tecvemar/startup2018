@@ -12,10 +12,7 @@ def load_tcv_stock_changes_method(lnk):
                                 'account.journal', ['name']),
                                ('stock_journal_id',
                                 'stock.journal', ['name']),
-                               ('stock_location_id',
+                               ('stock_journal_id',
                                 'stock.location', ['name']),
                                ])
     c2o.process_csv()
-
-
-

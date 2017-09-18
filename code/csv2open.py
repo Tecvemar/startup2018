@@ -27,6 +27,7 @@ class csv_2_openerp(object):
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
+            print item
             for f in self.integer_fields:
                 item[f] = int(item[f])
             for f in self.boolean_fields:
