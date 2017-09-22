@@ -27,12 +27,12 @@ class csv_2_openerp(object):
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
+            print item
             for f in self.integer_fields:
                 item[f] = int(item[f])
             for f in self.boolean_fields:
                 item[f] = item[f] == 't' or item[f] == 'True'
             for f in self.float_fields:
-                print item, f
                 item[f] = float(item[f])
             for f in self.relational_fields:
                 value = self.find_duplicated(
@@ -123,7 +123,6 @@ class csv_2_openerp(object):
         self.load_csv()
         for item in self.csv_data:
             item_ids = self.find_duplicated(item)
-            print item, item_ids
             if not item_ids:
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:

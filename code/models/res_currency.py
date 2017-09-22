@@ -22,7 +22,7 @@ def update_res_currency(lnk):
     #~ set rate to 1.0
     c2o = csv_2_openerp(
         '../data/common/res_currency_rate.csv', 'res.currency.rate', lnk)
-    c2o.set_search_fields(['name', 'currency_id'])
+    c2o.set_search_fields(['currency_id'])
     c2o.set_relational_fields([('currency_id', 'res.currency', ['name'])])
     c2o.set_float_fields(['rate', 'inv_rate'])
     c2o.update_records = True

@@ -12,3 +12,13 @@ from account_payment_term_line import load_account_payment_term_line
 from tcv_bank_list import load_tcv_bank_list
 from l10n_ut import load_l10n_ut
 from account_tax import load_account_tax
+from account_journal import load_account_journal
+from product_category import load_product_category
+from product_product_tile_format import load_product_product_tile_format
+from stock_journal import load_stock_journal
+from tcv_stock_changes_method import load_tcv_stock_changes_method
+from product_product import load_product_product
+from res_partner_account import load_res_partner_account
+from res_partner import load_res_partner
+from tcv_driver_vehicle import load_tcv_driver_vehicle
+from res_partner_address import load_res_partner_address
