@@ -32,4 +32,7 @@ print 'Cargando datos comunes...'
 #~ models.load_stock_journal(lnk_dbgen)
 #~ models.load_tcv_stock_changes_method(lnk_dbgen)
 #~ models.load_product_product(lnk_dbgen)
-models.load_res_partnert(lnk_dbgen)
+#~ models.load_res_partner_account(lnk_dbgen)
+#~ models.load_res_partner(lnk_dbgen)
+#~ models.load_tcv_driver_vehicle
+#~ models.load_res_partner_address(lnk_dbgen)
