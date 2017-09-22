@@ -21,8 +21,9 @@ class csv_2_openerp(object):
         self.search_cache = {}
 
     def load_csv(self):
-        self.csv_data = self.format_csv_data(
-            csv.DictReader(open(self.csv_file)))
+        if self.csv_file:
+            self.csv_data = self.format_csv_data(
+                csv.DictReader(open(self.csv_file)))
 
     def format_csv_data(self, csv_reader):
         res = []
@@ -105,9 +106,11 @@ class csv_2_openerp(object):
         search_args = []
         for field in search_fields:
             if type(item) in (dict, list):
-                search_args.append((field, '=', item[field]))
+                if item[field]:
+                    search_args.append((field, '=', item[field]))
             else:
-                search_args.append((field, '=', item))
+                if item:
+                    search_args.append((field, '=', item))
         cache_key = '%s%s' % (
             model,
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
@@ -124,6 +127,7 @@ class csv_2_openerp(object):
         for item in self.csv_data:
             item_ids = self.find_duplicated(item)
             if not item_ids:
+                print item
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)
