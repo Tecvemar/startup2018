@@ -21,13 +21,13 @@ class csv_2_openerp(object):
         self.search_cache = {}
 
     def load_csv(self):
-        self.csv_data = self.format_csv_data(
-            csv.DictReader(open(self.csv_file)))
+        if self.csv_file:
+            self.csv_data = self.format_csv_data(
+                csv.DictReader(open(self.csv_file)))
 
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
-            print item
             for f in self.integer_fields:
                 item[f] = int(item[f])
             for f in self.boolean_fields:
@@ -105,9 +105,11 @@ class csv_2_openerp(object):
         search_args = []
         for field in search_fields:
             if type(item) in (dict, list):
-                search_args.append((field, '=', item[field]))
+                if item[field]:
+                    search_args.append((field, '=', item[field]))
             else:
-                search_args.append((field, '=', item))
+                if item:
+                    search_args.append((field, '=', item))
         cache_key = '%s%s' % (
             model,
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
