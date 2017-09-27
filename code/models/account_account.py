@@ -3,6 +3,7 @@ from csv2open import csv_2_openerp
 
 
 def load_account_account(lnk):
+
     c2o = csv_2_openerp(
         '../data/common/account_account.csv', 'account.account', lnk)
     c2o.set_search_fields(['code'])
