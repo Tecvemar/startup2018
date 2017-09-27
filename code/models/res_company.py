@@ -3,6 +3,7 @@ from csv2open import csv_2_openerp
 
 
 def update_res_company(lnk):
+
     c2o = csv_2_openerp(
         '../data/common/res_company.csv', 'res.company', lnk)
     c2o.set_search_fields(['name'])
