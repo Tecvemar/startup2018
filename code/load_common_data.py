@@ -41,7 +41,8 @@ models.load_stock_journal(lnk_dbgen)
 models.load_tcv_stock_changes_method(lnk_dbgen)
 models.load_product_product(lnk_dbgen)
 models.load_tcv_driver_vehicle(lnk_dbgen)
-
+models.load_product_pricelist(lnk_dbgen)
+models.load_tcv_igtf(lnk_dbgen)
 
 # models.load_res_partner_account(lnk_dbgen)
 # models.load_res_partner(lnk_dbgen)
