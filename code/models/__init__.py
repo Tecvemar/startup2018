@@ -23,3 +23,5 @@ from res_partner_account import load_res_partner_account
 from res_partner import load_res_partner
 from tcv_driver_vehicle import load_tcv_driver_vehicle
 from res_partner_address import load_res_partner_address
+from product_pricelist import load_product_pricelist
+from tcv_igtf import load_tcv_igtf
