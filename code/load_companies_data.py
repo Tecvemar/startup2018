@@ -4,6 +4,7 @@ from profit_lnk import profit_link
 from definitions import dbdata
 import companies
 
+
 #~ for database in dbdata['databases']:
 for database in ['guayana']:
     lnk_dbprofit = profit_link(
@@ -23,3 +24,6 @@ for database in ['guayana']:
 
     #~ companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
+    companies.load_res_company(lnk_dbcom)
+    companies.load_stock_warehouse(lnk_dbcom)
+    companies.load_sale_shop(lnk_dbcom)
