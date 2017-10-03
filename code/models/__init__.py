@@ -25,3 +25,5 @@ from tcv_driver_vehicle import load_tcv_driver_vehicle
 from res_partner_address import load_res_partner_address
 from product_pricelist import load_product_pricelist
 from tcv_igtf import load_tcv_igtf
+from account_fiscalyear import load_account_fiscalyear
+from account_period import load_account_period
