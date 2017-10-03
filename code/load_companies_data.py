@@ -22,8 +22,9 @@ for database in ['guayana']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    #~ companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
+    companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)
     companies.load_sale_shop(lnk_dbcom)
+    companies.load_account_account_0(lnk_dbcom)

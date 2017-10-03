@@ -7,3 +7,4 @@ from stock_warehouse import load_stock_warehouse
 from sale_shop import load_sale_shop
 from bank_account_journal import load_bank_account_journal
 from stock_production_lot import load_stock_production_lot
+from account_account_0 import load_account_account_0

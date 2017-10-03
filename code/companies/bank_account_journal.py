@@ -3,6 +3,7 @@ from profit2open import profit_2_openerp
 
 
 def load_bank_account_journal(lnk, profit):
+
     p2o = profit_2_openerp('account.account', lnk, profit)
     p2o.set_sql(
         '''

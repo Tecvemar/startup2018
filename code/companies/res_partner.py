@@ -3,6 +3,7 @@ from csv2open import csv_2_openerp
 
 
 def load_res_partner(lnk):
+
     work_dir = '../data/%s/' % lnk.database
     c2o = csv_2_openerp(
         work_dir + 'res_partner.csv', 'res.partner', lnk)
