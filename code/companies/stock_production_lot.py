@@ -1,15 +1,25 @@
 # -*- encoding: utf-8 -*-
-from csv2open import csv_2_openerp
+from profit2open import profit_2_openerp
 
 
-def load_stock_production_lot(lnk):
-    work_dir = '../data/%s/' % lnk.database
-    c2o = csv_2_openerp(
-        work_dir + 'stock_production_lot.csv', 'stock.production.lot', lnk)
-    c2o.set_search_fields(['name'])
-    c2o.set_float_fields([
-        'length', 'heigth', 'property_cost_price',])
-    c2o.set_relational_fields([
+def load_stock_production_lot(lnk, profit):
+    p2o = profit_2_openerp('stock.production.lot', lnk, profit)
+    p2o.set_sql(
+        '''
+select rtrim(r.nro_lote) as name, rtrim(r.co_art) as product_id,
+       e.fec_emis as date, rtrim(n.aux02) as aux02,
+       n.prec_vta as property_cost_price
+from factura f
+left join reng_fac r on r.fact_num = f.fact_num
+left join reng_com n on r.nro_lote = n.nro_lote and r.co_art = n.co_art
+left join compras e on n.fact_num = e.fact_num
+where f.fec_emis between '2017-01-01' and '2017-12-31' and
+      e.fec_emis < '2017-01-01' and f.anulada = 0
+group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
+        ''')
+    p2o.set_search_fields(['name', 'product_id'])
+    p2o.set_relational_fields([
         ('product_id', 'product.product', ['default_code']),
         ])
-    c2o.process_csv()
+    p2o.set_aux02_fields(['heigth', 'length'])
+    p2o.process_csv()

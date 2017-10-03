@@ -1,2 +1,2 @@
+from bank_account_journal import load_bank_account_journal
 from stock_production_lot import load_stock_production_lot
-
