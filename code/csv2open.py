@@ -11,6 +11,7 @@ class csv_2_openerp(object):
         self.csv_file = csv_file
         self.model = model
         self.lnk = lnk
+        self.data = []
         self.update_records = False
         self.search_fields = []
         self.integer_fields = []
@@ -20,26 +21,29 @@ class csv_2_openerp(object):
         self.relations = []
         self.search_cache = {}
 
-    def load_csv(self):
+    def load_data(self):
         if self.csv_file:
-            self.csv_data = self.format_csv_data(
+            self.data = self.format_csv_data(
                 csv.DictReader(open(self.csv_file)))
+
+    def format_data_row(self, item):
+        for f in self.integer_fields:
+            item[f] = int(item[f])
+        for f in self.boolean_fields:
+            item[f] = item[f] == 't' or item[f] == 'True'
+        for f in self.float_fields:
+            item[f] = float(item[f])
+        for f in self.relational_fields:
+            value = self.find_duplicated(
+                item[f], self.relations[f]['model'],
+                self.relations[f]['search_fields'])
+            item[f] = value and len(value) == 1 and value[0] or 0
+        return item
 
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
-            for f in self.integer_fields:
-                item[f] = int(item[f])
-            for f in self.boolean_fields:
-                item[f] = item[f] == 't' or item[f] == 'True'
-            for f in self.float_fields:
-                item[f] = float(item[f])
-            for f in self.relational_fields:
-                value = self.find_duplicated(
-                    item[f], self.relations[f]['model'],
-                    self.relations[f]['search_fields'])
-                item[f] = value and len(value) == 1 and value[0] or 0
-            res.append(item)
+            res.append(self.format_data_row(item))
         return res
 
     def set_search_fields(self, fields_list):
@@ -122,13 +126,19 @@ class csv_2_openerp(object):
         return item_ids
 
     def process_csv(self):
-        self.load_csv()
-        for item in self.csv_data:
+        self.load_data()
+        for item in self.data:
             item_ids = self.find_duplicated(item)
             if not item_ids:
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)
+
+    def test_data_file(self):
+        self.load_data()
+        for item in self.data:
+            print item
+
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)
