@@ -3,6 +3,7 @@
 #~ Postgesql user and other private data
 dbdata = {
     'dbgen': 'bdd_ref',
+    'dbdesarrollo': 'desarrollo',
     'host': 'localhost',
     'rpc_port': 8069,
     'openerp': {
@@ -13,7 +14,11 @@ dbdata = {
         'login': '',
         'password': '',
         },
-    'config_file': '',
+    'profit': {
+        'login': '',
+        'password': '',
+        },
+    'config_file': '/home/jmarquez/.openerp_serverrc',
     'backup_file': '../data/common/dbgen.backup',
     'server_path': '~/instancias/produccion/server/bin/',
     'addons_path': '~/instancias/produccion/modulos/',
@@ -23,7 +28,19 @@ dbdata = {
                   'valencia',
                   'barquisimeto',
                   'falcon',
-                  'orinoco')
+                  'orinoco'),
+    'barcelona': {
+        'profit': {
+            'host': '',
+            'db': '',
+            }
+        },
+    'guayana': {
+        'profit': {
+            'host': '',
+            'db': '',
+            }
+        }
     }
 
 #~ To simply params use
@@ -32,5 +49,6 @@ dbdata.update({
     'openerp_password': dbdata['openerp']['password'],
     'postgresql_login': dbdata['postgresql']['login'],
     'postgresql_password': dbdata['postgresql']['password'],
+    'profit_login': dbdata['profit']['login'],
+    'profit_password': dbdata['profit']['password'],
     })
-
