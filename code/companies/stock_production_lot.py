@@ -3,7 +3,7 @@ from csv2open import csv_2_openerp
 
 
 def load_stock_production_lot(lnk):
-    work_dir = '../data/%s/' % lnk.database
+    work_dir = '../data/companies/%s/' % lnk.database
     c2o = csv_2_openerp(
         work_dir + 'stock_production_lot.csv', 'stock.production.lot', lnk)
     c2o.set_search_fields(['name'])
