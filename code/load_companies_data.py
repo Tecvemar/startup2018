@@ -30,3 +30,5 @@ for database in ['guayana']:
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)
     companies.load_sale_shop(lnk_dbcom)
+    companies.load_account_account_0(lnk_dbcom)
+    companies.load_res_partner_address(lnk_dbcom)
