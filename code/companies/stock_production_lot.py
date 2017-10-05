@@ -3,7 +3,8 @@ from profit2open import profit_2_openerp
 
 
 def load_stock_production_lot(lnk, profit):
-
+    if not profit:
+        return
     p2o = profit_2_openerp('stock.production.lot', lnk, profit)
     p2o.set_sql(
         '''

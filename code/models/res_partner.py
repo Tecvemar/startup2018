@@ -13,11 +13,15 @@ def load_res_partner(lnk):
                             'spn', 'wh_iva_agent',
                             'group_wh_iva_doc', 'vat_subjected'])
     c2o.set_relational_fields([
-        ('account_kind_rec', 'res.partner.account', ['name']),
-        ('account_kind_pay', 'res.partner.account', ['name']),
-        ('property_account_receivable', 'account.account', ['parent_id']),
-        ('property_account_payable', 'account.account', ['parent_id']),
-        ('property_account_advance', 'account.account', ['parent_id']),
-        ('property_account_prepaid', 'account.account', ['parent_id']),
+        #~ ('account_kind_rec', 'res.partner.account', ['name']),
+        #~ ('account_kind_pay', 'res.partner.account', ['name']),
+        ('property_account_receivable', 'account.account', ['code']),
+        ('property_account_payable', 'account.account', ['code']),
+        ('property_account_advance', 'account.account', ['code']),
+        ('property_account_prepaid', 'account.account', ['code']),
+        ('property_stock_customer', 'stock.location', ['name']),
+        ('property_stock_supplier', 'stock.location', ['name']),
         ])
+    c2o.set_child_model_fields(['address'])
+    c2o.test_data_file()
     c2o.process_csv()

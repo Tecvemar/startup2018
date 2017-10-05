@@ -5,13 +5,16 @@ from definitions import dbdata
 import companies
 
 
-for database in dbdata['databases']:
-#~ for database in ['guayana']:
-    lnk_dbprofit = profit_link(
-        dbdata[database]['profit']['host'],
-        dbdata[database]['profit']['db'],
-        dbdata['profit_login'],
-        dbdata['profit_password'])
+#~ for database in dbdata['databases']:
+for database in ['guayana']:
+    if dbdata[database]['profit']:
+        lnk_dbprofit = profit_link(
+            dbdata[database]['profit']['host'],
+            dbdata[database]['profit']['db'],
+            dbdata['profit_login'],
+            dbdata['profit_password'])
+    else:
+        lnk_dbprofit = False
 
     lnk_dbcom = openerp_link(
         dbdata['host'],
