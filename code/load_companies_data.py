@@ -7,11 +7,14 @@ import companies
 
 #~ for database in dbdata['databases']:
 for database in ['guayana']:
-    lnk_dbprofit = profit_link(
-        dbdata[database]['profit']['host'],
-        dbdata[database]['profit']['db'],
-        dbdata['profit_login'],
-        dbdata['profit_password'])
+    if dbdata[database]['profit']:
+        lnk_dbprofit = profit_link(
+            dbdata[database]['profit']['host'],
+            dbdata[database]['profit']['db'],
+            dbdata['profit_login'],
+            dbdata['profit_password'])
+    else:
+        lnk_dbprofit = False
 
     lnk_dbcom = openerp_link(
         dbdata['host'],
@@ -22,7 +25,7 @@ for database in ['guayana']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    #~ companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
+    companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)

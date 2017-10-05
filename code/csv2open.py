@@ -18,7 +18,8 @@ class csv_2_openerp(object):
         self.boolean_fields = []
         self.float_fields = []
         self.relational_fields = []
-        self.relations = []
+        self.child_model_fields = []
+        self.relations = {}
         self.search_cache = {}
 
     def load_data(self):
@@ -40,10 +41,28 @@ class csv_2_openerp(object):
             item[f] = value and len(value) == 1 and value[0] or 0
         return item
 
+    def format_chield_data(self, item):
+        '''
+        Process child_models_fields list and separate in new child_dict, then
+        delete original keys and replace with
+        Child_field: (0, 0, {child_dict})
+        '''
+        for field in self.child_model_fields:
+            field_dot = field + '.'
+            child_keys = filter(
+                None, [x if field_dot in x else None for x in item.keys()])
+            chks = [x.replace(field_dot, '') for x in child_keys]
+            child_dict = {
+                chks[x]: item[child_keys[x]] for x in range(len(chks))}
+            [item.pop(f) for f in child_keys]
+            item.update({field: [(0, 0, child_dict)]})
+
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
-            res.append(self.format_data_row(item))
+            row = self.format_data_row(item)
+            self.format_chield_data(row)
+            res.append(row)
         return res
 
     def set_search_fields(self, fields_list):
@@ -101,6 +120,13 @@ class csv_2_openerp(object):
                           'search_fields': item[2],
                           }})
 
+    def set_child_model_fields(self, child_models):
+        '''
+        List of child fields: ['field_name1','field_name2']
+        '''
+        self.child_model_fields = []
+        self.child_model_fields.extend(child_models)
+
     def find_duplicated(self, item, model=False, search_fields=[]):
         if not model:
             model = self.model
@@ -138,7 +164,6 @@ class csv_2_openerp(object):
         self.load_data()
         for item in self.data:
             print item
-
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)
