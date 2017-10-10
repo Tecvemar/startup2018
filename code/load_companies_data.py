@@ -5,8 +5,8 @@ from definitions import dbdata
 import companies
 
 
-#~ for database in dbdata['databases']:
-for database in ['guayana']:
+#~ for database in ['guayana']:
+for database in dbdata['databases'][:4]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],

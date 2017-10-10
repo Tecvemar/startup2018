@@ -38,6 +38,8 @@ class csv_2_openerp(object):
             value = self.find_duplicated(
                 item[f], self.relations[f]['model'],
                 self.relations[f]['search_fields'])
+            if not value:
+                print '\tNo encontrado! -> %s: %s ' % (f, item[f])
             item[f] = value and len(value) == 1 and value[0] or 0
         return item
 

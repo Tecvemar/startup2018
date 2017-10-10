@@ -22,7 +22,7 @@ def load_product_product(lnk):
         ('finish_id', 'product.product.features', ['name']),
         ('quality_id', 'product.product.features', ['name']),
         ('tile_format_id', 'product.product.tile.format', ['name']),
-        ('origin_country_id', 'res.country', ['name']),
+        ('origin_country_id', 'res.country', ['code']),
         ('concept_id', 'islr.wh.concept', ['name'])
         ])
     c2o.process_csv()

@@ -14,7 +14,7 @@ class profit_link(object):
         self.args = {}
 
     def open_link(self):
-        print 'Conectando a mssql server (%s)...' % self.database
+        print 'Conectando a mssql server (%s)...' % self.host
         self.conn_profit = pymssql.connect(
             host=self.host,
             user=self.user_name,
