@@ -27,6 +27,14 @@ class csv_2_openerp(object):
             self.data = self.format_csv_data(
                 csv.DictReader(open(self.csv_file)))
 
+    def find_related_field_value(self, item, f):
+        value = self.find_duplicated(
+            item[f], self.relations[f]['model'],
+            self.relations[f]['search_fields'])
+        if not value and item[f]:
+            print '\tNo encontrado! -> %s: %s ' % (f, item[f])
+        return value and len(value) == 1 and value[0] or 0
+
     def format_data_row(self, item):
         for f in self.integer_fields:
             item[f] = int(item[f])
@@ -35,12 +43,8 @@ class csv_2_openerp(object):
         for f in self.float_fields:
             item[f] = float(item[f])
         for f in self.relational_fields:
-            value = self.find_duplicated(
-                item[f], self.relations[f]['model'],
-                self.relations[f]['search_fields'])
-            if not value:
-                print '\tNo encontrado! -> %s: %s ' % (f, item[f])
-            item[f] = value and len(value) == 1 and value[0] or 0
+            if not self.relations[f]['self_search']:
+                item[f] = self.find_related_field_value(item, f)
         return item
 
     def format_chield_data(self, item):
@@ -111,6 +115,9 @@ class csv_2_openerp(object):
         Sample:
             csv_2_openerp.set_relational_fields(
                 [('partner_id', 'res.partner', 'vat'), ])
+        Updated data values:
+            self.relations a Dict with relations data for each field
+            self.relational_fields List with user's relations
         '''
         self.relational_fields = []
         self.relational_fields.extend(
@@ -120,6 +127,7 @@ class csv_2_openerp(object):
             self.relations.update({
                 item[0]: {'model': item[1],
                           'search_fields': item[2],
+                          'self_search': item[1] == self.model,
                           }})
 
     def set_child_model_fields(self, child_models):
@@ -147,15 +155,20 @@ class csv_2_openerp(object):
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
         if cache_key in self.search_cache:
             return self.search_cache[cache_key]
-        item_ids = self.lnk.execute(
-            model, 'search', search_args)
-        if item_ids:
-            self.search_cache[cache_key] = item_ids
-        return item_ids
+        if search_args:
+            item_ids = self.lnk.execute(
+                model, 'search', search_args)
+            if item_ids:
+                self.search_cache[cache_key] = item_ids
+            return item_ids
+        return []
 
     def process_csv(self):
         self.load_data()
         for item in self.data:
+            for f in self.relational_fields:
+                if self.relations[f]['self_search']:
+                    item[f] = self.find_related_field_value(item, f)
             item_ids = self.find_duplicated(item)
             if not item_ids:
                 self.lnk.execute(self.model, 'create', item)

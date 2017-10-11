@@ -13,7 +13,7 @@ def load_product_category(lnk):
         ('property_stock_variation', 'account.account', ['code']),
         ('property_account_income_categ', 'account.account', ['code']),
         ('property_account_expense_categ', 'account.account', ['code']),
-        ('property_stock_journal', 'account.journal', ['code']),
+        ('property_stock_journal', 'account.journal', ['name']),
         ('parent_id', 'product.category', ['code']),
         ])
     c2o.process_csv()
