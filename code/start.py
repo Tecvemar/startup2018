@@ -112,16 +112,16 @@ os.system('python oerp_ws.py '
     )
 
 
-MODULES =       'base'
-ACTION =        'start-server'
-print ACTION
+#~ MODULES =       'base'
+#~ ACTION =        'start-server'
+#~ print ACTION
 
-os.system('python oerp_ws.py '
-            + '--root-path=%s ' % dbdata['server_path']
-            + '--addons-path=%s ' % dbdata['addons_path']
-            + '--database=%s ' % dbdata['dbgen']
-            + '--password=%s ' % dbdata['openerp_password']
-            + '--login=%s ' % dbdata['openerp_login']
-            + '--modules=%s ' % MODULES
-            + ' %s ' % ACTION
-            )
+#~ os.system('python oerp_ws.py '
+            #~ + '--root-path=%s ' % dbdata['server_path']
+            #~ + '--addons-path=%s ' % dbdata['addons_path']
+            #~ + '--database=%s ' % dbdata['dbgen']
+            #~ + '--password=%s ' % dbdata['openerp_password']
+            #~ + '--login=%s ' % dbdata['openerp_login']
+            #~ + '--modules=%s ' % MODULES
+            #~ + ' %s ' % ACTION
+            #~ )

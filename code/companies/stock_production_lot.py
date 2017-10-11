@@ -16,7 +16,8 @@ left join reng_fac r on r.fact_num = f.fact_num
 left join reng_com n on r.nro_lote = n.nro_lote and r.co_art = n.co_art
 left join compras e on n.fact_num = e.fact_num
 where f.fec_emis between '2017-01-01' and '2017-12-31' and
-      e.fec_emis < '2017-01-01' and f.anulada = 0
+      e.fec_emis < '2017-01-01' and f.anulada = 0 and
+      rtrim(r.nro_lote) != ''
 group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
         ''')
     p2o.set_search_fields(['name', 'product_id'])
@@ -24,4 +25,5 @@ group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
         ('product_id', 'product.product', ['default_code']),
         ])
     p2o.set_aux02_fields(['heigth', 'length'])
-    p2o.process_csv()
+    #~ p2o.process_csv()
+    p2o.test_data_file()

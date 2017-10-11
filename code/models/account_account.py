@@ -10,6 +10,5 @@ def load_account_account(lnk):
     c2o.set_integer_fields(['company_id'])
     c2o.set_boolean_fields(['active', 'reconcile'])
     c2o.set_relational_fields(
-        [('parent_id', 'account.account', ['code']),
-         ('user_type', 'account.account.type', ['name'])])
+        [('user_type', 'account.account.type', ['name'])])
     c2o.process_csv()
