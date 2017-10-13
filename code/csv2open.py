@@ -21,6 +21,7 @@ class csv_2_openerp(object):
         self.child_model_fields = []
         self.relations = {}
         self.search_cache = {}
+        self.set_vat_field = ''
 
     def load_data(self):
         if self.csv_file:
@@ -45,6 +46,9 @@ class csv_2_openerp(object):
         for f in self.relational_fields:
             if not self.relations[f]['self_search']:
                 item[f] = self.find_related_field_value(item, f)
+        if self.set_vat_field in item:
+            item[self.set_vat_field] = self.validate_vat_field(
+               item[self.set_vat_field])
         return item
 
     def format_chield_data(self, item):
@@ -136,6 +140,13 @@ class csv_2_openerp(object):
         '''
         self.child_model_fields = []
         self.child_model_fields.extend(child_models)
+
+    def validate_vat_field(self, vat):
+        vat = vat.replace('-', '').replace(' ', '').strip()
+        if len(vat) != 10:
+            print vat
+            return ''
+        return 'VE' + vat
 
     def find_duplicated(self, item, model=False, search_fields=[]):
         if not model:

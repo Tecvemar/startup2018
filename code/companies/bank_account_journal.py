@@ -15,6 +15,17 @@ select rtrim(b.des_ban) + ' - ' + rtrim(c.num_cta) as name,
        1 as company_id
 from cuentas c
 left join bancos b on c.co_banco = b.co_ban
+where c.moneda = 'BS'
+union
+select rtrim(b.des_ban) + ' - ' + rtrim(c.num_cta) as name,
+       convert(varchar(10),
+           1100400000 + ROW_NUMBER() OVER(ORDER BY b.fe_us_in)) as code,
+       '11004' as parent_id, 'liquidity' as type, 'Efectivo' as user_type,
+       1 as company_id
+from cuentas c
+left join bancos b on c.co_banco = b.co_ban
+where c.moneda != 'BS'
+
         ''')
     p2o.set_search_fields(['code'])
     p2o.set_relational_fields(

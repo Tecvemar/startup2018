@@ -6,7 +6,7 @@ import companies
 
 
 #~ for database in ['guayana']:
-for database in dbdata['databases'][:6]:
+for database in dbdata['databases'][:1]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -25,10 +25,13 @@ for database in dbdata['databases'][:6]:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
-    companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
-    companies.load_res_company(lnk_dbcom)
-    companies.load_stock_warehouse(lnk_dbcom)
-    companies.load_sale_shop(lnk_dbcom)
-    companies.load_account_account_0(lnk_dbcom)
-    companies.load_res_partner_address(lnk_dbcom)
+    #~ companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
+    #~ companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
+    #~ companies.load_res_company(lnk_dbcom)
+    #~ companies.load_stock_warehouse(lnk_dbcom)
+    #~ companies.load_sale_shop(lnk_dbcom)
+    #~ companies.load_account_account_0(lnk_dbcom)
+    #~ companies.load_res_partner_address(lnk_dbcom)
+    #~ companies.load_res_partner(lnk_dbcom)
+    #~ companies.load_res_partner_profit_pruchase(lnk_dbcom, lnk_dbprofit)
+    companies.load_purchase_order(lnk_dbcom, lnk_dbprofit)

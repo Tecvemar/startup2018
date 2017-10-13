@@ -103,3 +103,4 @@ ENV/
 # Private data
 data/
 code/definitions.py
+openerp.pid

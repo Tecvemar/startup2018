@@ -69,6 +69,8 @@ class profit_2_openerp(csv_2_openerp):
                 values = self.decode_aux02(item[k])
                 for f in self.aux02_fields:
                     aux02.update({f: values[f]})
+            if type(item[k]) == unicode:
+                item[k] = item[k].strip()
         res.update(aux02)
         if 'aux02' in res and self.aux02_fields:
             res.pop('aux02')

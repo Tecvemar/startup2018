@@ -25,5 +25,5 @@ group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
         ('product_id', 'product.product', ['default_code']),
         ])
     p2o.set_aux02_fields(['heigth', 'length'])
-    #~ p2o.process_csv()
-    p2o.test_data_file()
+    p2o.process_csv()
+    #~ p2o.test_data_file()
