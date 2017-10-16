@@ -23,5 +23,5 @@ order by nro_doc
         ('location_id', 'stock.location', ['name']),
         ('pricelist_id', 'product.pricelist', ['name']),
         ])
-    #~ p2o.process_csv()
-    p2o.test_data_file()
+    p2o.process_csv()
+    #~ p2o.test_data_file()

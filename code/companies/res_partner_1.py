@@ -124,5 +124,5 @@ where p.co_cli in (
         ])
     p2o.set_child_model_fields(['address'])
     p2o.set_vat_field = 'vat'
-    #~ p2o.process_csv()
-    p2o.test_data_file()
+    p2o.process_csv()
+    #~ p2o.test_data_file()
