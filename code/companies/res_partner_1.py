@@ -84,3 +84,45 @@ where p.co_prov in (
     p2o.set_vat_field = 'vat'
     p2o.process_csv()
     #~ p2o.test_data_file()
+
+
+def load_res_partner_profit_sale(lnk, profit):
+    if not profit:
+        return
+    p2o = profit_2_openerp('res.partner', lnk, profit)
+    p2o.set_sql(
+        '''
+select p.cli_des as name, p.rif as vat, p.co_cli as ref, 'es_VE' as lang,
+       't' as supplier, p.website, 'invoice' as "address.type",
+       p.direc1 as "address.street1", p.direc2 as "address.street2",
+       p.telefonos as  "address.phone", p.fax as  "address.fax",
+       p.email as "address.email", p.ciudad as "address.city",
+       p.zip as "address.zip", 't' as islr_withholding_agent,
+       case p.contribu_e when 1 then 't' else 'f' end as wh_iva_agent,
+       '1110299999' as property_account_receivable,
+       '2120199999' as property_account_payable,
+       '2180399999' as property_account_advance,
+       '1110899999' as property_account_prepaid,
+       'Stock' as property_stock_customer,
+       'Suppliers' as property_stock_supplier
+from clientes p
+where p.co_cli in (
+    select distinct co_cli from docum_cc
+    where tipo_doc = 'FACT' and fec_emis >= '2017-01-01')
+
+        ''')
+    p2o.set_search_fields(['vat'])
+    p2o.set_boolean_fields(['supplier', 'islr_withholding_agent',
+                            'wh_iva_agent'])
+    p2o.set_relational_fields([
+        ('property_account_receivable', 'account.account', ['code']),
+        ('property_account_payable', 'account.account', ['code']),
+        ('property_account_advance', 'account.account', ['code']),
+        ('property_account_prepaid', 'account.account', ['code']),
+        ('property_stock_customer', 'stock.location', ['name']),
+        ('property_stock_supplier', 'stock.location', ['name']),
+        ])
+    p2o.set_child_model_fields(['address'])
+    p2o.set_vat_field = 'vat'
+    #~ p2o.process_csv()
+    p2o.test_data_file()

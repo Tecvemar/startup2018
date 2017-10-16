@@ -10,4 +10,6 @@ from account_account_0 import load_account_account_0
 from res_partner_address_1 import load_res_partner_address
 from res_partner_1 import load_res_partner
 from res_partner_1 import load_res_partner_profit_pruchase
+from res_partner_1 import load_res_partner_profit_sale
 from purchase_order import load_purchase_order
+from sale_order import load_sale_order
