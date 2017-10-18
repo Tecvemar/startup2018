@@ -5,8 +5,8 @@ from definitions import dbdata
 import companies
 
 
-#~ for database in ['guayana']:
-for database in dbdata['databases'][:1]:
+#~ for database in ['monagas']:
+for database in dbdata['databases'][:6]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -36,3 +36,5 @@ for database in dbdata['databases'][:1]:
     companies.load_res_partner_profit_pruchase(lnk_dbcom, lnk_dbprofit)
     companies.load_purchase_order(lnk_dbcom, lnk_dbprofit)
     companies.load_purchase_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
+    companies.load_res_partner_profit_sale(lnk_dbcom, lnk_dbprofit)
+    companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
