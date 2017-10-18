@@ -11,3 +11,4 @@ from res_partner_address_1 import load_res_partner_address
 from res_partner_1 import load_res_partner
 from res_partner_1 import load_res_partner_profit_pruchase
 from purchase_order import load_purchase_order
+from purchase_order_line import load_purchase_order_line_profit_detail
