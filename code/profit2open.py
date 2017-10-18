@@ -9,7 +9,9 @@ class profit_2_openerp(csv_2_openerp):
     def __init__(self, model, lnk, profit_lnk):
         super(profit_2_openerp, self).__init__('', model, lnk)
         self.dbprofit = profit_lnk
+        self.aux02_field = 'aux02'
         self.aux02_fields = []
+        self.aux02_prefix = ''
 
     def set_sql(self, sql_string):
         self.dbprofit.set_sql_string(sql_string)
@@ -44,17 +46,17 @@ class profit_2_openerp(csv_2_openerp):
                     he = float(data[2])
                 if data[3]:
                     ub = data[3]
-            res = {'pieces': pc,
-                   'length': le,
-                   'heigth': he,
-                   'width': wi,
-                   'location': ub}
+            res = {self.aux02_prefix + 'pieces': pc,
+                   self.aux02_prefix + 'length': le,
+                   self.aux02_prefix + 'heigth': he,
+                   self.aux02_prefix + 'width': wi,
+                   self.aux02_prefix + 'location': ub}
         else:
-            res = {'pieces': 0,
-                   'length': 0,
-                   'heigth': 0,
-                   'width': 0,
-                   'location': 0}
+            res = {self.aux02_prefix + 'pieces': 0,
+                   self.aux02_prefix + 'length': 0,
+                   self.aux02_prefix + 'heigth': 0,
+                   self.aux02_prefix + 'width': 0,
+                   self.aux02_prefix + 'location': 0}
         return res
 
     def format_data_row(self, item):
@@ -65,15 +67,15 @@ class profit_2_openerp(csv_2_openerp):
                 item[k] = item[k].strftime('%Y-%m-%d %H:%M:%S')
             if isinstance(item[k], decimal.Decimal):
                 item[k] = float(item[k])
-            if k == 'aux02' and self.aux02_fields:
+            if k == self.aux02_field and self.aux02_fields:
                 values = self.decode_aux02(item[k])
                 for f in self.aux02_fields:
                     aux02.update({f: values[f]})
             if type(item[k]) == unicode:
                 item[k] = item[k].strip()
         res.update(aux02)
-        if 'aux02' in res and self.aux02_fields:
-            res.pop('aux02')
+        if self.aux02_field in res and self.aux02_fields:
+            res.pop(self.aux02_field)
         return res
 
     def load_data(self):

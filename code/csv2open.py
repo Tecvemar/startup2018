@@ -22,6 +22,7 @@ class csv_2_openerp(object):
         self.relations = {}
         self.search_cache = {}
         self.set_vat_field = ''
+        self.m2m_fields = []
 
     def load_data(self):
         if self.csv_file:
@@ -33,7 +34,7 @@ class csv_2_openerp(object):
             item[f], self.relations[f]['model'],
             self.relations[f]['search_fields'])
         if not value and item[f]:
-            print '\tNo encontrado! -> %s: %s ' % (f, item[f])
+            print '\tNo encontrado! -> %s: "%s" ' % (f, item[f])
         return value and len(value) == 1 and value[0] or 0
 
     def format_data_row(self, item):
@@ -48,7 +49,7 @@ class csv_2_openerp(object):
                 item[f] = self.find_related_field_value(item, f)
         if self.set_vat_field in item:
             item[self.set_vat_field] = self.validate_vat_field(
-               item[self.set_vat_field])
+                item[self.set_vat_field])
         return item
 
     def format_chield_data(self, item):
@@ -67,11 +68,24 @@ class csv_2_openerp(object):
             [item.pop(f) for f in child_keys]
             item.update({field: [(0, 0, child_dict)]})
 
+    def format_m2m_data(self, item):
+        for m2m in self.m2m_fields:
+            field = m2m[0]
+            operation = m2m[1]
+            rel_model = m2m[2]
+            if operation == 'link':
+                search_fields = m2m[3]
+                value = self.find_duplicated(
+                    item[field], rel_model, search_fields)
+                if value and len(value) == 1:
+                    item[field] = [(4, value[0])]
+
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
             row = self.format_data_row(item)
             self.format_chield_data(row)
+            self.format_m2m_data(row)
             res.append(row)
         return res
 
@@ -111,6 +125,13 @@ class csv_2_openerp(object):
         '''
         self.float_fields = []
         self.float_fields.extend(fields_list)
+
+    def set_m2m_fields(self, fields_list):
+        '''
+        fields_list: A list of file names to be procesed as many2many ref
+        '''
+        self.m2m_fields = []
+        self.m2m_fields.extend(fields_list)
 
     def set_relational_fields(self, fields_rel):
         '''
