@@ -28,7 +28,7 @@ order by r.fact_num, r.reng_num
         ('product_id', 'product.product', ['default_code']),
         ])
     p2o.aux02_field = 'aux02'
-    p2o.set_aux02_fields([ 'heigth', 'length'])
+    p2o.set_aux02_fields(['heigth', 'length'])
     p2o.process_csv()
     #~ p2o.test_data_file()
 
@@ -63,6 +63,60 @@ order by r.fact_num, r.reng_num
         ('order_id', 'purchase.order', ['origin']),
         ('product_id', 'product.product', ['default_code']),
         ('prod_lot_id', 'stock.production.lot', ['name']),
+        ('concept_id', 'islr.wh.concept', ['name']),
+        ('product_uom', 'product.uom', ['name']),
+        ])
+    p2o.aux02_field = 'aux02'
+    p2o.set_aux02_fields(['pieces'])
+    p2o.set_m2m_fields([('taxes_id', 'link', 'account.tax', ['name'])])
+    p2o.process_csv()
+    #~ p2o.test_data_file()
+
+
+
+
+def load_purchase_order_no_details(lnk, profit):
+    if not profit:
+        return
+    p2o = profit_2_openerp('purchase.order.line', lnk, profit)
+    p2o.set_sql(
+        '''
+select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
+       '7230100003' as product_id,
+       'NO APLICA RETENCION' as concept_id, 1 as product_qty,
+       'PCE' as product_uom, c.monto_bru as price_unit,
+       rtrim(c.observa) as name, c.fec_emis as date_planned,
+       case str(c.tipo) when 1 then 'IVA 12% Compras'
+                        when 5 then 'IVA 0% Compras'
+                        when 6 then 'IVA 0% Compras'
+                        when 7 then 'IVA 7% Compras'
+                        when 8 then 'IVA 9% Compras'
+                        when 9 then 'IVA 8% Compras'
+                        else str(c.tipo) end as taxes_id,
+        rtrim(p.prov_des) as "x"
+from docum_cp c
+left join prov p on c.co_cli = p.co_prov
+where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
+      and c.nro_doc not in (select distinct fact_num from reng_com)
+union
+select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
+       '7230100003' as product_id,
+       'NO APLICA RETENCION' as concept_id, 1 as product_qty,
+       'PCE' as product_uom, c.monto_otr as price_unit,
+       rtrim(c.observa) as name, c.fec_emis as date_planned,
+       'IVA 0% Compras' as taxes_id,
+        rtrim(p.prov_des) as "x"
+from docum_cp c
+left join prov p on c.co_cli = p.co_prov
+where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
+      and c.nro_doc not in (select distinct fact_num from reng_com) and
+      c.monto_otr != 0
+order by 1
+        ''')
+    p2o.set_search_fields([])
+    p2o.set_relational_fields([
+        ('order_id', 'purchase.order', ['origin']),
+        ('product_id', 'product.product', ['default_code']),
         ('concept_id', 'islr.wh.concept', ['name']),
         ('product_uom', 'product.uom', ['name']),
         ])
