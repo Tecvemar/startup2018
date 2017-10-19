@@ -10,4 +10,5 @@ from res_partner_1 import load_res_partner_profit_pruchase
 from res_partner_1 import load_res_partner_profit_sale
 from purchase_order import load_purchase_order
 from purchase_order_line import load_purchase_order_line_profit_detail
+from purchase_order_line import load_purchase_order_no_details
 from sale_order import load_sale_order
