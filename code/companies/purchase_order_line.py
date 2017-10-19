@@ -19,7 +19,8 @@ select rtrim(r.co_art) as "product_id",
 from reng_com r
 left join docum_cp c on r.fact_num = c.nro_doc and c.tipo_doc = 'FACT'
 left join art a on r.co_art = a.co_art
-where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
+where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0 and
+      rtrim(nro_lote) != ''
 order by r.fact_num, r.reng_num
         ''')
     p2o.set_search_fields(['name'])
@@ -57,7 +58,7 @@ left join art a on r.co_art = a.co_art
 where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
 order by r.fact_num, r.reng_num
         ''')
-    p2o.set_search_fields([])
+    p2o.set_search_fields(['order_id'])
     p2o.set_relational_fields([
         ('order_id', 'purchase.order', ['origin']),
         ('product_id', 'product.product', ['default_code']),

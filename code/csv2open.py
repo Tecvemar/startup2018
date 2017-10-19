@@ -1,5 +1,9 @@
 # -*- encoding: utf-8 -*-
 import csv
+import sys
+
+
+__animation__ = "|/-\\"
 
 
 class csv_2_openerp(object):
@@ -7,7 +11,8 @@ class csv_2_openerp(object):
     def __init__(self, csv_file, model, lnk):
         '''
         '''
-        print 'Cargando: %s...' % (model)
+        self.msg = '  Cargando: %s' % (model)
+        print self.msg,
         self.csv_file = csv_file
         self.model = model
         self.lnk = lnk
@@ -23,6 +28,7 @@ class csv_2_openerp(object):
         self.search_cache = {}
         self.set_vat_field = ''
         self.m2m_fields = []
+        self.wait_idx = 0
 
     def load_data(self):
         if self.csv_file:
@@ -83,6 +89,7 @@ class csv_2_openerp(object):
     def format_csv_data(self, csv_reader):
         res = []
         for item in csv_reader:
+            self.show_wait()
             row = self.format_data_row(item)
             self.format_chield_data(row)
             self.format_m2m_data(row)
@@ -163,7 +170,7 @@ class csv_2_openerp(object):
         self.child_model_fields.extend(child_models)
 
     def validate_vat_field(self, vat):
-        vat = vat.replace('-', '').replace(' ', '').strip()
+        vat = vat.replace('-', '').replace(' ', '').strip().upper()
         if len(vat) != 10:
             print vat
             return ''
@@ -182,8 +189,8 @@ class csv_2_openerp(object):
             else:
                 if item:
                     search_args.append((field, '=', item))
-        cache_key = '%s%s' % (
-            model,
+        cache_key = '%s%s%s' % (
+            self.lnk.database, model,
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
         if cache_key in self.search_cache:
             return self.search_cache[cache_key]
@@ -198,6 +205,7 @@ class csv_2_openerp(object):
     def process_csv(self):
         self.load_data()
         for item in self.data:
+            self.show_wait()
             for f in self.relational_fields:
                 if self.relations[f]['self_search']:
                     item[f] = self.find_related_field_value(item, f)
@@ -206,6 +214,7 @@ class csv_2_openerp(object):
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)
+        print "\r" + self.msg + ', Listo.'
 
     def test_data_file(self):
         self.load_data()
@@ -214,3 +223,9 @@ class csv_2_openerp(object):
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)
+
+    def show_wait(self):
+        print "\r" + self.msg, __animation__[
+            self.wait_idx % len(__animation__)],
+        self.wait_idx += 1
+        sys.stdout.flush()
