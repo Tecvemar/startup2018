@@ -11,6 +11,7 @@ class openerp_link(object):
         self.user_name = user
         self.password = password
         self.open_link()
+        print 'Conectado a: %s\%s' % (host, database)
 
     def open_link(self):
         url = "http://%s:%s/xmlrpc/" % (self.host, self.port)
