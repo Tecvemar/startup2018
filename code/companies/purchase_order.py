@@ -25,3 +25,24 @@ order by nro_doc
         ])
     p2o.process_csv()
     #~ p2o.test_data_file()
+
+
+def postprocess_purchase_order(dbcomp):
+    msg = 'Postprocesando: purchase.order.'
+    print msg + '\r',
+    order_ids = dbcomp.execute(
+        'purchase.order', 'search', [])
+    for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
+        print msg + ' ' + order['name'] + '\r',
+        data = {}
+        addrs_id = dbcomp.execute(
+            'res.partner.address', 'search', [
+                ('type', '=', 'invoice'),
+                ('partner_id', '=', order['partner_id'][0]),
+                ])
+        if addrs_id and len(addrs_id) == 1:
+            data.update({'partner_address_id': addrs_id[0]})
+
+        dbcomp.execute('purchase.order', 'write', order['id'], data)
+
+    print msg + ' Done.' + ' ' * 20
