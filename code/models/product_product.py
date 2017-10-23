@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from csv2open import csv_2_openerp
+import sys
 
 
 def load_product_product(lnk):
@@ -29,7 +30,7 @@ def load_product_product(lnk):
 
 
 def postprocess_product_product(dbref, dbdes):
-    print 'Postprocesando: product.product.'
+    msg = 'Postprocesando: product.product.'
     properties = [
         ('account', 'property_account_income'),
         ('account', 'property_account_allowance'),
@@ -50,12 +51,15 @@ def postprocess_product_product(dbref, dbdes):
     products = dbref.execute(
         'product.product', 'read', product_ids, [])
     for prd in products:
+        sys.stdout.flush()
         base_prd_id = dbdes.execute(
             'product.product', 'search', [
                 ('default_code', '=', prd['default_code'])])
         base_prds = dbdes.execute(
             'product.product', 'read', base_prd_id, [])
         for base_prd in base_prds:
+            print msg + ' ' + base_prd['code'] + '\r',
+            sys.stdout.flush()
             #~ data = {'default_code': base_prd['default_code']}
             data = {}
             for prop in properties:
@@ -98,3 +102,4 @@ def postprocess_product_product(dbref, dbdes):
             if data:
                 dbref.execute(
                     'product.product', 'write', prd['id'], data)
+        print msg + ' Done.' + ' ' * 20

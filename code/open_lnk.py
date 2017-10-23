@@ -33,3 +33,17 @@ class openerp_link(object):
             print err.faultString      # arguments stored in .args
             raise SystemExit(0)
         return res
+
+    def execute_workflow(self, *args):
+        '''
+        args: ('model.name', 'workflow_signal', id)
+        '''
+        try:
+            res = self.object_proxy.exec_workflow(
+                self.database, self.uid, self.password, *args)
+        except xmlrpclib.Fault as err:
+            print u'Workflow exception!'
+            print err.faultCode        # the exception instance
+            print err.faultString      # arguments stored in .args
+            raise SystemExit(0)
+        return res

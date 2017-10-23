@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from profit2open import profit_2_openerp
+import sys
 
 
 def load_purchase_order(lnk, profit):
@@ -29,20 +30,25 @@ order by nro_doc
 
 def postprocess_purchase_order(dbcomp):
     msg = 'Postprocesando: purchase.order.'
-    print msg + '\r',
     order_ids = dbcomp.execute(
         'purchase.order', 'search', [])
     for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
         print msg + ' ' + order['name'] + '\r',
+        sys.stdout.flush()
         data = {}
-        addrs_id = dbcomp.execute(
-            'res.partner.address', 'search', [
-                ('type', '=', 'invoice'),
-                ('partner_id', '=', order['partner_id'][0]),
-                ])
-        if addrs_id and len(addrs_id) == 1:
-            data.update({'partner_address_id': addrs_id[0]})
-
-        dbcomp.execute('purchase.order', 'write', order['id'], data)
+        if order['partner_address_id'] == 8:
+            #~ Fix partner_address_id
+            addrs_id = dbcomp.execute(
+                'res.partner.address', 'search', [
+                    ('type', '=', 'invoice'),
+                    ('partner_id', '=', order['partner_id'][0]),
+                    ])
+            if addrs_id and len(addrs_id) == 1:
+                data.update({'partner_address_id': addrs_id[0]})
+        if data:
+            dbcomp.execute('purchase.order', 'write', order['id'], data)
+        if order['state'] == 'draft' and not order['invoice_ids']:
+            dbcomp.execute_workflow(
+                'purchase.order', 'purchase_confirm', order['id'])
 
     print msg + ' Done.' + ' ' * 20
