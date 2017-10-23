@@ -28,7 +28,34 @@ order by nro_doc
     #~ p2o.test_data_file()
 
 
-def postprocess_purchase_order(dbcomp):
+def complete_purchase_invoice_data(dbcomp, dbprofit, order_id):
+    order = dbcomp.execute('purchase.order', 'read', order_id, [])
+    params = {'nro_doc': int(order['origin'].split('-')[1])}
+    dbprofit.set_sql_string('''
+select c.fec_emis, c.n_control, monto_reten,
+       case isnull(isv, 0) when 0 then 0 else
+            round((ret_iva / isv) * 100, 0) end as wh_iva_rate,
+       ret_iva, p.monto_reten
+from docum_cp c
+left join reng_pag p on p.tp_doc_cob = 'FACT' and p.doc_num = c.nro_doc
+where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
+        ''' % params)
+    profit_doc = dbprofit.execute_sql()[0]
+    data = {
+        'date_invoice': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
+        'date_document': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
+        'nro_ctrl': profit_doc['n_control'].strip(),
+        'journal_id': 15,
+        'wh_iva_rate': float(profit_doc['wh_iva_rate']),
+        'vat_apply': bool(profit_doc['ret_iva']),
+        }
+    dbcomp.execute(
+        'account.invoice', 'write', order['invoice_ids'], data)
+    for inv_id in order['invoice_ids']:
+        dbcomp.execute_workflow(
+            'account.invoice', 'invoice_open', inv_id)
+
+def postprocess_purchase_order(dbcomp, dbprofit):
     msg = 'Postprocesando: purchase.order.'
     order_ids = dbcomp.execute(
         'purchase.order', 'search', [])
@@ -50,5 +77,5 @@ def postprocess_purchase_order(dbcomp):
         if order['state'] == 'draft' and not order['invoice_ids']:
             dbcomp.execute_workflow(
                 'purchase.order', 'purchase_confirm', order['id'])
-
+        complete_purchase_invoice_data(dbcomp, dbprofit, order['id'])
     print msg + ' Done.' + ' ' * 20
