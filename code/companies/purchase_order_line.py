@@ -82,7 +82,7 @@ def load_purchase_order_no_details(lnk, profit):
     p2o.set_sql(
         '''
 select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
-       '7230100003' as product_id,
+       c.campo1 as product_id,
        'NO APLICA RETENCION' as concept_id, 1 as product_qty,
        'PCE' as product_uom, c.monto_bru as price_unit,
        rtrim(c.observa) as name, c.fec_emis as date_planned,
@@ -100,7 +100,7 @@ where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
       and c.nro_doc not in (select distinct fact_num from reng_com)
 union
 select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
-       '7230100003' as product_id,
+       c.campo1 as product_id,
        'NO APLICA RETENCION' as concept_id, 1 as product_qty,
        'PCE' as product_uom, c.monto_otr as price_unit,
        rtrim(c.observa) as name, c.fec_emis as date_planned,

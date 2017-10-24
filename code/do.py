@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+
 x = raw_input('Favor DETENER el servidor Open y pgadmin para comenzar y pulse [Enter]...')
 import start
 x = raw_input('Favor INICIAR el servidor OpenERP para continuar y pulse [Enter]...')
