@@ -28,3 +28,4 @@ from account_fiscalyear import load_account_fiscalyear
 from account_period import load_account_period
 from res_partner_account import load_res_partner_account
 from tcv_import_config import load_tcv_import_config
+from tcv_sale_order_config import load_tcv_sale_order_config
