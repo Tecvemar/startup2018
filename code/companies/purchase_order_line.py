@@ -43,7 +43,9 @@ def load_purchase_order_line_profit_detail(lnk, profit):
 select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
        rtrim(r.co_art) as product_id,
        'NO APLICA RETENCION' as concept_id, total_art as product_qty,
-       'm2' as product_uom,
+       CASE rtrim(r.co_art)
+          WHEN 'ADSELLGA130' then 'PCE'
+          ELSE 'm2' END as product_uom,
        a.art_des as name, c.fec_emis as date_planned,
        r.prec_vta as price_unit,
        rtrim(nro_lote) as "prod_lot_id",
@@ -58,7 +60,7 @@ left join art a on r.co_art = a.co_art
 where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
 order by r.fact_num, r.reng_num
         ''')
-    p2o.set_search_fields(['order_id'])
+    # p2o.set_search_fields(['order_id']) No search, allways add lines!
     p2o.set_relational_fields([
         ('order_id', 'purchase.order', ['origin']),
         ('product_id', 'product.product', ['default_code']),
