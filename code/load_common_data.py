@@ -18,7 +18,7 @@ lnk_dbdesarrollo = openerp_link(
     dbdata['openerp_password'])
 
 print 'Cargando datos comunes...'
-#~
+
 #~ models.load_res_users(lnk_dbgen)
 #~ models.load_res_country_state(lnk_dbgen)
 #~ models.load_product_product_features(lnk_dbgen)
@@ -28,7 +28,7 @@ print 'Cargando datos comunes...'
 #~ models.update_res_company(lnk_dbgen)
 #~ models.update_res_currency(lnk_dbgen)
 #~ models.update_res_lang(lnk_dbgen)
-#~ models.load_account_account(lnk_dbgen)
+models.load_account_account(lnk_dbgen)
 #~ models.load_account_payment_term(lnk_dbgen)
 #~ models.load_account_payment_term_line(lnk_dbgen)
 #~ models.load_tcv_bank_list(lnk_dbgen)
@@ -47,6 +47,6 @@ print 'Cargando datos comunes...'
 #~ models.load_account_fiscalyear(lnk_dbgen)
 #~ models.load_account_period(lnk_dbgen)
 #~ models.load_res_partner_account(lnk_dbgen)
-#~ models.load_tcv_import_config(lnk_dbgen)
-models.load_tcv_sale_order_config(lnk_dbgen)
+models.load_tcv_import_config(lnk_dbgen)
+#~ models.load_tcv_sale_order_config(lnk_dbgen)
 
