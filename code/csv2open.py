@@ -170,9 +170,9 @@ class csv_2_openerp(object):
         self.child_model_fields.extend(child_models)
 
     def validate_vat_field(self, vat):
-        vat = vat.replace('-', '').replace(' ', '').strip().upper()
+        vat = vat.replace('-', '').replace('.', '').replace(' ', '').strip().upper()
         if len(vat) != 10:
-            print vat
+            print '\nError en el RIF: %s\n' % vat
             return ''
         return 'VE' + vat
 
