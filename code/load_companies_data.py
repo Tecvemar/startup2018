@@ -6,7 +6,7 @@ import companies
 
 
 #~ for database in ['monagas']:
-for database in dbdata['databases'][2:6]:
+for database in dbdata['databases'][1]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -39,6 +39,6 @@ for database in dbdata['databases'][2:6]:
     #~ companies.load_purchase_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
     #~ companies.load_purchase_order_no_details(lnk_dbcom, lnk_dbprofit)
     #~ companies.postprocess_purchase_order(lnk_dbcom, lnk_dbprofit)
-    companies.load_res_partner_profit_sale(lnk_dbcom, lnk_dbprofit)
-    companies.load_res_partner_companies_extra_data(lnk_dbcom)
+    #~ companies.load_res_partner_profit_sale(lnk_dbcom, lnk_dbprofit)
+    #~ companies.load_res_partner_companies_extra_data(lnk_dbcom)
     companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
