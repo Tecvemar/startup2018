@@ -15,3 +15,4 @@ from purchase_order import postprocess_purchase_order
 from purchase_order_line import load_purchase_order_line_profit_detail
 from purchase_order_line import load_purchase_order_no_details
 from sale_order import load_sale_order
+from sale_order_line import load_sale_order_line_profit_detail

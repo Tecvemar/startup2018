@@ -226,10 +226,11 @@ class csv_2_openerp(object):
         gc.collect()
         print "\r" + self.msg + ', Listo.'
 
-    def test_data_file(self):
+    def test_data_file(self, print_data=True):
         self.load_data()
         for item in self.data:
-            print item
+            if print_data:
+                print item
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)
