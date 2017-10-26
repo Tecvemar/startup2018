@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import os
 from csv2open import csv_2_openerp
 from profit2open import profit_2_openerp
 
@@ -51,7 +52,8 @@ def load_res_partner_profit_pruchase(lnk, profit):
     p2o = profit_2_openerp('res.partner', lnk, profit)
     p2o.set_sql(
         '''
-select p.prov_des as name, p.rif as vat, p.co_prov as ref, 'es_VE' as lang,
+select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
+       rtrim(p.co_prov) as ref, 'es_VE' as lang,
        't' as supplier, p.website, 'invoice' as "address.type",
        p.direc1 as "address.street1", p.direc2 as "address.street2",
        p.telefonos as  "address.phone", p.fax as  "address.fax",
@@ -68,6 +70,7 @@ from prov p
 where p.co_prov in (
     select distinct co_cli from docum_cp
     where tipo_doc = 'FACT' and fec_emis >= '2017-01-01')
+order by 3
         ''')
     p2o.set_search_fields(['vat'])
     p2o.set_boolean_fields(['supplier', 'islr_withholding_agent',
@@ -92,8 +95,9 @@ def load_res_partner_profit_sale(lnk, profit):
     p2o = profit_2_openerp('res.partner', lnk, profit)
     p2o.set_sql(
         '''
-select p.cli_des as name, p.rif as vat, p.co_cli as ref, 'es_VE' as lang,
-       't' as supplier, p.website, 'invoice' as "address.type",
+select rtrim(p.cli_des) as name, rtrim(p.rif) as vat,
+       rtrim(p.co_cli) as ref, 'es_VE' as lang,
+       't' as customer, p.website, 'invoice' as "address.type",
        p.direc1 as "address.street1", p.direc2 as "address.street2",
        p.telefonos as  "address.phone", p.fax as  "address.fax",
        p.email as "address.email", p.ciudad as "address.city",
@@ -109,10 +113,10 @@ from clientes p
 where p.co_cli in (
     select distinct co_cli from docum_cc
     where tipo_doc = 'FACT' and fec_emis >= '2017-01-01')
-
+order by 3
         ''')
     p2o.set_search_fields(['vat'])
-    p2o.set_boolean_fields(['supplier', 'islr_withholding_agent',
+    p2o.set_boolean_fields(['customer', 'islr_withholding_agent',
                             'wh_iva_agent'])
     p2o.set_relational_fields([
         ('property_account_receivable', 'account.account', ['code']),
@@ -126,3 +130,16 @@ where p.co_cli in (
     p2o.set_vat_field = 'vat'
     p2o.process_csv()
     #~ p2o.test_data_file()
+
+
+def load_res_partner_companies_extra_data(lnk):
+    # Update special data from companie's data folder
+    work_dir = '../data/companies/%s/' % lnk.database
+    work_csv = work_dir + 'res_partner.csv'
+    if not os.path.isfile(work_csv):
+        return
+    c2o = csv_2_openerp(work_csv, 'res.partner', lnk)
+    c2o.set_search_fields(['vat'])
+    c2o.set_boolean_fields(['customer', 'supplier'])
+    c2o.update_records = True
+    c2o.process_csv()

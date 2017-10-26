@@ -39,3 +39,6 @@ class profit_link(object):
             print err.args        # the exception instance
             raise SystemExit(0)
         return res
+
+    def close(self):
+        self.conn_profit.close()

@@ -22,25 +22,55 @@ dbdata = {
     'backup_file': '../data/common/dbgen.backup',
     'server_path': '~/instancias/produccion/server/bin/',
     'addons_path': '~/instancias/produccion/modulos/',
-    'databases': ('barcelona',
-                  'guayana',
-                  'monagas',
-                  'valencia',
-                  'barquisimeto',
-                  'falcon',
-                  'orinoco'),
+    'databases': (
+        'barcelona',
+        'guayana',
+        'monagas',
+        'valencia',
+        'barquisimeto',
+        'falcon',
+        'orinoco',
+        ),
     'barcelona': {
         'profit': {
-            'host': '',
-            'db': '',
+            'host': '192.168.0.21',
+            'db': 'ACROPOLI',
             }
         },
     'guayana': {
         'profit': {
-            'host': '',
-            'db': '',
+            'host': '192.168.0.21',
+            'db': 'ACROGUAA',
             }
-        }
+        },
+    'monagas': {
+        'profit': {
+            'host': '192.168.0.21',
+            'db': 'ACROMOA',
+            }
+        },
+    'valencia': {
+        'profit': {
+            'host': '192.168.0.21',
+            'db': 'DACRO_A',
+            }
+        },
+    'barquisimeto': {
+        'profit': {
+            'host': '192.168.0.21',
+            'db': 'ACBARQ_A',
+            }
+        },
+    'falcon': {
+        'profit': {
+            'host': '192.168.0.21',
+            'db': 'ACFALC_A',
+            }
+        },
+    'orinoco': {
+        'profit': {}
+        },
+        },
     }
 
 #~ To simply params use
