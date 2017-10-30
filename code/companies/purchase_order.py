@@ -30,6 +30,9 @@ order by nro_doc
 
 def complete_purchase_invoice_data(dbcomp, dbprofit, order_id):
     order = dbcomp.execute('purchase.order', 'read', order_id, [])
+    journal_id = dbcomp.execute(
+        'account.journal', 'search', [
+            ('name', '=', 'Diario / Compras Nacionales')])
     params = {'nro_doc': int(order['origin'].split('-')[1])}
     dbprofit.set_sql_string('''
 select c.fec_emis, c.n_control, monto_reten,
@@ -41,11 +44,19 @@ left join reng_pag p on p.tp_doc_cob = 'FACT' and p.doc_num = c.nro_doc
 where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
         ''' % params)
     profit_doc = dbprofit.execute_sql()[0]
+    ##check n_control duplicated
+    n_control = profit_doc['n_control'].strip()
+    duplicated_ids = dbcomp.execute(
+        'account.invoice', 'search', [
+            ('nro_ctrl', 'ilike', n_control),
+            ('partner_id', '=', order['partner_id'][0])])
+    if duplicated_ids:
+        n_control = '%s-%s' % (n_control, len(duplicated_ids))
     data = {
         'date_invoice': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
         'date_document': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
-        'nro_ctrl': profit_doc['n_control'].strip(),
-        'journal_id': 15,
+        'nro_ctrl': n_control,
+        'journal_id': journal_id[0],
         'wh_iva_rate': float(profit_doc['wh_iva_rate']),
         'vat_apply': bool(profit_doc['ret_iva']),
         }
@@ -56,11 +67,11 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
             'account.invoice', 'invoice_open', inv_id)
 
 def postprocess_purchase_order(dbcomp, dbprofit):
-    msg = 'Postprocesando: purchase.order.'
+    msg = '  Postprocesando: purchase.order.'
     order_ids = dbcomp.execute(
         'purchase.order', 'search', [])
     for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
-        print msg + ' ' + order['name'] + '\r',
+        print msg + ' ' + order['name'] + ' ' * 20 + '\r',
         sys.stdout.flush()
         data = {}
         if order['partner_address_id'] == 8:

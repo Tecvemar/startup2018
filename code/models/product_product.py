@@ -30,7 +30,7 @@ def load_product_product(lnk):
 
 
 def postprocess_product_product(dbref, dbdes):
-    msg = 'Postprocesando: product.product.'
+    msg = '  Postprocesando: product.product.'
     properties = [
         ('account', 'property_account_income'),
         ('account', 'property_account_allowance'),
@@ -58,7 +58,7 @@ def postprocess_product_product(dbref, dbdes):
         base_prds = dbdes.execute(
             'product.product', 'read', base_prd_id, [])
         for base_prd in base_prds:
-            print msg + ' ' + base_prd['code'] + '\r',
+            print msg + ' ' + base_prd['code'] + ' ' * 20 + '\r',
             sys.stdout.flush()
             #~ data = {'default_code': base_prd['default_code']}
             data = {}

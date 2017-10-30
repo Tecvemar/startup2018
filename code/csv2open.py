@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 import csv
 import sys
+import gc
+from rif import calcular_rif
 
 
 __animation__ = "|/-\\"
@@ -170,9 +172,16 @@ class csv_2_openerp(object):
         self.child_model_fields.extend(child_models)
 
     def validate_vat_field(self, vat):
-        vat = vat.replace('-', '').replace(' ', '').strip().upper()
+        vat = vat.replace('-', '').replace('.', '').replace(' ', '').strip().upper()
+        if 'J' not in vat:
+            if 'V' not in vat and vat.isdigit():
+                vat = 'V%08d' % int(vat)
+        if len(vat) == 8 and 'V' in vat:
+            vat = vat[0] + '0' + vat[1:]
+        if len(vat) == 9:
+            vat = calcular_rif(vat)
         if len(vat) != 10:
-            print vat
+            print '\nError en el RIF: %s\n' % vat
             return ''
         return 'VE' + vat
 
@@ -190,7 +199,7 @@ class csv_2_openerp(object):
                 if item:
                     search_args.append((field, '=', item))
         cache_key = '%s%s%s' % (
-            self.lnk.database, model,
+            self.lnk.database[:5], model.replace('.',''),
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
         if cache_key in self.search_cache:
             return self.search_cache[cache_key]
@@ -214,12 +223,14 @@ class csv_2_openerp(object):
                 self.lnk.execute(self.model, 'create', item)
             elif self.update_records and len(item_ids) == 1:
                 self.lnk.execute(self.model, 'write', item_ids, item)
+        gc.collect()
         print "\r" + self.msg + ', Listo.'
 
-    def test_data_file(self):
+    def test_data_file(self, print_data=True):
         self.load_data()
         for item in self.data:
-            print item
+            if print_data:
+                print item
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)

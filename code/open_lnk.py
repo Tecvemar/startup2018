@@ -28,9 +28,10 @@ class openerp_link(object):
                 self.uid,
                 self.password, *args)
         except xmlrpclib.Fault as err:
-            print u'Exception!'
+            print u'\nException!'
             print err.faultCode        # the exception instance
             print err.faultString      # arguments stored in .args
+            print args
             raise SystemExit(0)
         return res
 

@@ -81,3 +81,6 @@ class profit_2_openerp(csv_2_openerp):
     def load_data(self):
         if self.dbprofit.sql:
             self.data = self.format_csv_data(self.dbprofit.execute_sql())
+
+    def close(self):
+        self.dbprofit.close()
