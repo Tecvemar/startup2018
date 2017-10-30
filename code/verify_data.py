@@ -5,8 +5,8 @@ from definitions import dbdata
 import verify
 
 '''
-               verify that the data that comes from profit
-               are the same as the data stored in openerp
+                verify that the data that comes from profit
+                are the same as the data stored in openerp
 
     '''
 

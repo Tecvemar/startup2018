@@ -3,8 +3,8 @@ from profit2open import profit_2_openerp
 
 
 '''
-                verify that the profit invoices
-                are equal to the openerp invoices
+                 verify that the profit invoices
+                 are equal to the openerp invoices
 
     '''
 
