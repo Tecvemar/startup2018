@@ -11,7 +11,7 @@ import verify
     '''
 
 #~ for database in ['monagas']:
-for database in dbdata['databases'][:1]:
+for database in dbdata['databases'][:6]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -30,4 +30,4 @@ for database in dbdata['databases'][:1]:
 
     print 'Verificano datos: %s...' % database
 
-    verify.check_account_invoice(lnk_dbcom, lnk_dbprofit)
+    verify.check_account_invoice_purchases(lnk_dbcom, lnk_dbprofit)

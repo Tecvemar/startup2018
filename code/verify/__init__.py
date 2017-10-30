@@ -1,1 +1,1 @@
-from account_invoice import check_account_invoice
+from account_invoice import check_account_invoice_purchases

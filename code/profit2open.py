@@ -64,7 +64,7 @@ class profit_2_openerp(csv_2_openerp):
         aux02 = {}
         for k in res.keys():
             if isinstance(item[k], datetime.datetime):
-                item[k] = item[k].strftime('%Y-%m-%d %H:%M:%S')
+                item[k] = item[k].strftime('%Y-%m-%d')
             if isinstance(item[k], decimal.Decimal):
                 item[k] = float(item[k])
             if k == self.aux02_field and self.aux02_fields:
