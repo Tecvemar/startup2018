@@ -27,6 +27,7 @@ for database in dbdata['databases'][:6]:
 
     companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
+    companies.load_stock_production_lot_extra(lnk_dbcom)
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)
     companies.load_sale_shop(lnk_dbcom)
