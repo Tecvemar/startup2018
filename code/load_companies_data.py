@@ -31,6 +31,7 @@ for database in dbdata['databases'][:6]:
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)
     companies.load_stock_location(lnk_dbcom)
+    companies.load_ir_translation(lnk_dbcom)
     companies.load_sale_shop(lnk_dbcom)
     companies.load_account_account_0(lnk_dbcom)
     companies.load_product_product(lnk_dbcom)
