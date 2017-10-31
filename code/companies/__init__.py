@@ -1,5 +1,6 @@
 from res_company import load_res_company
 from stock_warehouse import load_stock_warehouse
+from stock_location import load_stock_location
 from sale_shop import load_sale_shop
 from bank_account_journal import load_bank_account_journal
 from stock_production_lot import load_stock_production_lot
