@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 from profit2open import profit_2_openerp
+from csv2open import csv_2_openerp
+import os
 
 
 def load_stock_production_lot(lnk, profit):
@@ -26,4 +28,23 @@ group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
         ])
     p2o.set_aux02_fields(['heigth', 'length'])
     p2o.process_csv()
+    #~ p2o.test_data_file()
+
+
+def load_stock_production_lot_extra(lnk):
+    '''
+    Load extra lots from Profit data -> csv
+    '''
+    work_dir = '../data/companies/%s/' % lnk.database
+    work_csv = work_dir + 'stock_production_lot.csv'
+    if not os.path.isfile(work_csv):
+        return
+    c2o = csv_2_openerp(work_csv, 'stock.production.lot', lnk)
+    c2o.set_search_fields(['name', 'product_id'])
+    c2o.set_relational_fields([
+        ('product_id', 'product.product', ['default_code']),
+        ])
+    c2o.set_aux02_fields(['heigth', 'length'])
+    c2o.set_float_fields(['property_cost_price'])
+    c2o.process_csv()
     #~ p2o.test_data_file()
