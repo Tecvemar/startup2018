@@ -14,3 +14,4 @@ def load_tcv_import_config(lnk):
         ])
     c2o.update_records = True
     c2o.process_csv()
+    #~ c2o.test_data_file_csv()

@@ -28,11 +28,8 @@ order by nro_doc
     #~ p2o.test_data_file()
 
 
-def complete_purchase_invoice_data(dbcomp, dbprofit, order_id):
+def complete_purchase_invoice_data(dbcomp, dbprofit, order_id, journal_id):
     order = dbcomp.execute('purchase.order', 'read', order_id, [])
-    journal_id = dbcomp.execute(
-        'account.journal', 'search', [
-            ('name', '=', 'Diario / Compras Nacionales')])
     params = {'nro_doc': int(order['origin'].split('-')[1])}
     dbprofit.set_sql_string('''
 select c.fec_emis, c.n_control, monto_reten,
@@ -66,10 +63,14 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
         dbcomp.execute_workflow(
             'account.invoice', 'invoice_open', inv_id)
 
+
 def postprocess_purchase_order(dbcomp, dbprofit):
     msg = '  Postprocesando: purchase.order.'
     order_ids = dbcomp.execute(
         'purchase.order', 'search', [])
+    journal_id = dbcomp.execute(
+        'account.journal', 'search', [
+            ('name', '=', 'Diario / Compras Nacionales')])
     for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
         print msg + ' ' + order['name'] + ' ' * 20 + '\r',
         sys.stdout.flush()
@@ -88,5 +89,6 @@ def postprocess_purchase_order(dbcomp, dbprofit):
         if order['state'] == 'draft' and not order['invoice_ids']:
             dbcomp.execute_workflow(
                 'purchase.order', 'purchase_confirm', order['id'])
-        complete_purchase_invoice_data(dbcomp, dbprofit, order['id'])
+        complete_purchase_invoice_data(
+            dbcomp, dbprofit, order['id'], journal_id)
     print msg + ' Done.' + ' ' * 20
