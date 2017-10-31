@@ -21,5 +21,3 @@ def calcular_rif(data):
     digit = 11 - (val % 11)
     digit = digit if digit < 10 else 0
     return '%s%s' % (data[:9], digit)
-
-print calcular_rif('J40425984')

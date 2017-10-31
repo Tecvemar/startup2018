@@ -18,7 +18,7 @@ lnk_dbdesarrollo = openerp_link(
     dbdata['openerp_password'])
 
 print 'Cargando datos comunes...'
-#~ #~
+
 models.load_res_users(lnk_dbgen)
 models.load_res_country_state(lnk_dbgen)
 models.load_product_product_features(lnk_dbgen)
@@ -49,4 +49,3 @@ models.load_account_period(lnk_dbgen)
 models.load_res_partner_account(lnk_dbgen)
 models.load_tcv_import_config(lnk_dbgen)
 models.load_tcv_sale_order_config(lnk_dbgen)
-

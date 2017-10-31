@@ -19,46 +19,6 @@ class profit_2_openerp(csv_2_openerp):
     def set_args(self, *args):
         self.dbprofit.set_sql_args(args)
 
-    def set_aux02_fields(self, field_names):
-        '''
-        Create a list of fields to be extracted from aux02 profit's field
-        all fields:
-        p20.set_aux02_fields([
-            'pieces', 'length', 'heigth', 'width', 'location_id'])
-        '''
-        self.aux02_fields = field_names
-
-    def decode_aux02(self, a2):
-        '''
-        This code splits the data in aux02 (from profit db)
-        '''
-        if a2:
-            data = a2.split(';')
-            pc = le = he = wi = 0
-            ub = ''
-            if len(data) == 4:
-                if data[0]:
-                    pc = int(float(data[0]))
-                    wi = float(data[0])
-                if data[1]:
-                    le = float(data[1].replace(',', '.'))
-                if data[2]:
-                    he = float(data[2])
-                if data[3]:
-                    ub = data[3]
-            res = {self.aux02_prefix + 'pieces': pc,
-                   self.aux02_prefix + 'length': le,
-                   self.aux02_prefix + 'heigth': he,
-                   self.aux02_prefix + 'width': wi,
-                   self.aux02_prefix + 'location': ub}
-        else:
-            res = {self.aux02_prefix + 'pieces': 0,
-                   self.aux02_prefix + 'length': 0,
-                   self.aux02_prefix + 'heigth': 0,
-                   self.aux02_prefix + 'width': 0,
-                   self.aux02_prefix + 'location': 0}
-        return res
-
     def format_data_row(self, item):
         res = super(profit_2_openerp, self).format_data_row(item)
         aux02 = {}

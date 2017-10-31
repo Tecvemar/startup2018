@@ -172,7 +172,8 @@ class csv_2_openerp(object):
         self.child_model_fields.extend(child_models)
 
     def validate_vat_field(self, vat):
-        vat = vat.replace('-', '').replace('.', '').replace(' ', '').strip().upper()
+        vat = vat.replace(
+            '-', '').replace('.', '').replace(' ', '').strip().upper()
         if 'J' not in vat:
             if 'V' not in vat and vat.isdigit():
                 vat = 'V%08d' % int(vat)
@@ -199,7 +200,7 @@ class csv_2_openerp(object):
                 if item:
                     search_args.append((field, '=', item))
         cache_key = '%s%s%s' % (
-            self.lnk.database[:5], model.replace('.',''),
+            self.lnk.database[:5], model.replace('.', ''),
             str(search_args).strip('[]').replace("'", '').replace(', ', ''))
         if cache_key in self.search_cache:
             return self.search_cache[cache_key]
@@ -226,10 +227,11 @@ class csv_2_openerp(object):
         gc.collect()
         print "\r" + self.msg + ', Listo.'
 
-    def test_data_file(self):
+    def test_data_file(self, print_data=True):
         self.load_data()
         for item in self.data:
-            print item
+            if print_data:
+                print item
 
     def execute(self, model, action, *args):
         self.lnk.execute(model, action, *args)
@@ -239,3 +241,43 @@ class csv_2_openerp(object):
             self.wait_idx % len(__animation__)],
         self.wait_idx += 1
         sys.stdout.flush()
+
+    def set_aux02_fields(self, field_names):
+        '''
+        Create a list of fields to be extracted from aux02 profit's field
+        all fields:
+        p20.set_aux02_fields([
+            'pieces', 'length', 'heigth', 'width', 'location_id'])
+        '''
+        self.aux02_fields = field_names
+
+    def decode_aux02(self, a2):
+        '''
+        This code splits the data in aux02 (from profit db)
+        '''
+        if a2:
+            data = a2.split(';')
+            pc = le = he = wi = 0
+            ub = ''
+            if len(data) == 4:
+                if data[0]:
+                    pc = int(float(data[0]))
+                    wi = float(data[0])
+                if data[1]:
+                    le = float(data[1].replace(',', '.'))
+                if data[2]:
+                    he = float(data[2])
+                if data[3]:
+                    ub = data[3]
+            res = {self.aux02_prefix + 'pieces': pc,
+                   self.aux02_prefix + 'length': le,
+                   self.aux02_prefix + 'heigth': he,
+                   self.aux02_prefix + 'width': wi,
+                   self.aux02_prefix + 'location': ub}
+        else:
+            res = {self.aux02_prefix + 'pieces': 0,
+                   self.aux02_prefix + 'length': 0,
+                   self.aux02_prefix + 'heigth': 0,
+                   self.aux02_prefix + 'width': 0,
+                   self.aux02_prefix + 'location': 0}
+        return res
