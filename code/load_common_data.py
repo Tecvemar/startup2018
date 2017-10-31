@@ -49,4 +49,5 @@ print 'Cargando datos comunes...'
 #~ models.load_res_partner_account(lnk_dbgen)
 #~ models.load_tcv_import_config(lnk_dbgen)
 #~ models.load_tcv_sale_order_config(lnk_dbgen)
-models.load_stock_inventory(lnk_dbgen)
+#~ models.load_stock_inventory(lnk_dbgen)
+models.load_stock_location(lnk_dbgen)
