@@ -4,15 +4,16 @@ from csv2open import csv_2_openerp
 import os
 
 
-def load_lots(dbcomp, dbprofit):
+def load_stock_inventory_line(dbcomp, dbprofit):
     if not dbprofit:
         return
-    p2o = profit_2_openerp('stock.move', dbcomp, dbprofit)
+    p2o = profit_2_openerp('stock.inventory.line', dbcomp, dbprofit)
     p2o.set_sql(
         '''
 select rtrim(r.nro_lote) as name, rtrim(r.co_art) as product_id,
        e.fec_emis as date, rtrim(n.aux02) as aux02,
-       n.prec_vta as property_cost_price, sum(r.total_art) as product_qty, 'm2' as product_uom
+       n.prec_vta as property_cost_price, sum(r.total_art) as product_qty,
+      'm2' as product_uom, 'Stock' as location_id
 from factura f
 left join reng_fac r on r.fact_num = f.fact_num
 left join reng_com n on r.nro_lote = n.nro_lote and r.co_art = n.co_art
@@ -23,14 +24,14 @@ where  f.fec_emis  >= '2017-01-01' and
 group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
         ''')
 
-    p2o.set_search_fields(['name', 'product_id'])
+    p2o.set_search_fields(['product_id'])
     p2o.set_relational_fields([
         ('product_id', 'product.product', ['default_code']),
         ('product_uom', 'product.uom', ['name']),
         ('location_id', 'stock.location', ['name']),
         ])
     p2o.set_aux02_fields(['heigth', 'length'])
-    p2o.process_csv()
+    #~ p2o.process_csv()
     #~ p2o.test_data_file()
 
 
