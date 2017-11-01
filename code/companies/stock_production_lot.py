@@ -45,5 +45,6 @@ def load_stock_production_lot_extra(lnk):
         ('product_id', 'product.product', ['default_code']),
         ])
     c2o.set_aux02_fields(['heigth', 'length'])
+    c2o.set_float_fields(['property_cost_price'])
     c2o.process_csv()
     #~ p2o.test_data_file()
