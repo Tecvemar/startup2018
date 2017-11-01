@@ -31,3 +31,5 @@ from tcv_import_config import load_tcv_import_config
 from tcv_sale_order_config import load_tcv_sale_order_config
 from ir_sequence import load_ir_sequence
 from tcv_to_dispatch_config import load_tcv_to_dispatch_config
+from stock_inventory import load_stock_inventory
+from stock_location import load_stock_location
