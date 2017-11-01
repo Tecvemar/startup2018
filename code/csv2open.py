@@ -238,7 +238,7 @@ class csv_2_openerp(object):
 
     def show_wait(self):
         print "\r" + self.msg, __animation__[
-            self.wait_idx % len(__animation__)],
+            self.wait_idx % len(__animation__)] + ' ' * 40,
         self.wait_idx += 1
         sys.stdout.flush()
 

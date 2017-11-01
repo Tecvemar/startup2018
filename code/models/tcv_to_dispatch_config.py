@@ -8,7 +8,7 @@ def load_tcv_to_dispatch_config(lnk):
         '../data/common/tcv_to_dispatch_config.csv',
         'tcv.to.dispatch.config', lnk)
     c2o.set_search_fields(['date_from'])
-    c20.set_integer_fields(['driver_id', 'vehicle_id'])
+    c2o.set_integer_fields(['driver_id', 'vehicle_id'])
     c2o.set_relational_fields([
         ('stock_journal_id', 'stock.journal', ['name']),
         ('location_id', 'stock.location', ['name']),
