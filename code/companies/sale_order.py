@@ -15,7 +15,8 @@ select c.fec_emis as date_order, nro_doc as partner_ref,
        rtrim(tipo_doc) + '-' + ltrim(str(nro_doc)) as client_order_ref,
        rtrim(co_cli) as partner_id, 'Contado' as payment_term,
        'Stock' as location_id, 'Public Pricelist' as pricelist_id,
-       'one' as picking_policy, 'prepaid' as order_policy
+       'one' as picking_policy, 'prepaid' as order_policy,
+       '2017-12-31' as date_due
 from docum_cc c
 where tipo_doc = 'FACT' and fec_emis >= '2017-01-01' and anulado = 0
 order by nro_doc
