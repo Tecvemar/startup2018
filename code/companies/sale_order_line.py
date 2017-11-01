@@ -10,7 +10,8 @@ def load_sale_order_line_profit_detail(lnk, profit):
         '''
 select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
        rtrim(r.co_art) as product_id,
-       'NO APLICA RETENCION' as concept_id, total_art as product_qty,
+       'NO APLICA RETENCION' as concept_id,
+       total_art as product_uom_qty, total_art as product_uos_qty,
        CASE rtrim(r.co_art)
           WHEN 'URISEUBLA673937' then 'PCE'
           WHEN 'SANHERBL' then 'PCE'
@@ -23,7 +24,7 @@ select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
        case str(r.tipo_imp) when 1 then 'IVA 12% Ventas'
                             when 7 then 'IVA 7% Ventas'
                             when 8 then 'IVA 9% Ventas'
-                            else '0' end as taxes_id
+                            else '0' end as tax_id
 from reng_fac r
 left join docum_cc c on r.fact_num = c.nro_doc and c.tipo_doc = 'FACT'
 left join art a on r.co_art = a.co_art
@@ -39,6 +40,6 @@ order by r.fact_num, r.reng_num
         ])
     p2o.aux02_field = 'aux02'
     p2o.set_aux02_fields(['pieces'])
-    p2o.set_m2m_fields([('taxes_id', 'link', 'account.tax', ['name'])])
-    #~ p2o.process_csv()
-    p2o.test_data_file(False)
+    p2o.set_m2m_fields([('tax_id', 'link', 'account.tax', ['name'])])
+    p2o.process_csv()
+    #~ p2o.test_data_file(False)

@@ -10,7 +10,7 @@ def load_purchase_order(lnk, profit):
     p2o.set_sql(
         '''
 select c.fec_emis as date_order, nro_fact as partner_ref,
-       observa as description, 8 as partner_address_id,
+       observa as description, 1 as partner_address_id,
        rtrim(tipo_doc) + '-' + ltrim(str(nro_doc)) as origin,
        rtrim(co_cli) as partner_id, 'Stock' as location_id,
        'Default Purchase Pricelist' as pricelist_id
@@ -75,7 +75,7 @@ def postprocess_purchase_order(dbcomp, dbprofit):
         print msg + ' ' + order['name'] + ' ' * 20 + '\r',
         sys.stdout.flush()
         data = {}
-        if order['partner_address_id'] == 8:
+        if order['partner_address_id'][0] == 1:
             #~ Fix partner_address_id
             addrs_id = dbcomp.execute(
                 'res.partner.address', 'search', [
@@ -84,6 +84,9 @@ def postprocess_purchase_order(dbcomp, dbprofit):
                     ])
             if addrs_id and len(addrs_id) == 1:
                 data.update({'partner_address_id': addrs_id[0]})
+            else:
+                print '  No se encontró la dirección para: %s %s' % (
+                    order['partner_id'], addrs_id)
         if data:
             dbcomp.execute('purchase.order', 'write', order['id'], data)
         if order['state'] == 'draft' and not order['invoice_ids']:

@@ -30,6 +30,8 @@ for database in dbdata['databases'][:1]:
     companies.load_stock_production_lot_extra(lnk_dbcom)
     companies.load_res_company(lnk_dbcom)
     companies.load_stock_warehouse(lnk_dbcom)
+    companies.load_stock_location(lnk_dbcom)
+    companies.load_ir_translation(lnk_dbcom)
     companies.load_sale_shop(lnk_dbcom)
     companies.load_account_account_0(lnk_dbcom)
     companies.load_product_product(lnk_dbcom)
@@ -45,4 +47,3 @@ for database in dbdata['databases'][:1]:
     companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
     companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_inventory_line(lnk_dbcom, lnk_dbprofit)
-    
