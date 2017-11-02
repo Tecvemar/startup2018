@@ -31,18 +31,21 @@ class csv_2_openerp(object):
         self.set_vat_field = ''
         self.m2m_fields = []
         self.wait_idx = 0
+        self.aux02_field = ''
+        self.aux02_fields = []
+        self.aux02_prefix = ''
 
     def load_data(self):
         if self.csv_file:
             self.data = self.format_csv_data(
                 csv.DictReader(open(self.csv_file)))
 
-    def find_related_field_value(self, item, f):
+    def find_related_field_value(self, item, field):
         value = self.find_duplicated(
-            item[f], self.relations[f]['model'],
-            self.relations[f]['search_fields'])
-        if not value and item[f]:
-            print '\tNo encontrado! -> %s: "%s" ' % (f, item[f])
+            item[field], self.relations[field]['model'],
+            self.relations[field]['search_fields'])
+        if not value and item[field]:
+            print '\tNo encontrado! -> %s: "%s" ' % (field, item[field])
         return value and len(value) == 1 and value[0] or 0
 
     def format_data_row(self, item):
@@ -77,6 +80,9 @@ class csv_2_openerp(object):
             item.update({field: [(0, 0, child_dict)]})
 
     def format_m2m_data(self, item):
+        '''
+        Link m2m fields
+        '''
         for m2m in self.m2m_fields:
             field = m2m[0]
             operation = m2m[1]
@@ -89,6 +95,9 @@ class csv_2_openerp(object):
                     item[field] = [(4, value[0])]
 
     def format_csv_data(self, csv_reader):
+        '''
+        Process all records and format row's data
+        '''
         res = []
         for item in csv_reader:
             self.show_wait()
@@ -186,7 +195,7 @@ class csv_2_openerp(object):
             return ''
         return 'VE' + vat
 
-    def find_duplicated(self, item, model=False, search_fields=[]):
+    def find_duplicated(self, item, model=False, search_fields=None):
         if not model:
             model = self.model
         if not search_fields:
@@ -283,11 +292,10 @@ class csv_2_openerp(object):
         return res
 
     def export_to_csv_file(self, file_name, key_list=None):
-        print self.data
         if not key_list and self.data:
             key_list = self.data[0].keys()
         with open(file_name, 'wb') as output_file:
             dict_writer = csv.DictWriter(
-                output_file, key_list, quotechar = '"')
+                output_file, key_list, quotechar='"')
             dict_writer.writeheader()
             dict_writer.writerows(self.data)

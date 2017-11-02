@@ -10,8 +10,6 @@ class profit_2_openerp(csv_2_openerp):
         super(profit_2_openerp, self).__init__('', model, lnk)
         self.dbprofit = profit_lnk
         self.aux02_field = 'aux02'
-        self.aux02_fields = []
-        self.aux02_prefix = ''
 
     def set_sql(self, sql_string):
         self.dbprofit.set_sql_string(sql_string)
