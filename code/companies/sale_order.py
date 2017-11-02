@@ -10,8 +10,8 @@ def load_sale_order(lnk, profit):
     p2o.set_sql(
         '''
 select c.fec_emis as date_order, nro_doc as partner_ref,
-       observa as description, 8 as partner_shipping_id,
-       8 as partner_order_id, 1 as partner_invoice_id,
+       observa as description, 1 as partner_shipping_id,
+       1 as partner_order_id, 1 as partner_invoice_id,
        rtrim(tipo_doc) + '-' + ltrim(str(nro_doc)) as client_order_ref,
        rtrim(co_cli) as partner_id, 'Contado' as payment_term,
        'Stock' as location_id, 'Public Pricelist' as pricelist_id,
@@ -89,7 +89,11 @@ def postprocess_sale_order(dbcomp, dbprofit):
                     ('partner_id', '=', order['partner_id'][0]),
                     ])
             if addrs_id and len(addrs_id) == 1:
-                data.update({'partner_shipping_id': addrs_id[0]})
+                data.update({
+                    'partner_shipping_id': addrs_id[0],
+                    'partner_order_id': addrs_id[0],
+                    'partner_invoice_id': addrs_id[0],
+                    })
             else:
                 print '  No se encontró la dirección para: %s %s' % (
                     order['partner_id'], addrs_id)
