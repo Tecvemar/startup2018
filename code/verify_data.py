@@ -8,10 +8,10 @@ import verify
                 verify that the data that comes from profit
                 are the same as the data stored in openerp
 
-    '''
+'''
 
 #~ for database in ['monagas']:
-for database in dbdata['databases'][:6]:
+for database in dbdata['databases'][:1]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
