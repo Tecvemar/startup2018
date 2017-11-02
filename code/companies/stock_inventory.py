@@ -9,7 +9,7 @@ def postprocess_stock_inventory(dbcomp, dbprofit):
     '''
     msg = '  Postprocesando: stock.inventory.'
     inv_ids = dbcomp.execute(
-        'stock.inventory', 'search', [('state','=','draft')])
+        'stock.inventory', 'search', [])
     for inv in dbcomp.execute('stock.inventory', 'read', inv_ids, []):
         print msg + ' ' + inv['name'] + ' ' * 40 + '\r',
         sys.stdout.flush()
