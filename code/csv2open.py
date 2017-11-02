@@ -281,3 +281,13 @@ class csv_2_openerp(object):
                    self.aux02_prefix + 'width': 0,
                    self.aux02_prefix + 'location': 0}
         return res
+
+    def export_to_csv_file(self, file_name, key_list=None):
+        print self.data
+        if not key_list and self.data:
+            key_list = self.data[0].keys()
+        with open(file_name, 'wb') as output_file:
+            dict_writer = csv.DictWriter(
+                output_file, key_list, quotechar = '"')
+            dict_writer.writeheader()
+            dict_writer.writerows(self.data)
