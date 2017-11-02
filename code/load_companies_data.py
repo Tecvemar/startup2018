@@ -7,6 +7,7 @@ import companies
 
 #~ for database in ['monagas']:
 for database in dbdata['databases'][:6]:
+
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -20,8 +21,8 @@ for database in dbdata['databases'][:6]:
         dbdata['host'],
         dbdata['rpc_port'],
         database,
-        dbdata['openerp_login'],
-        dbdata['openerp_password'])
+        dbdata['migracion_login'],
+        dbdata['migracion_password'])
 
     print 'Cargando datos de compañias: %s...' % database
 
