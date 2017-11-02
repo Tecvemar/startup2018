@@ -65,7 +65,8 @@ select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
        '2180399999' as property_account_advance,
        '1110899999' as property_account_prepaid,
        'Stock' as property_stock_customer,
-       'Suppliers' as property_stock_supplier
+       'Suppliers' as property_stock_supplier,
+       'VE' as country_id
 from prov p
 where p.co_prov in (
     select distinct co_cli from docum_cp
@@ -82,6 +83,7 @@ order by 3
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
+        ('country_id', 'res.country', ['code']),
         ])
     p2o.set_child_model_fields(['address'])
     p2o.set_vat_field = 'vat'
@@ -108,7 +110,8 @@ select rtrim(p.cli_des) as name, rtrim(p.rif) as vat,
        '2180399999' as property_account_advance,
        '1110899999' as property_account_prepaid,
        'Stock' as property_stock_customer,
-       'Suppliers' as property_stock_supplier
+       'Suppliers' as property_stock_supplier,
+       'VE' as country_id
 from clientes p
 where p.co_cli in (
     select distinct co_cli from docum_cc
@@ -125,6 +128,7 @@ order by 3
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
+        ('country_id', 'res.country', ['code']),
         ])
     p2o.set_child_model_fields(['address'])
     p2o.set_vat_field = 'vat'

@@ -58,7 +58,7 @@ def postprocess_product_product(dbref, dbdes):
         base_prds = dbdes.execute(
             'product.product', 'read', base_prd_id, [])
         for base_prd in base_prds:
-            print msg + ' ' + base_prd['code'] + ' ' * 20 + '\r',
+            print msg + ' ' + base_prd['code'] + ' ' * 40 + '\r',
             sys.stdout.flush()
             #~ data = {'default_code': base_prd['default_code']}
             data = {}
@@ -102,4 +102,4 @@ def postprocess_product_product(dbref, dbdes):
             if data:
                 dbref.execute(
                     'product.product', 'write', prd['id'], data)
-    print msg + ' Done.' + ' ' * 20
+    print msg + ' Done.' + ' ' * 40

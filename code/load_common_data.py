@@ -3,7 +3,7 @@ from open_lnk import openerp_link
 from definitions import dbdata
 import models
 
-lnk_dbgen = openerp_link(
+lnk_dbgen_admin = openerp_link(
     dbdata['host'],
     dbdata['rpc_port'],
     dbdata['dbgen'],
@@ -19,7 +19,16 @@ lnk_dbdesarrollo = openerp_link(
 
 print 'Cargando datos comunes...'
 
-models.load_res_users(lnk_dbgen)
+models.load_res_users(lnk_dbgen_admin)
+
+# login with migration's user
+lnk_dbgen = openerp_link(
+    dbdata['host'],
+    dbdata['rpc_port'],
+    dbdata['dbgen'],
+    dbdata['migracion_login'],
+    dbdata['migracion_password'])
+
 models.load_res_country_state(lnk_dbgen)
 models.load_product_product_features(lnk_dbgen)
 models.load_res_partner_title(lnk_dbgen)

@@ -72,7 +72,7 @@ def postprocess_purchase_order(dbcomp, dbprofit):
         'account.journal', 'search', [
             ('name', '=', 'Diario / Compras Nacionales')])
     for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
-        print msg + ' ' + order['name'] + ' ' * 20 + '\r',
+        print msg + ' ' + order['name'] + ' ' * 40 + '\r',
         sys.stdout.flush()
         data = {}
         if order['partner_address_id'][0] == 1:
@@ -94,4 +94,4 @@ def postprocess_purchase_order(dbcomp, dbprofit):
                 'purchase.order', 'purchase_confirm', order['id'])
         complete_purchase_invoice_data(
             dbcomp, dbprofit, order['id'], journal_id)
-    print msg + ' Done.' + ' ' * 20
+    print msg + ' Done.' + ' ' * 40
