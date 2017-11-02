@@ -12,7 +12,7 @@ def load_stock_inventory_line(dbcomp, dbprofit):
         '''
 select 'Inventario Inicial Migración' as inventory_id, 'B99' as location_id,
         rtrim(r.nro_lote) as prod_lot_id, rtrim(r.co_art) as product_id,
-        sum(r.total_art) as product_qty,
+        max(r.total_art) as product_qty,
         rtrim(n.aux02) as aux02,
         'm2' as product_uom, 1 as pieces_qty
 from factura f
