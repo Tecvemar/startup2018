@@ -9,13 +9,12 @@ def postprocess_stock_inventory(dbcomp, dbprofit):
     '''
     msg = '  Postprocesando: stock.inventory.'
     inv_ids = dbcomp.execute(
-        'stock.inventory', 'search', [])
+        'stock.inventory', 'search', [('state', '=', 'draft')])
     for inv in dbcomp.execute('stock.inventory', 'read', inv_ids, []):
         print msg + ' ' + inv['name'] + ' ' * 40 + '\r',
         sys.stdout.flush()
-        if inv['state'] == 'draft':
-            dbcomp.execute(
-                'stock.inventory', 'action_confirm', [inv['id']])
-            dbcomp.execute(
-                'stock.inventory', 'action_done', [inv['id']])
+        dbcomp.execute(
+            'stock.inventory', 'action_confirm', [inv['id']])
+        dbcomp.execute(
+            'stock.inventory', 'action_done', [inv['id']])
     print msg + ' Done.' + ' ' * 40
