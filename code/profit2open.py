@@ -10,8 +10,6 @@ class profit_2_openerp(csv_2_openerp):
         super(profit_2_openerp, self).__init__('', model, lnk)
         self.dbprofit = profit_lnk
         self.aux02_field = 'aux02'
-        self.aux02_fields = []
-        self.aux02_prefix = ''
 
     def set_sql(self, sql_string):
         self.dbprofit.set_sql_string(sql_string)
@@ -22,17 +20,17 @@ class profit_2_openerp(csv_2_openerp):
     def format_data_row(self, item):
         res = super(profit_2_openerp, self).format_data_row(item)
         aux02 = {}
-        for k in res.keys():
-            if isinstance(item[k], datetime.datetime):
-                item[k] = item[k].strftime('%Y-%m-%d')
-            if isinstance(item[k], decimal.Decimal):
-                item[k] = float(item[k])
-            if k == self.aux02_field and self.aux02_fields:
-                values = self.decode_aux02(item[k])
-                for f in self.aux02_fields:
-                    aux02.update({f: values[f]})
-            if type(item[k]) == unicode:
-                item[k] = item[k].strip()
+        for key in res.keys():
+            if isinstance(item[key], datetime.datetime):
+                item[key] = item[key].strftime('%Y-%m-%d')
+            if isinstance(item[key], decimal.Decimal):
+                item[key] = float(item[key])
+            if key == self.aux02_field and self.aux02_fields:
+                values = self.decode_aux02(item[key])
+                for fld in self.aux02_fields:
+                    aux02.update({fld: values[fld]})
+            if type(item[key]) == unicode:
+                item[key] = item[key].strip()
         res.update(aux02)
         if self.aux02_field in res and self.aux02_fields:
             res.pop(self.aux02_field)
