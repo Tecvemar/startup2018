@@ -34,9 +34,7 @@ order by nro_doc
                   )
     for field in chk_fields:
         print field
-
     for item in p2o.data:
-
         #~ print item
         order_id = dbcomp.execute(
             'purchase.order', 'search', [
@@ -47,18 +45,18 @@ order by nro_doc
                 for invoice in dbcomp.execute(
                         'account.invoice', 'read', order['invoice_ids'], []):
                     for field in chk_fields:
-                        if type (invoice.get(field)) == float and \
-                                abs(invoice.get(field) - item.get(field)) < 0.1:
+                        if type(invoice.get(field)) == float and \
+                                abs(invoice.get(field) - item.get(field)) \
+                                < 0.1:
                             print 'ok'
                         elif invoice.get(field) == item.get(field):
                             print 'ok'
                         else:
-                            print 'Error ' , field,  invoice.get(field), item.get(field)
+                            print 'Error ', field, invoice.get(field), \
+                                item.get(field)
                     if invoice.get('address_invoice_id') == 1:
                         print invoice.get('address_invoice_id')
                         print 'error en la dirección'
             else:
                 print order, 'No se encontró la factura de compra: %s' \
                     % item.get('origin')
-
-
