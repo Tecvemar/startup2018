@@ -5,7 +5,6 @@ from definitions import dbdata
 import companies
 
 
-#~ for database in ['monagas']:
 for database in dbdata['databases'][:6]:
 
     if dbdata[database]['profit']:
@@ -49,3 +48,5 @@ for database in dbdata['databases'][:6]:
     companies.postprocess_sale_order(lnk_dbcom, lnk_dbprofit)
     companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_inventory_line(lnk_dbcom, lnk_dbprofit)
+    companies.postprocess_stock_inventory(lnk_dbcom, lnk_dbprofit)
+    companies.postprocess_stock_picking(lnk_dbcom, lnk_dbprofit)
