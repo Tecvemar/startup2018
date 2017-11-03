@@ -71,7 +71,10 @@ def postprocess_purchase_order(dbcomp, dbprofit):
     journal_id = dbcomp.execute(
         'account.journal', 'search', [
             ('name', '=', 'Diario / Compras Nacionales')])
-    for order in dbcomp.execute('purchase.order', 'read', order_ids, []):
+    orders = sorted(
+        dbcomp.execute('purchase.order', 'read', order_ids, [],),
+        key=lambda k: k['name'])
+    for order in orders:
         print msg + ' ' + order['name'] + ' ' * 40 + '\r',
         sys.stdout.flush()
         data = {}

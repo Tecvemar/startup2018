@@ -64,7 +64,7 @@ select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
        '2120199999' as property_account_payable,
        '2180399999' as property_account_advance,
        '1110899999' as property_account_prepaid,
-       'Stock' as property_stock_customer,
+       'Customers' as property_stock_customer,
        'Suppliers' as property_stock_supplier,
        'VE' as country_id
 from prov p
@@ -109,7 +109,7 @@ select rtrim(p.cli_des) as name, rtrim(p.rif) as vat,
        '2120199999' as property_account_payable,
        '2180399999' as property_account_advance,
        '1110899999' as property_account_prepaid,
-       'Stock' as property_stock_customer,
+       'Customers' as property_stock_customer,
        'Suppliers' as property_stock_supplier,
        'VE' as country_id
 from clientes p
