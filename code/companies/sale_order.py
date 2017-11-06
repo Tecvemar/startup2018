@@ -32,16 +32,15 @@ order by nro_doc
     #~ p2o.test_data_file()
 
 
-"""
 def complete_sale_invoice_data(dbcomp, dbprofit, order_id, journal_id):
-    order = dbcomp.execute('purchase.order', 'read', order_id, [])
-    params = {'nro_doc': int(order['origin'].split('-')[1])}
+    order = dbcomp.execute('sale.order', 'read', order_id, [])
+    params = {'nro_doc': int(order['client_order_ref'].split('-')[1])}
     dbprofit.set_sql_string('''
-select c.fec_emis, c.n_control, monto_reten,
+select c.fec_emis, c.numcon as n_control, monto_reten,
        case isnull(isv, 0) when 0 then 0 else
             round((ret_iva / isv) * 100, 0) end as wh_iva_rate,
        ret_iva, p.monto_reten
-from docum_cp c
+from docum_cc c
 left join reng_pag p on p.tp_doc_cob = 'FACT' and p.doc_num = c.nro_doc
 where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
         ''' % params)
@@ -67,17 +66,19 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
     for inv_id in order['invoice_ids']:
         dbcomp.execute_workflow(
             'account.invoice', 'invoice_open', inv_id)
-"""
 
 
 def postprocess_sale_order(dbcomp, dbprofit):
     msg = '  Postprocesando: sale.order.'
+    journal_id = dbcomp.execute(
+        'account.journal', 'search', [
+            ('name', '=', 'Diario / Ventas Nacionales')])
     order_ids = dbcomp.execute(
         'sale.order', 'search', [])
-    #~ journal_id = dbcomp.execute(
-        #~ 'account.journal', 'search', [
-            #~ ('name', '=', 'Diario / Compras Nacionales')])
-    for order in dbcomp.execute('sale.order', 'read', order_ids, []):
+    orders = sorted(
+        dbcomp.execute('sale.order', 'read', order_ids, []),
+        key=lambda k: k['name'])
+    for order in orders:
         print msg + ' ' + order['name'] + ' ' * 40 + '\r',
         sys.stdout.flush()
         data = {}
@@ -99,9 +100,11 @@ def postprocess_sale_order(dbcomp, dbprofit):
                     order['partner_id'], addrs_id)
         if data:
             dbcomp.execute('sale.order', 'write', order['id'], data)
-        #~ if order['state'] == 'draft' and not order['invoice_ids']:
-            #~ dbcomp.execute_workflow(
-                #~ 'sale.order', 'purchase_confirm', order['id'])
-        #~ complete_purchase_invoice_data(
-            #~ dbcomp, dbprofit, order['id'], journal_id)
+        if order['state'] == 'draft' and not order['invoice_ids']:
+            dbcomp.execute_workflow(
+                'sale.order', 'order_confirm', order['id'])
+            dbcomp.execute_workflow(
+                'sale.order', 'manual_invoice', order['id'])
+            complete_sale_invoice_data(
+                dbcomp, dbprofit, order['id'], journal_id)
     print msg + ' Done.' + ' ' * 40

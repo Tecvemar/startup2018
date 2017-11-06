@@ -2,7 +2,7 @@
 import os
 from definitions import dbdata
 
-for database in dbdata['databases'][:6]:
+for database in dbdata['databases']:
     print 'Respaldando Bdd %s...' % database
     bkdata = {
         'backup_file': '../data/companies/%s.backup' % database,

@@ -47,4 +47,22 @@ def load_stock_production_lot_extra(lnk):
     c2o.set_aux02_fields(['heigth', 'length'])
     c2o.set_float_fields(['property_cost_price'])
     c2o.process_csv()
+
+
+def load_stock_production_lot_update(lnk):
+    '''
+    Load extra lots from Profit data -> csv
+    '''
+    work_dir = '../data/companies/%s/' % lnk.database
+    work_csv = work_dir + 'stock_production_lot_update.csv'
+    if not os.path.isfile(work_csv):
+        return
+    c2o = csv_2_openerp(work_csv, 'stock.production.lot', lnk)
+    c2o.set_search_fields(['name', 'product_id'])
+    c2o.set_relational_fields([
+        ('product_id', 'product.product', ['default_code']),
+        ])
+    c2o.set_float_fields(['length','heigth'])
+    c2o.update_records = True
+    c2o.process_csv()
     #~ p2o.test_data_file()

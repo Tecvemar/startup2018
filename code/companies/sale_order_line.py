@@ -16,6 +16,7 @@ select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
           WHEN 'URISEUBLA673937' then 'PCE'
           WHEN 'SANHERBL' then 'PCE'
           WHEN 'MIN0029' then 'PCE'
+          WHEN 'GALCLARP101L' then 'ml'
           ELSE 'm2' END as product_uom,
        a.art_des as name, c.fec_emis as date_planned,
        r.prec_vta as price_unit,
