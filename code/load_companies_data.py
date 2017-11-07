@@ -20,11 +20,11 @@ for database in dbdata['databases'][:6]:
         dbdata['host'],
         dbdata['rpc_port'],
         database,
-        dbdata['migracion_login'],
-        dbdata['migracion_password'])
+        dbdata['openerp_login'],
+        dbdata['openerp_password'])
 
     print 'Cargando datos de compañias: %s...' % database
-
+#~
     companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -50,3 +50,4 @@ for database in dbdata['databases'][:6]:
     companies.load_stock_inventory_line(lnk_dbcom, lnk_dbprofit)
     companies.postprocess_stock_inventory(lnk_dbcom, lnk_dbprofit)
     companies.postprocess_stock_picking(lnk_dbcom, lnk_dbprofit)
+    companies.load_sale_order_confirm(lnk_dbcom)

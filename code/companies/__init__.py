@@ -23,3 +23,4 @@ from sale_order_line import load_sale_order_line_profit_detail
 from stock_inventory_line import load_stock_inventory_line
 from stock_inventory import postprocess_stock_inventory
 from stock_picking import postprocess_stock_picking
+from sale_order_confirm import load_sale_order_confirm
