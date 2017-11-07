@@ -24,7 +24,8 @@ where  f.fec_emis  >= '2017-01-01' and
       rtrim(r.nro_lote) != ''
 group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
 union
-select 'Inventario Inicial Migración (Lotes adicionales)' as inventory_id, 'B99' as location_id,
+select 'Inventario Inicial Migración (Lotes adicionales)' as inventory_id,
+       'B99' as location_id,
         rtrim(r.nro_lote) as prod_lot_id, rtrim(r.co_art) as product_id,
         max(n.total_art) as product_qty,
         rtrim(n.aux02) as aux02,
@@ -40,7 +41,8 @@ left join reng_ndr n on r.nro_lote = n.nro_lote and r.co_art = n.co_art
 left join not_rec e on n.fact_num = e.fact_num
 where r.nro_lote in ('05200001244', -- barcelona
                      '93048', '57895', '4381', '4223', --monagas
-                     '65808', '65806', '56568', '56567', '65703', '65702', '65701', '10544', '56569',  --valencia
+                     '65808', '65806', '56568', '56567', '65703',  --sigue..
+                     '65702', '65701', '10544', '56569',  --valencia
                      '05200005043' --falcon
                      )
 group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta
