@@ -107,4 +107,28 @@ def postprocess_sale_order(dbcomp, dbprofit):
                 'sale.order', 'manual_invoice', order['id'])
             complete_sale_invoice_data(
                 dbcomp, dbprofit, order['id'], journal_id)
+            stock_picking_approve(dbcomp, dbprofit, order['id'])
+
     print msg + ' Done.' + ' ' * 40
+
+
+def stock_picking_approve(dbcomp, dbprofit, order_id):
+
+    '''
+    Process and Confirm stock picking 'out'
+    '''
+    order = dbcomp.execute('sale.order', 'read', order_id, [])
+    picking_ids = order['picking_ids']
+    # Write default driver & vehicle to all pickins
+    stock_journal_id = dbcomp.execute(
+        'stock.journal', 'search', [('name', '=', 'Ordenes de Salida')])
+    dbcomp.execute(
+        'stock.picking', 'write', picking_ids,
+        {'driver_id': 1, 'vehicle_id': 2,
+         'stock_journal_id': stock_journal_id[0]})
+
+    for picking_id in picking_ids:
+        dbcomp.execute(
+            'stock.picking', 'action_assign', [picking_id])
+        dbcomp.execute_workflow(
+            'stock.picking', 'button_done', picking_id)
