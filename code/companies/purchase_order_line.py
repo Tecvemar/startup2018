@@ -4,7 +4,7 @@ from profit2open import profit_2_openerp
 
 def create_stock_production_lot_purchase_order_line(lnk, profit):
     '''
-    To create stock.peoduction.lot records before load lines
+    To create stock.production.lot records before load lines
     '''
     if not profit:
         return

@@ -21,6 +21,7 @@ from purchase_order_line import load_purchase_order_no_details
 from tcv_stock_changes import load_tcv_stock_changes
 from sale_order import load_sale_order
 from sale_order import postprocess_sale_order
+from sale_order import stock_picking_approve
 from sale_order_line import load_sale_order_line_profit_detail
 from stock_inventory_line import load_stock_inventory_line
 from stock_inventory import postprocess_stock_inventory
