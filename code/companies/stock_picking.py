@@ -26,7 +26,7 @@ def postprocess_stock_picking(dbcomp, dbprofit):
         'stock.location', 'search', [('name', '=', 'Stock')])
     if b99_id and len(b99_id) == 1:
         move_ids = dbcomp.execute(
-            'stock.move', 'search', [('pickind_id', 'in', picking_ids),
+            'stock.move', 'search', [('picking_id', 'in', picking_ids),
                                      ('location_dest_id', '=', stock_id[0])])
         dbcomp.execute(
             'stock.move', 'write', move_ids, {'location_dest_id': b99_id[0]})
