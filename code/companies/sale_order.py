@@ -36,7 +36,7 @@ def complete_sale_invoice_data(dbcomp, dbprofit, order_id, journal_id):
     order = dbcomp.execute('sale.order', 'read', order_id, [])
     params = {'nro_doc': int(order['client_order_ref'].split('-')[1])}
     dbprofit.set_sql_string('''
-select c.fec_emis, c.numcon as n_control, monto_reten,
+select c.fec_emis, c.nro_doc, c.numcon as n_control, monto_reten,
        case isnull(isv, 0) when 0 then 0 else
             round((ret_iva / isv) * 100, 0) end as wh_iva_rate,
        ret_iva, p.monto_reten
@@ -57,6 +57,7 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
         'date_invoice': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
         'date_document': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
         'nro_ctrl': n_control,
+        'internal_number': profit_doc['nro_doc'],
         'journal_id': journal_id[0],
         'wh_iva_rate': float(profit_doc['wh_iva_rate']),
         'vat_apply': bool(profit_doc['ret_iva']),

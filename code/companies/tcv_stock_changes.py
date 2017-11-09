@@ -40,7 +40,10 @@ def load_tcv_stock_changes_lines(dbcomp, dbprofit):
                 select ajue_num as line_id, rtrim(nro_lote) as prod_lot_id,
                 rtrim(co_art) as product_id, aux02, 1 as pieces,
                 'm2' as product_uom, 'B99' as location_id
-                from reng_aju where ajue_num=%s
+                from reng_aju
+                where ajue_num=%s and
+                      nro_lote not in ('05200005442', '0520004705')
+
                 ''' % adj['ref'])
             p2o.set_aux02_fields(['heigth', 'length'])
             p2o.set_relational_fields([

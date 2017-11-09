@@ -14,7 +14,7 @@ con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 cur = con.cursor()
 
-for db in dbdata['databases'][1:2]:
+for db in dbdata['databases'][5:6]:
     dbdata.update({'database_name': db})
 
     try:
