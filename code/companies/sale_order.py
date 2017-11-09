@@ -128,6 +128,11 @@ def stock_picking_approve(dbcomp, dbprofit, order_id):
          'stock_journal_id': stock_journal_id[0]})
 
     for picking_id in picking_ids:
+        min_time = order['create_date'].split(' ')[1]
+        min_date = order['date_order']
+        dbcomp.execute(
+            'stock.picking', 'write', [picking_id],
+            {'min_date': '%s %s' % (min_date, min_time)})
         dbcomp.execute(
             'stock.picking', 'action_assign', [picking_id])
         dbcomp.execute_workflow(
