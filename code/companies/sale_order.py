@@ -109,7 +109,7 @@ def postprocess_sale_order(dbcomp, dbprofit):
                 dbcomp, dbprofit, order['id'], journal_id)
             stock_picking_approve(dbcomp, dbprofit, order['id'])
 
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40
 
 
 def stock_picking_approve(dbcomp, dbprofit, order_id):

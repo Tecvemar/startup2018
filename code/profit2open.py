@@ -41,4 +41,5 @@ class profit_2_openerp(csv_2_openerp):
             self.data = self.format_csv_data(self.dbprofit.execute_sql())
 
     def close(self):
-        self.dbprofit.close()
+        self.dbprofit.cur_profit.close()
+

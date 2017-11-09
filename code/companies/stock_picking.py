@@ -40,4 +40,4 @@ def postprocess_stock_picking(dbcomp, dbprofit):
         sys.stdout.flush()
         dbcomp.execute_workflow(
             'stock.picking', 'button_done', picking['id'])
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40

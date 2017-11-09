@@ -17,4 +17,4 @@ def postprocess_stock_inventory(dbcomp, dbprofit):
             'stock.inventory', 'action_confirm', [inv['id']])
         dbcomp.execute(
             'stock.inventory', 'action_done', [inv['id']])
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40

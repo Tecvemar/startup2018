@@ -102,4 +102,4 @@ def postprocess_product_product(dbref, dbdes):
             if data:
                 dbref.execute(
                     'product.product', 'write', prd['id'], data)
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40
