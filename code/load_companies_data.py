@@ -24,7 +24,6 @@ for database in dbdata['databases'][:6]:
         dbdata['migracion_password'])
 
     print 'Cargando datos de compañias: %s...' % database
-
     companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
     companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -52,3 +51,4 @@ for database in dbdata['databases'][:6]:
     companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
     companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
     companies.postprocess_sale_order(lnk_dbcom, lnk_dbprofit)
+    companies.load_fiscal_book(lnk_dbcom)
