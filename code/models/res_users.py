@@ -29,4 +29,4 @@ def load_res_users(lnk):
         if not user_id:
             lnk.execute('res.users', 'create', user)
     time.sleep(1)
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40

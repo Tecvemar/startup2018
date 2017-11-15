@@ -221,18 +221,24 @@ class csv_2_openerp(object):
             return item_ids
         return []
 
+    def write_data_row(self, item):
+        self.show_wait()
+        for f in self.relational_fields:
+            if self.relations[f]['self_search']:
+                item[f] = self.find_related_field_value(item, f)
+        item_ids = self.find_duplicated(item)
+        if not item_ids:
+            self.lnk.execute(self.model, 'create', item)
+        elif self.update_records and len(item_ids) == 1:
+            self.lnk.execute(self.model, 'write', item_ids, item)
+
     def process_csv(self):
         self.load_data()
         for item in self.data:
-            self.show_wait()
-            for f in self.relational_fields:
-                if self.relations[f]['self_search']:
-                    item[f] = self.find_related_field_value(item, f)
-            item_ids = self.find_duplicated(item)
-            if not item_ids:
-                self.lnk.execute(self.model, 'create', item)
-            elif self.update_records and len(item_ids) == 1:
-                self.lnk.execute(self.model, 'write', item_ids, item)
+            self.write_data_row(item)
+        self.done()
+
+    def done(self):
         gc.collect()
         print "\r" + self.msg + ', Listo.'
 

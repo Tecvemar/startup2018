@@ -40,4 +40,17 @@ def postprocess_stock_picking(dbcomp, dbprofit):
         sys.stdout.flush()
         dbcomp.execute_workflow(
             'stock.picking', 'button_done', picking['id'])
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40
+
+
+def fix_stock_picking_date(dbcomp, dbprofit, picking_type):
+    msg = '  Postprocesando: stock.picking'
+    picking_ids = dbcomp.execute(
+        'stock.picking', 'search', [('state', '=', 'done'),
+                                    ('type', '=', picking_type)])
+    pickings = sorted(
+        dbcomp.execute('stock.picking', 'read', picking_ids, []),
+        key=lambda k: k['name'])
+    for picking in pickings:
+        print msg + ' ' + picking['name'] + ' ' * 40 + '\r',
+        sys.stdout.flush()

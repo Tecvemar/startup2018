@@ -97,4 +97,4 @@ def postprocess_purchase_order(dbcomp, dbprofit):
                 'purchase.order', 'purchase_confirm', order['id'])
         complete_purchase_invoice_data(
             dbcomp, dbprofit, order['id'], journal_id)
-    print msg + ' Done.' + ' ' * 40
+    print msg + ' Listo.' + ' ' * 40
