@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 import xmlrpclib
 import psycopg2
+import psycopg2.extras
 
 
 class openerp_link(object):
@@ -12,6 +13,8 @@ class openerp_link(object):
         self.database = database
         self.user_name = user
         self.password = password
+        self.postgresql_login = postgresql_login
+        self.postgresql_password = postgresql_password
         print 'Conectado a: %s\%s' % (host, database)
         self.open_link()
 
@@ -68,13 +71,16 @@ class openerp_link(object):
             self.host, self.database,
             self.postgresql_login, self.postgresql_password)
         conn = psycopg2.connect(conn_string)
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         if params:
             cursor.execute(sql % params)
         else:
             cursor.execute(sql)
         if 'select' in sql.lower():
-            return cursor.fetchall()
+            ans1 = []
+            for row in cursor.fetchall():
+                ans1.append(dict(row))
+            return ans1
         elif 'update' in sql.lower() or 'insert' in sql.lower():
             conn.commit()
         return True
