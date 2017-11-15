@@ -5,7 +5,7 @@ from definitions import dbdata
 import companies
 
 
-for database in dbdata['databases'][5:6]:
+for database in dbdata['databases']:
 
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
@@ -41,7 +41,7 @@ for database in dbdata['databases'][5:6]:
     companies.load_product_product(lnk_dbcom)
     companies.load_res_partner_address(lnk_dbcom)
     companies.load_res_partner(lnk_dbcom)
-    #~ # Purchases ---------------------------------------------------------------
+    # Purchases ---------------------------------------------------------------
     companies.load_res_partner_profit_pruchase(lnk_dbcom, lnk_dbprofit)
     companies.load_purchase_order(lnk_dbcom, lnk_dbprofit)
     companies.load_purchase_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)

@@ -17,3 +17,4 @@ for database in dbdata['databases']:
     #~ print backup
     #~ print """BACKUP DATABASE %s""" % database
     os.system(backup)
+    print """BACKUP DATABASE %s""" % database

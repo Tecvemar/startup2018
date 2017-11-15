@@ -66,7 +66,7 @@ select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
        '1110899999' as property_account_prepaid,
        'Customers' as property_stock_customer,
        'Suppliers' as property_stock_supplier,
-       'VE' as country_id
+       'VE' as "address.country_id"
 from prov p
 where p.co_prov in (
     select distinct co_cli from docum_cp
@@ -83,7 +83,7 @@ order by 3
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
-        ('country_id', 'res.country', ['code']),
+        ('address.country_id', 'res.country', ['code']),
         ])
     p2o.set_child_model_fields(['address'])
     p2o.set_vat_field = 'vat'
