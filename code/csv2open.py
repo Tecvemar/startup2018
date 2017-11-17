@@ -8,6 +8,13 @@ from rif import calcular_rif
 __animation__ = "|/-\\"
 
 
+__special_field_cases__ = {
+    'guayana': {
+        u'partner_id088878848': u'08887884',
+        }
+    }
+
+
 class csv_2_openerp(object):
 
     def __init__(self, csv_file, model, lnk):
@@ -63,6 +70,14 @@ class csv_2_openerp(object):
                 item[self.set_vat_field])
         return item
 
+    def validate_special_cases(self, item):
+        for f in item.keys():
+            db = self.lnk.database
+            if '%s%s' % (f, item[f]) in __special_field_cases__.get(db, {}):
+                item[f] = __special_field_cases__[db]['%s%s' % (f, item[f])]
+                print '\tValor reasignado! -> %s: "%s" ' % (f, item[f])
+        return item
+
     def format_chield_data(self, item):
         '''
         Process child_models_fields list and separate in new child_dict, then
@@ -101,7 +116,8 @@ class csv_2_openerp(object):
         res = []
         for item in csv_reader:
             self.show_wait()
-            row = self.format_data_row(item)
+            row = self.validate_special_cases(item)
+            row = self.format_data_row(row)
             self.format_chield_data(row)
             self.format_m2m_data(row)
             res.append(row)

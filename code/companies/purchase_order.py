@@ -9,8 +9,8 @@ def load_purchase_order(lnk, profit):
     p2o = profit_2_openerp('purchase.order', lnk, profit)
     p2o.set_sql(
         '''
-select c.fec_emis as date_order, nro_fact as partner_ref,
-       observa as description, 1 as partner_address_id,
+select c.fec_emis as date_order, rtrim(nro_fact) as partner_ref,
+       rtrim(observa) as description, 1 as partner_address_id,
        rtrim(tipo_doc) + '-' + ltrim(str(nro_doc)) as origin,
        rtrim(co_cli) as partner_id, 'Stock' as location_id,
        'Default Purchase Pricelist' as pricelist_id
@@ -32,7 +32,7 @@ def complete_purchase_invoice_data(dbcomp, dbprofit, order_id, journal_id):
     order = dbcomp.execute('purchase.order', 'read', order_id, [])
     params = {'nro_doc': int(order['origin'].split('-')[1])}
     dbprofit.set_sql_string('''
-select c.fec_emis, c.n_control, monto_reten,
+select c.fec_emis, rtrim(c.n_control) as n_control, monto_reten,
        case isnull(isv, 0) when 0 then 0 else
             round((ret_iva / isv) * 100, 0) end as wh_iva_rate,
        ret_iva, p.monto_reten
