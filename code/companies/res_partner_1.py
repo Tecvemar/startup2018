@@ -41,6 +41,8 @@ def load_res_partner(lnk):
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
+        ('address.country_id', 'res.country', ['code']),
+        ('address.state_id', 'res.country.state', ['name']),
         ])
     c2o.set_child_model_fields(['address'])
     c2o.process_csv()
