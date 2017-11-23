@@ -7,9 +7,9 @@ def postprocess_stock_move(dbcomp):
     Fix stock move date
     '''
     msg = '  Postprocesando: stock.move.'
-    #~ fix_stock_inventory_moves(dbcomp, msg)
-    #~ fix_tcv_stock_changes_moves(dbcomp, msg)
-    #~ fix_purchase_order_moves(dbcomp, msg)
+    fix_stock_inventory_moves(dbcomp, msg)
+    fix_tcv_stock_changes_moves(dbcomp, msg)
+    fix_purchase_order_moves(dbcomp, msg)
     fix_sale_order_moves(dbcomp, msg)
 
     print msg + ' Listo.' + ' ' * 40
