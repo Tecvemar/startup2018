@@ -26,3 +26,4 @@ from stock_inventory_line import load_stock_inventory_line
 from stock_inventory import postprocess_stock_inventory
 from stock_picking import postprocess_stock_picking
 from fiscal_book import load_fiscal_book
+from stock_move import postprocess_stock_move

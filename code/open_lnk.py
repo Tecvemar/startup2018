@@ -65,8 +65,8 @@ class openerp_link(object):
             print u'Run execute_sql exception!'
             print u'    Undefined user or password for postgresql'
             raise SystemExit(0)
-        print 'Ejecutando SQL %s en: %s\%s' % (
-            sql.split(' ')[0], self.host, self.database)
+        #~ print 'Ejecutando SQL %s en: %s\%s' % (
+            #~ sql.split(' ')[0], self.host, self.database)
         conn_string = "host=%s dbname=%s user=%s password=%s" % (
             self.host, self.database,
             self.postgresql_login, self.postgresql_password)
