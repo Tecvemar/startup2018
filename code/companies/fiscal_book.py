@@ -34,7 +34,7 @@ def postprocess_fiscal_book(dbcomp, book_type):
             'fiscal.book', 'write', book_ids,
             {'article_number': '76'}, {'type': book_type})
     for book_id in book_ids:
-        print msg + ' ' + str(book_id) + ' ' + str(book_type) + ' ' * 40 + '\r'
+        print msg + ' ' + str(book_id) + ' ' + str(book_type) + ' ' * 40 + '\r',
         sys.stdout.flush()
         dbcomp.execute(
             'fiscal.book', 'update_book', [book_id])

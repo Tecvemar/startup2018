@@ -104,3 +104,4 @@ ENV/
 data/
 code/definitions.py
 openerp.pid
+code/granalla.py

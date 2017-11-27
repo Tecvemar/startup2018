@@ -44,8 +44,8 @@ def load_stock_production_lot_extra(lnk):
     c2o.set_relational_fields([
         ('product_id', 'product.product', ['default_code']),
         ])
-    c2o.set_aux02_fields(['heigth', 'length'])
-    c2o.set_float_fields(['property_cost_price'])
+    c2o.set_float_fields(['heigth', 'length', 'property_cost_price'])
+    c2o.update_records = True
     c2o.process_csv()
 
 
@@ -62,7 +62,7 @@ def load_stock_production_lot_update(lnk):
     c2o.set_relational_fields([
         ('product_id', 'product.product', ['default_code']),
         ])
-    c2o.set_float_fields(['length','heigth'])
+    c2o.set_float_fields(['length', 'heigth'])
     c2o.update_records = True
     c2o.process_csv()
     #~ p2o.test_data_file()

@@ -40,9 +40,11 @@ left join reng_fac r on r.fact_num = f.fact_num
 left join reng_ndr n on r.nro_lote = n.nro_lote and r.co_art = n.co_art
 left join not_rec e on n.fact_num = e.fact_num
 where r.nro_lote in ('05200001244', -- barcelona
-                     '93048', '57895', '4381', '4223', --monagas
+                     '91016', --guayana
+                     '93048', '57895', '4381', '4223',  --monagas
                      '65808', '65806', '56568', '56567', '65703',  --sigue..
                      '65702', '65701', '10544', '56569',  --valencia
+                     '62424', '56228',  --barquisimeto
                      '05200005043' --falcon
                      )
 group by r.nro_lote, r.co_art, e.fec_emis, n.aux02, n.prec_vta

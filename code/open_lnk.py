@@ -1,15 +1,20 @@
 # -*- encoding: utf-8 -*-
 import xmlrpclib
+import psycopg2
+import psycopg2.extras
 
 
 class openerp_link(object):
 
-    def __init__(self, host, port, database, user, password):
+    def __init__(self, host, port, database, user, password,
+                 postgresql_login=None, postgresql_password=None):
         self.host = host
         self.port = port
         self.database = database
         self.user_name = user
         self.password = password
+        self.postgresql_login = postgresql_login
+        self.postgresql_password = postgresql_password
         print 'Conectado a: %s\%s' % (host, database)
         self.open_link()
 
@@ -48,3 +53,34 @@ class openerp_link(object):
             print err.faultString      # arguments stored in .args
             raise SystemExit(0)
         return res
+
+    def execute_sql(self, sql, params=None):
+        '''
+        usage:
+        execute_sql(
+            sql_string,
+            params)
+        '''
+        if not self.postgresql_login or not self.postgresql_password:
+            print u'Run execute_sql exception!'
+            print u'    Undefined user or password for postgresql'
+            raise SystemExit(0)
+        #~ print 'Ejecutando SQL %s en: %s\%s' % (
+            #~ sql.split(' ')[0], self.host, self.database)
+        conn_string = "host=%s dbname=%s user=%s password=%s" % (
+            self.host, self.database,
+            self.postgresql_login, self.postgresql_password)
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        if params:
+            cursor.execute(sql % params)
+        else:
+            cursor.execute(sql)
+        if 'select' in sql.lower():
+            ans1 = []
+            for row in cursor.fetchall():
+                ans1.append(dict(row))
+            return ans1
+        elif 'update' in sql.lower() or 'insert' in sql.lower():
+            conn.commit()
+        return True
