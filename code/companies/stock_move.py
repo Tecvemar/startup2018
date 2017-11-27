@@ -7,6 +7,7 @@ def postprocess_stock_move(dbcomp):
     Fix stock move date
     '''
     msg = '  Postprocesando: stock.move.'
+    print msg + '\r',
     fix_stock_inventory_moves(dbcomp, msg)
     fix_tcv_stock_changes_moves(dbcomp, msg)
     fix_purchase_order_moves(dbcomp, msg)
@@ -69,10 +70,10 @@ def fix_tcv_stock_changes_moves(dbcomp, msg):
     tsc_ids = dbcomp.execute(
         'tcv.stock.changes', 'search', [])
     for tsc in dbcomp.execute('tcv.stock.changes', 'read', tsc_ids, []):
-        fix_picking_moves(
-            dbcomp, tsc and tsc['picking_out_id'][0], 'date', msg)
-        fix_picking_moves(
-            dbcomp, tsc and tsc['picking_in_id'][0], 'date', msg)
+        pk_id = tsc['picking_out_id'] and tsc['picking_out_id'][0]
+        fix_picking_moves(dbcomp, pk_id, 'date', msg)
+        pk_id = tsc['picking_in_id'] and tsc['picking_in_id'][0]
+        fix_picking_moves(dbcomp, pk_id, 'date', msg)
 
 
 def fix_purchase_order_moves(dbcomp, msg):
