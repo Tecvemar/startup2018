@@ -57,10 +57,11 @@ for database in dbdata['databases'][5:6]:
     companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
     companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
     companies.postprocess_sale_order(lnk_dbcom, lnk_dbprofit)
-    # Taxes --------------------------------------------------------------------
+    # Taxes -------------------------------------------------------------------
     companies.load_fiscal_book(lnk_dbcom)
     companies.postprocess_stock_move(lnk_dbcom)
+    # Payments ---------------------------------------------------------------- 
+    companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
         lnk_dbprofit.close()
-

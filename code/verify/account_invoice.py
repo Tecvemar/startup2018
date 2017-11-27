@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import sys
 from profit2open import profit_2_openerp
 
 
@@ -32,8 +33,6 @@ order by nro_doc
                   'date_document',
                   'amount_total',
                   )
-    for field in chk_fields:
-        print field
     for item in p2o.data:
         #~ print item
         order_id = dbcomp.execute(
@@ -60,3 +59,5 @@ order by nro_doc
             else:
                 print order, 'No se encontró la factura de compra: %s' \
                     % item.get('origin')
+
+
