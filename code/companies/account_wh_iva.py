@@ -9,6 +9,7 @@ def load_account_wh_iva(dbcomp, dbprofit):
     Charge whitholdings IVA
 
     '''
+    fixed_wh_numbers = []
     p2o = profit_2_openerp('account.wh.iva', dbcomp, dbprofit)
     p2o.set_sql(
         '''
@@ -33,6 +34,7 @@ def load_account_wh_iva(dbcomp, dbprofit):
             (a.tipo_doc= 'AJPM' or a.tipo_doc= 'AJNM') and
             b.nro_orig =0 and b.doc_orig =''
         ''')
+    p2o.set_search_fields(['number'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
         ])
@@ -41,13 +43,18 @@ def load_account_wh_iva(dbcomp, dbprofit):
         partner = dbcomp.execute(
             'res.partner', 'read', ret['partner_id'], [])
         ret['account_id'] = partner['property_account_payable'][0]
-        #~ ret['number'] = '%04d%02d%s' % (ret['y'], ret['m'], ret['number'])
-        dbcomp.execute(
-            'account.wh.iva', 'create', ret)
-    postprocess_account_wh_iva_line(dbcomp, dbprofit)
+        wh_id = p2o.write_data_row(ret)
+        if wh_id:
+            fixed_wh_numbers.append({
+                'wh_id': wh_id,
+                'number': ret['number'],
+                'fixed': '%04d%02d%s' % (ret['y'], ret['m'], ret['number']),
+                })
+    print fixed_wh_numbers
+    load_account_wh_iva_line(dbcomp, dbprofit)
 
 
-def postprocess_account_wh_iva_line(dbcomp, dbprofit):
+def load_account_wh_iva_line(dbcomp, dbprofit):
     p2o = profit_2_openerp('account.wh.iva.line', dbcomp, dbprofit)
     p2o.set_sql(
         '''

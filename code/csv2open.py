@@ -52,7 +52,8 @@ class csv_2_openerp(object):
             item[field], self.relations[field]['model'],
             self.relations[field]['search_fields'])
         if not value and item[field]:
-            print '\tNo encontrado! -> %s: "%s" ' % (field, item[field])
+            print '\tNo encontrado! -> %s: "%s"' % (field, item[field])
+            print item
         return value and len(value) == 1 and value[0] or 0
 
     def format_data_row(self, item):
@@ -244,7 +245,7 @@ class csv_2_openerp(object):
                 item[f] = self.find_related_field_value(item, f)
         item_ids = self.find_duplicated(item)
         if not item_ids:
-            self.lnk.execute(self.model, 'create', item)
+            return self.lnk.execute(self.model, 'create', item)
         elif self.update_records and len(item_ids) == 1:
             self.lnk.execute(self.model, 'write', item_ids, item)
 

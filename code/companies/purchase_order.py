@@ -55,7 +55,7 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
         'nro_ctrl': n_control,
         'journal_id': journal_id[0],
         'wh_iva_rate': 0,
-        'vat_apply': False,
+        'vat_apply': True,
         }
     dbcomp.execute(
         'account.invoice', 'write', order['invoice_ids'], data)

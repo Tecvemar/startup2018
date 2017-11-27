@@ -18,10 +18,10 @@ select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
           WHEN 'MIN0029' then 'PCE'
           WHEN 'GALCLARP101L' then 'ml'
           ELSE 'm2' END as product_uom,
-       a.art_des as name, c.fec_emis as date_planned,
+       rtrim(a.art_des) as name, c.fec_emis as date_planned,
        r.prec_vta as price_unit,
        rtrim(nro_lote) as "prod_lot_id",
-       r.aux02 as "aux02",
+       rtrim(r.aux02) as "aux02",
        case str(r.tipo_imp) when 1 then 'IVA 12% Ventas'
                             when 7 then 'IVA 7% Ventas'
                             when 8 then 'IVA 9% Ventas'

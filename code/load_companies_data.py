@@ -5,8 +5,7 @@ from definitions import dbdata
 import companies
 
 
-for database in dbdata['databases'][5:6]:
-
+for database in dbdata['databases'][0:1]:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
@@ -60,7 +59,7 @@ for database in dbdata['databases'][5:6]:
     # Taxes -------------------------------------------------------------------
     companies.load_fiscal_book(lnk_dbcom)
     companies.postprocess_stock_move(lnk_dbcom)
-    # Payments ---------------------------------------------------------------- 
+    # Payments ----------------------------------------------------------------
     companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
