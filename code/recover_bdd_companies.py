@@ -14,18 +14,15 @@ con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 cur = con.cursor()
 
-for database in dbdata['databases'][1:2]:
+for database in dbdata['databases'][0:1]:
     bkdata = {
         'backup_file': '../data/companies/%s.backup' % database,
         'database_name': database,
         'postgresql_login': dbdata['postgresql_login']
         }
 
-    try:
-        print """DROP DATABASE %(database_name)s""" % bkdata
-        cur.execute("""DROP DATABASE %(database_name)s;""" % bkdata)
-    except:
-        pass
+    print """DROP DATABASE %(database_name)s""" % bkdata
+    cur.execute("""DROP DATABASE %(database_name)s;""" % bkdata)
 
     print """CREATE DATABASE %(database_name)s""" % bkdata
     cur.execute("""CREATE DATABASE %(database_name)s
