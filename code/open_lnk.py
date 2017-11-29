@@ -76,7 +76,7 @@ class openerp_link(object):
             cursor.execute(sql % params)
         else:
             cursor.execute(sql)
-        if 'select' in sql.lower():
+        if 'select' in sql[:20].lower():
             ans1 = []
             for row in cursor.fetchall():
                 ans1.append(dict(row))
