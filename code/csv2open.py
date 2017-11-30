@@ -11,7 +11,10 @@ __animation__ = "|/-\\"
 __special_field_cases__ = {
     'guayana': {
         u'partner_id088878848': u'08887884',
-        }
+        },
+    'monagas': {
+        u'partner_id14012670': u'140126701',
+        },
     }
 
 
@@ -75,8 +78,10 @@ class csv_2_openerp(object):
         for f in item.keys():
             db = self.lnk.database
             if '%s%s' % (f, item[f]) in __special_field_cases__.get(db, {}):
+                org_value = item[f]
                 item[f] = __special_field_cases__[db]['%s%s' % (f, item[f])]
-                print '\tValor reasignado! -> %s: "%s" ' % (f, item[f])
+                print '\tValor reasignado %s!: "%s" -> "%s" ' % (
+                    f, org_value, item[f])
         return item
 
     def format_chield_data(self, item):

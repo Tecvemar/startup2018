@@ -3,6 +3,7 @@ from open_lnk import openerp_link
 from definitions import dbdata
 import models
 
+
 lnk_dbgen_admin = openerp_link(
     dbdata['host'],
     dbdata['rpc_port'],
@@ -62,3 +63,4 @@ models.load_stock_inventory(lnk_dbgen)
 models.load_stock_location(lnk_dbgen)
 models.load_ir_sequence(lnk_dbgen)
 models.load_tcv_to_dispatch_config(lnk_dbgen)
+models.load_islr_wh_concept(lnk_dbgen)

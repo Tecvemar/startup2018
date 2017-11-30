@@ -20,11 +20,11 @@ def load_account_wh_iva(dbcomp, dbprofit):
             right(100 + month(a.fec_emis), 2) + '-' + a.nro_che) as number,
             ltrim(rtrim(a.co_cli)) as partner_id, a.observa as name,
             case when rtrim(B.n_control)= '' then left(a.campo7,20) else
-            B.n_control end as nro_ctrl, a.co_sucu,a.nro_orig,a.doc_orig,
-            a.aut,a.moneda,a.monto_net, a.campo8,a.anulado,
+            rtrim(B.n_control) end as nro_ctrl, a.co_sucu,a.nro_orig,
+            a.doc_orig, a.aut,a.moneda,a.monto_net, a.campo8, a.anulado,
             b.dis_cen as inf_iva,b.monto_net as net_iva,
             ltrim(rtrim(b.nro_fact))  as invoice_id ,ltrim(rtrim(b.nro_fact))
-            as supplier_invoice_number , b.nro_fact as donde,
+            as supplier_invoice_number , rtrim(b.nro_fact) as donde,
             b.doc_orig as fac_orig, b.nro_fact as nfacori,
             cast(round((a.monto_net / b.monto_imp) *100, 0) as Int)
             as pct_ret, 'in_invoice' as type

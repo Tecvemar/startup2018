@@ -33,3 +33,4 @@ from ir_sequence import load_ir_sequence
 from tcv_to_dispatch_config import load_tcv_to_dispatch_config
 from stock_inventory import load_stock_inventory
 from stock_location import load_stock_location
+from islr_wh_concept import load_islr_wh_concept

@@ -46,9 +46,10 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
     duplicated_ids = dbcomp.execute(
         'account.invoice', 'search', [
             ('nro_ctrl', 'ilike', n_control),
-            ('partner_id', '=', order['partner_id'][0])])
+            ('partner_id', '=', order['partner_id'][0]),
+            ('id', '<=', order['id'])])
     if duplicated_ids:
-        n_control = '%s-%s' % (n_control, len(duplicated_ids))
+        n_control = '%s-%s' % (n_control, len(duplicated_ids) - 1)
     data = {
         'date_invoice': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
         'date_document': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
