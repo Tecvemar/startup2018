@@ -28,3 +28,4 @@ from stock_picking import postprocess_stock_picking
 from fiscal_book import load_fiscal_book
 from account_wh_iva import load_account_wh_iva
 from stock_move import postprocess_stock_move
+from tcv_stock_book  import load_tcv_stock_book
