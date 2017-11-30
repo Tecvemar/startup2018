@@ -5,7 +5,7 @@ from profit2open import profit_2_openerp
 
 __islr_wh_concepts__ = {
     '1002': 2, '1005': 12, '1006': 3, '1020': 4, '1021': 7, '1022': 25,
-    '1023': 26, '1025': 5, '1029': 32,'1030': 6,
+    '1023': 26, '1025': 5, '1029': 32, '1030': 6,
     }
 
 
@@ -15,7 +15,6 @@ def load_islr_wh_doc(dbcomp, dbprofit):
     Charge whitholdings ISLR
 
     '''
-    #~ retention_ids = []
     p2o = profit_2_openerp('islr.wh.doc', dbcomp, dbprofit)
     p2o.set_sql(
         '''
@@ -111,11 +110,13 @@ def create_islr_doc(dbcomp, ret, inv_lines):
         'account.invoice', 'create_islr_wh_doc', ivl['invoice_id'][0], {})
     dbcomp.execute(
         'islr.wh.doc', 'write', [ret_id], {
-            'name': ret['name'],
+            'name': ret['name'] or u'Retención ISLR (Migración)',
             'date_ret': ret['date_ret'],
             'date_uid': ret['date_uid'],
             'number': ret['number'],
             'code': ret['code'],
+            'period_id': dbcomp.execute(
+                'account.period', 'find', ret['date_uid'])[0]
             })
     dbcomp.execute_workflow(
         'islr.wh.doc', 'act_confirm', ret_id)

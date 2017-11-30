@@ -14,7 +14,7 @@ con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
 cur = con.cursor()
 
-for database in dbdata['databases'][0:1]:
+for database in dbdata['databases']:
     bkdata = {
         'backup_file': '../data/companies/%s.backup' % database,
         'database_name': database,
