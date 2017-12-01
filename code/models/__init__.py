@@ -34,3 +34,5 @@ from tcv_to_dispatch_config import load_tcv_to_dispatch_config
 from stock_inventory import load_stock_inventory
 from stock_location import load_stock_location
 from islr_wh_concept import load_islr_wh_concept
+from tcv_petty_cash_config_detail import load_tcv_petty_cash_config_detail
+from tcv_petty_cash_expense_acc import load_tcv_petty_cash_expense_acc
