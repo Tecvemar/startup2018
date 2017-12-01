@@ -13,7 +13,7 @@ def load_islr_wh_doc(dbcomp, dbprofit):
     '''
 
     Charge whitholdings ISLR
-
+    Let OpenERP assign wh numbres!
     '''
     p2o = profit_2_openerp('islr.wh.doc', dbcomp, dbprofit)
     p2o.set_sql(
@@ -25,7 +25,6 @@ def load_islr_wh_doc(dbcomp, dbprofit):
                rtrim(d.co_cli) as partner_id,
                CAST(year(p.fec_cob) as varchar) + '-' +
                right(CAST(month(p.fec_cob) + 100 as varchar), 2) + '-' +
-               right(CAST(p.cob_num + 100000000 as varchar), 8) as number,
                p.descrip as name
         from reng_pag r
         left join pagos p on r.cob_num = p.cob_num
@@ -35,7 +34,6 @@ def load_islr_wh_doc(dbcomp, dbprofit):
               d.fec_emis > '2017-01-01' and p.anulado = 0
         order by p.cob_num
         ''')
-    p2o.set_search_fields(['number'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
         ])
@@ -113,7 +111,6 @@ def create_islr_doc(dbcomp, ret, inv_lines):
             'name': ret['name'] or u'Retención ISLR (Migración)',
             'date_ret': ret['date_ret'],
             'date_uid': ret['date_uid'],
-            'number': ret['number'],
             'code': ret['code'],
             'period_id': dbcomp.execute(
                 'account.period', 'find', ret['date_uid'])[0]
