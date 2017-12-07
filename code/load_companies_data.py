@@ -64,6 +64,7 @@ for database in dbdata['databases']:
     # Books -------------------------------------------------------------------
     companies.load_fiscal_book(lnk_dbcom)
     companies.load_tcv_stock_book(lnk_dbcom)
+    companies.load_tcv_bank_account(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
         lnk_dbprofit.close()

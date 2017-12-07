@@ -30,3 +30,4 @@ from account_wh_iva import load_account_wh_iva
 from stock_move import postprocess_stock_move
 from tcv_stock_book  import load_tcv_stock_book
 from islr_wh_doc import load_islr_wh_doc
+from tcv_bank_account import load_tcv_bank_account

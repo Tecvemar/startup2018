@@ -9,11 +9,18 @@ __animation__ = "|/-\\"
 
 
 __special_field_cases__ = {
+    'barcelona': {
+        u'bank_idCOMMER': u'0440',
+        u'bank_idORINOC': u'0430',
+        },
     'guayana': {
         u'partner_id088878848': u'08887884',
+        u'bank_idCOMMER': u'0440',
+        u'bank_id0429': u'0430',
         },
     'monagas': {
         u'partner_id14012670': u'140126701',
+        u'bank_id0425': u'0410',
         },
     }
 
