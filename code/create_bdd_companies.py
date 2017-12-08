@@ -17,11 +17,8 @@ cur = con.cursor()
 for db in dbdata['databases']:
     dbdata.update({'database_name': db})
 
-    try:
-        print """DROP DATABASE %(database_name)s""" % dbdata
-        cur.execute("""DROP DATABASE %(database_name)s;""" % dbdata)
-    except:
-        pass
+    print """DROP DATABASE %(database_name)s""" % dbdata
+    cur.execute("""DROP DATABASE %(database_name)s;""" % dbdata)
 
     print """CREATE DATABASE %(database_name)s""" % dbdata
     cur.execute("""CREATE DATABASE %(database_name)s

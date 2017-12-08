@@ -73,7 +73,7 @@ class openerp_link(object):
         conn = psycopg2.connect(conn_string)
         cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         if params:
-            cursor.execute(sql % params)
+            cursor.execute(sql, params)
         else:
             cursor.execute(sql)
         if 'select' in sql[:20].lower():
