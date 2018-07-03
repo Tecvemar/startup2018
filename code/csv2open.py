@@ -2,6 +2,7 @@
 import csv
 import sys
 import gc
+import string
 from rif import calcular_rif
 
 
@@ -293,6 +294,7 @@ class csv_2_openerp(object):
         This code splits the data in aux02 (from profit db)
         '''
         if a2:
+            a2 = filter(lambda x: x in string.printable, a2)
             data = a2.split(';')
             pc = le = he = wi = 0
             ub = ''

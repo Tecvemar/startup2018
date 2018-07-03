@@ -3,6 +3,7 @@
 
 import os
 from psycopg2 import connect
+from psycopg2 import Error
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from definitions import dbdata
 
@@ -18,7 +19,12 @@ for db in dbdata['databases']:
     dbdata.update({'database_name': db})
 
     print """DROP DATABASE %(database_name)s""" % dbdata
-    cur.execute("""DROP DATABASE %(database_name)s;""" % dbdata)
+    try:
+        cur.execute("""DROP DATABASE %(database_name)s;""" % dbdata)
+    except Error as e:
+        print "Unable to connect!"
+        print e.pgerror
+        pass
 
     print """CREATE DATABASE %(database_name)s""" % dbdata
     cur.execute("""CREATE DATABASE %(database_name)s

@@ -91,6 +91,8 @@ def postprocess_purchase_order(dbcomp, dbprofit):
             else:
                 print '  No se encontró la dirección para: %s %s' % (
                     order['partner_id'], addrs_id)
+        if order['date_order'] < '2017-12-31' and order['name'][:5] == 'ODC18':
+            data.update({'name': 'ODC17' + order['name'][5:]})
         if data:
             dbcomp.execute('purchase.order', 'write', order['id'], data)
         if order['state'] == 'draft' and not order['invoice_ids']:
