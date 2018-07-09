@@ -4,7 +4,7 @@ from profit2open import profit_2_openerp
 
 
 __islr_wh_concepts__ = {
-    '1002': 2, '1005': 12, '1006': 3, '1020': 4, '1021': 7, '1022': 25,
+    '1002': 2, '1005': 12, '1006': 3, '1020': 4, '1021': 25, '1022': 25,
     '1023': 26, '1025': 5, '1029': 32, '1030': 6,
     }
 
@@ -32,7 +32,7 @@ def load_islr_wh_doc(dbcomp, dbprofit):
         left join docum_cp d on d.tipo_doc='FACT' and d.nro_doc = i.fact_num
         where r.tp_doc_cob= 'ISLR' and p.fec_cob > '2017-01-01' and
               d.fec_emis > '2017-01-01' and p.anulado = 0
-        order by p.cob_num
+        order by p.fec_cob, p.cob_num
         ''')
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),

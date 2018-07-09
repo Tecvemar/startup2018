@@ -25,7 +25,6 @@ where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
     p2o.load_data()
     for l in p2o.data:
         l['--update_str'] = l['--update_str'].replace('|', "'")
-        print l
     file_name = '../data/companies/%s/docum_cp_campo1.sql' % dbcomp.database
     p2o.export_to_csv_file(file_name)
     #~ print p2o.data
