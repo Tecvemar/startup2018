@@ -14,6 +14,7 @@ from res_partner_1 import load_res_partner
 from res_partner_1 import load_res_partner_profit_pruchase
 from res_partner_1 import load_res_partner_profit_sale
 from res_partner_1 import load_res_partner_companies_extra_data
+from purchase_order import load_purchase_order_extra
 from purchase_order import load_purchase_order
 from purchase_order import postprocess_purchase_order
 from purchase_order_line import load_purchase_order_line_profit_detail
@@ -30,3 +31,7 @@ from account_wh_iva import load_account_wh_iva
 from stock_move import postprocess_stock_move
 from tcv_stock_book  import load_tcv_stock_book
 from islr_wh_doc import load_islr_wh_doc
+from account_payments import load_account_voucher_purchase
+from account_payments import postprocess_acc_voucher_purchase
+from account_payments import postprocess_acc_voucher_purchase_manual
+from account_payments import load_account_voucher_sale

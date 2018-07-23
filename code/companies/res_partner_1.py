@@ -71,8 +71,14 @@ select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
        'VE' as "address.country_id"
 from prov p
 where p.co_prov in (
-    select distinct co_cli from docum_cp
-    where tipo_doc = 'FACT' and fec_emis >= '2017-01-01')
+    select distinct co_cli from (
+        select distinct co_cli from docum_cp
+        where tipo_doc = 'FACT' and fec_emis >= '2017-01-01'
+        union
+        select distinct co_cli from pagos
+        where fec_cob >= '2017-01-01'
+        ) as f)
+
 order by 3
         ''')
     p2o.set_search_fields(['vat'])

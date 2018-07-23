@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
+from csv2open import csv_2_openerp
 from profit2open import profit_2_openerp
 import sys
+import os
 
 
 def load_purchase_order(lnk, profit):
@@ -25,7 +27,28 @@ order by nro_doc
         ('pricelist_id', 'product.pricelist', ['name']),
         ])
     p2o.process_csv()
-    #~ p2o.test_data_file()
+
+
+def load_purchase_order_extra(lnk, profit):
+    work_dir = '../data/companies/%s/' % lnk.database
+    work_csv = work_dir + 'purchase_order_extra.csv'
+    if not os.path.isfile(work_csv):
+        return
+    c2o = csv_2_openerp(work_csv, 'purchase.order', lnk)
+    c2o.set_search_fields(['origin'])
+    c2o.set_relational_fields([
+        ('partner_id', 'res.partner', ['ref']),
+        ('location_id', 'stock.location', ['name']),
+        ('pricelist_id', 'product.pricelist', ['name']),
+        ('order_line.product_id', 'product.product', ['default_code']),
+        ('order_line.concept_id', 'islr.wh.concept', ['name']),
+        ('order_line.product_uom', 'product.uom', ['name']),
+        ])
+    c2o.set_m2m_fields([
+        ('order_line.taxes_id', 'link', 'account.tax', ['name'])])
+    c2o.set_child_model_fields(['order_line'])
+    c2o.update_records = True
+    c2o.process_csv()
 
 
 def complete_purchase_invoice_data(dbcomp, dbprofit, order_id, journal_id):
@@ -35,7 +58,9 @@ def complete_purchase_invoice_data(dbcomp, dbprofit, order_id, journal_id):
 select c.fec_emis, rtrim(c.n_control) as n_control, monto_reten,
        case isnull(isv, 0) when 0 then 0 else
             round((ret_iva / isv) * 100, 0) end as wh_iva_rate,
-       ret_iva, p.monto_reten
+       ret_iva, p.monto_reten,
+       case c.fec_reg when '1900-01-01'
+            then c.fec_emis else c.fec_reg end as fec_reg
 from docum_cp c
 left join reng_pag p on p.tp_doc_cob = 'FACT' and p.doc_num = c.nro_doc
 where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
@@ -51,13 +76,15 @@ where c.tipo_doc = 'FACT' and c.nro_doc = %(nro_doc)s
     if duplicated_ids:
         n_control = '%s-%s' % (n_control, len(duplicated_ids) - 1)
     data = {
-        'date_invoice': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
+        'date_invoice': profit_doc['fec_reg'].strftime('%Y-%m-%d %H:%M:%S'),
         'date_document': profit_doc['fec_emis'].strftime('%Y-%m-%d %H:%M:%S'),
+        'comment': order.get('origin', ''),
         'nro_ctrl': n_control,
         'journal_id': journal_id[0],
         'wh_iva_rate': 0,
         'vat_apply': True,
         }
+    data['date_invoice'] = data['date_document'] if data['date_invoice'] < data['date_document'] else data['date_invoice']
     dbcomp.execute(
         'account.invoice', 'write', order['invoice_ids'], data)
     for inv_id in order['invoice_ids']:

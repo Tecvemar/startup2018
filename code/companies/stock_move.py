@@ -24,9 +24,9 @@ def write_move_date(dbcomp, move_id, date):
         print '\n\tError al asignar la fecha al movimiento: %d\n' % move_id
     sql = '''
     UPDATE stock_move set
-           create_date = '%(date)s',
-           date = '%(date)s',
-           date_expected = '%(date)s'
+           create_date = %(date)s,
+           date = %(date)s,
+           date_expected = %(date)s
           WHERE id = %(move_id)s
     '''
     params = {'move_id': move_id, 'date': date}

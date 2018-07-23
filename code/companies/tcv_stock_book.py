@@ -13,8 +13,11 @@ def load_tcv_stock_book(dbcomp):
         ('period_id', 'account.period', ['name']),
         ])
     c2o.load_data()
+    c2o.done()
 
+    msg = '  Postprocesando: tcv.stock.book'
     for book in c2o.data:
+        print msg + ' ' + str(book['name']) + ' ' * 40 + '\r',
         book_id = c2o.write_data_row(book)
         if book_id:
             dbcomp.execute(
@@ -32,4 +35,5 @@ def load_tcv_stock_book(dbcomp):
                             {'stock_init': stock_init})
                 dbcomp.execute(
                     'tcv.stock.book', 'button_update_book', [book_id])
+    print msg + ', Done.' + ' ' * 40
     c2o.done()

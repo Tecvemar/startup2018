@@ -125,8 +125,8 @@ class csv_2_openerp(object):
             self.show_wait()
             row = self.validate_special_cases(item)
             row = self.format_data_row(row)
-            self.format_chield_data(row)
             self.format_m2m_data(row)
+            self.format_chield_data(row)
             res.append(row)
         return res
 

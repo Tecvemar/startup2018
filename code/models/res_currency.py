@@ -2,7 +2,7 @@
 from csv2open import csv_2_openerp
 
 
-def update_res_currency(lnk):
+def update_res_currency(dbref, lnk):
     #~ disable unused currencies
     c2o = csv_2_openerp(
         '../data/common/res_currency_1.csv', 'res.currency', lnk)
@@ -10,6 +10,16 @@ def update_res_currency(lnk):
     c2o.set_boolean_fields(['active', 'base'])
     c2o.update_records = True
     c2o.process_csv()
+
+    #~ Force base currency to VEB
+    eur_id = dbref.execute(
+        'res.currency', 'search', [('name', '=', 'EUR')])
+    veb_id = dbref.execute(
+        'res.currency', 'search', [('name', '=', 'VEB')])
+    dbref.execute(
+        'res.currency', 'write', eur_id, {'name': 'VEB', 'symbol': 'Bs'})
+    dbref.execute(
+        'res.currency', 'write', veb_id, {'name': 'EUR', 'symbol': u'€'})
 
     #~ set rounding factor to VEB
     c2o = csv_2_openerp(

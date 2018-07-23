@@ -15,6 +15,7 @@ def load_fiscal_book(dbcomp):
         ])
     c2o.update_records = True
     c2o.process_csv()
+    c2o.done()
 
     postprocess_fiscal_book(dbcomp, 'purchase')
     postprocess_fiscal_book(dbcomp, 'sale')
