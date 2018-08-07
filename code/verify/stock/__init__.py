@@ -1,0 +1,1 @@
+from stock_profit_open_inventory import  stock_profit_open_inventory
