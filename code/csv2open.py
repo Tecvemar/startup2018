@@ -10,6 +10,10 @@ __animation__ = "|/-\\"
 
 
 __special_field_cases__ = {
+    'barcelona': {
+        u'partner_id9867027': u'31234393',
+        u'partner_id5706139': u'576139',
+        },
     'guayana': {
         u'partner_id088878848': u'08887884',
         },
@@ -239,6 +243,9 @@ class csv_2_openerp(object):
         if search_args:
             item_ids = self.lnk.execute(
                 model, 'search', search_args)
+            if len(item_ids) > 1:
+                print '\tMultiples resultados encontrados! ->',
+                print field, item, item_ids
             if item_ids:
                 self.search_cache[cache_key] = item_ids
             return item_ids

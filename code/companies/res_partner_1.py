@@ -68,6 +68,7 @@ select rtrim(p.prov_des) as name, rtrim(p.rif) as vat,
        '1110899999' as property_account_prepaid,
        'Customers' as property_stock_customer,
        'Suppliers' as property_stock_supplier,
+       'CXP NACIONALES' as account_kind_rec,
        'VE' as "address.country_id"
 from prov p
 where p.co_prov in (
@@ -91,12 +92,64 @@ order by 3
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
+        ('account_kind_rec', 'res.partner.account', ['name']),
         ('address.country_id', 'res.country', ['code']),
         ])
     p2o.set_child_model_fields(['address'])
     p2o.set_vat_field = 'vat'
     p2o.process_csv()
-    #~ p2o.test_data_file()
+
+
+def load_res_partner_profit_payment_orders(lnk, profit):
+    if not profit:
+        return
+    p2o = profit_2_openerp('res.partner', lnk, profit)
+    p2o.set_sql(
+        '''
+select rtrim(ben_des) as name, rtrim(rif) as vat,
+       rtrim(cod_ben) as ref, 'es_VE' as lang,
+       't' as supplier, 'invoice' as "address.type",
+       direc1 as "address.street1",
+       telefono as  "address.phone",
+       't' as islr_withholding_agent,
+       'f' as wh_iva_agent,
+       '1110299999' as property_account_receivable,
+       '2120199999' as property_account_payable,
+       '2180399999' as property_account_advance,
+       '1110899999' as property_account_prepaid,
+       'Customers' as property_stock_customer,
+       'Suppliers' as property_stock_supplier,
+       'CXP NACIONALES' as account_kind_rec,
+       'VE' as "address.country_id"
+from benefici
+where cod_ben in (
+    select distinct cod_ben
+    from ord_pago op
+    where op.fecha >= '2017-01-01' and op.anulada = 0)
+        ''')
+    p2o.set_search_fields(['vat'])
+    p2o.set_boolean_fields(['supplier', 'islr_withholding_agent',
+                            'wh_iva_agent'])
+    p2o.set_relational_fields([
+        ('property_account_receivable', 'account.account', ['code']),
+        ('property_account_payable', 'account.account', ['code']),
+        ('property_account_advance', 'account.account', ['code']),
+        ('property_account_prepaid', 'account.account', ['code']),
+        ('property_stock_customer', 'stock.location', ['name']),
+        ('property_stock_supplier', 'stock.location', ['name']),
+        ('account_kind_rec', 'res.partner.account', ['name']),
+        ('address.country_id', 'res.country', ['code']),
+        ])
+    p2o.set_child_model_fields(['address'])
+    p2o.set_vat_field = 'vat'
+    p2o.load_data()
+    for partner in p2o.data:
+        partner_row = partner.copy()
+        if not partner_row['address'][0][2]['street1']:
+            partner_row['address'][0][2]['street1'] = lnk.database
+        if not partner_row['vat']:
+            partner_row['address'][0][2]['country_id'] = 0
+        p2o.write_data_row(partner_row)
 
 
 def load_res_partner_profit_sale(lnk, profit):
@@ -119,11 +172,15 @@ select rtrim(p.cli_des) as name, rtrim(p.rif) as vat,
        '1110899999' as property_account_prepaid,
        'Customers' as property_stock_customer,
        'Suppliers' as property_stock_supplier,
+       'CXC NACIONALES' as account_kind_rec,
        'VE' as country_id
 from clientes p
 where p.co_cli in (
     select distinct co_cli from docum_cc
-    where tipo_doc = 'FACT' and fec_emis >= '2017-01-01')
+    where tipo_doc = 'FACT' and fec_emis >= '2017-01-01') or
+      p.co_cli in (
+    select distinct co_cli from clientes
+    where campo8='openerp')
 order by 3
         ''')
     p2o.set_search_fields(['vat'])
@@ -136,6 +193,7 @@ order by 3
         ('property_account_prepaid', 'account.account', ['code']),
         ('property_stock_customer', 'stock.location', ['name']),
         ('property_stock_supplier', 'stock.location', ['name']),
+        ('account_kind_rec', 'res.partner.account', ['name']),
         ('country_id', 'res.country', ['code']),
         ])
     p2o.set_child_model_fields(['address'])

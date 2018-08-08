@@ -76,6 +76,11 @@ where c.moneda != 'BS'
         ('currency_id', 'res.currency', ['name']),
         ])
     p2o.process_csv()
+    # force allow_date to false
+    journal_ids = lnk.execute(
+        'account.journal', 'search', [('type', '=', 'bank')])
+    lnk.execute(
+        'account.journal', 'write', journal_ids, {'allow_date': False})
 
     #  tcv.bank.account -------------------------------------------------------
     work_dir = '../data/companies/%s/' % lnk.database

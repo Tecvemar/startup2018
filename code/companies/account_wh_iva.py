@@ -93,7 +93,7 @@ WHERE ltrim(rtrim(a.campo8))='IVA' and a.anulado=0 and
     p2o.set_search_fields(['invoice_id'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
-        ('invoice_id', 'account.invoice', ['supplier_invoice_number']),
+        ('invoice_id', 'account.invoice', ['supplier_invoice_number', 'partner_id']),
         ('retention_id', 'account.wh.iva', ['number']),
         ])
     p2o.load_data()

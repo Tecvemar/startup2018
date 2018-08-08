@@ -12,6 +12,7 @@ from product_product import load_product_product
 from res_partner_address_1 import load_res_partner_address
 from res_partner_1 import load_res_partner
 from res_partner_1 import load_res_partner_profit_pruchase
+from res_partner_1 import load_res_partner_profit_payment_orders
 from res_partner_1 import load_res_partner_profit_sale
 from res_partner_1 import load_res_partner_companies_extra_data
 from purchase_order import load_purchase_order_extra
@@ -35,3 +36,8 @@ from account_payments import load_account_voucher_purchase
 from account_payments import postprocess_acc_voucher_purchase
 from account_payments import postprocess_acc_voucher_purchase_manual
 from account_payments import load_account_voucher_sale
+from account_payments import postprocess_acc_voucher_sale
+from account_payments import load_account_voucher_payment_ordes
+from tcv_bank_deposit import load_tcv_bank_deposit
+from tcv_bank_config import load_tcv_bank_config
+
