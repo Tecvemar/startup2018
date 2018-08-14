@@ -120,6 +120,10 @@ order by rd.reng_num
         if op_key in ('ADEL', 'FACT', 'FACT_ISLR_AJNM') and voucher['amount']:
             dbcomp.execute_workflow(
                 'account.voucher', 'proforma_voucher', voucher['id'])
+        elif op_key in ('FACT_ISLR', 'FACT_AJNM', 'FACT_ISLR_AJNM',) and \
+                not voucher['amount']:
+            dbcomp.execute_workflow(
+                'account.voucher', 'cancel_voucher', voucher['id'])
 
 
 def postprocess_acc_voucher_purchase_manual(dbcomp, dbprofit):
@@ -207,7 +211,6 @@ order by op.fecha, op.ord_num
         dbcomp.execute_workflow(
             'account.voucher', 'proforma_voucher', vou['id'])
     p2o.done
-
 
 
 # Sales -----------------------------------------------------------------------

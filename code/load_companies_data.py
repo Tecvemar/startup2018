@@ -28,7 +28,7 @@ for database in dbdata['databases']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    if False:
+    if True:
         companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -69,17 +69,15 @@ for database in dbdata['databases']:
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
-        # ~ companies.load_res_partner_profit_payment_orders(lnk_dbcom, lnk_dbprofit)
+        companies.load_res_partner_profit_payment_orders(lnk_dbcom, lnk_dbprofit)
+        companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
+        companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom, lnk_dbprofit)
         # Books -------------------------------------------------------------------
         companies.load_fiscal_book(lnk_dbcom)
         companies.load_tcv_stock_book(lnk_dbcom)
         # Deposits ----------------------------------------------------------------
         companies.load_tcv_bank_config(lnk_dbcom)
         companies.load_tcv_bank_deposit(lnk_dbcom, lnk_dbprofit)
-
-    # Mover o copiar y elimina!!!!!!
-    # ~ companies.load_res_partner_profit_payment_orders(lnk_dbcom, lnk_dbprofit)
-    companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
         lnk_dbprofit.close()

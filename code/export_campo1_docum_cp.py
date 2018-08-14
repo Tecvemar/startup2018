@@ -30,7 +30,7 @@ where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
     #~ print p2o.data
 
 
-for database in dbdata['databases'][:6]:
+for database in dbdata['databases']:
     if dbdata[database]['profit']:
         lnk_dbprofit = profit_link(
             dbdata[database]['profit']['host'],
