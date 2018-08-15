@@ -27,7 +27,27 @@ where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
         l['--update_str'] = l['--update_str'].replace('|', "'")
     file_name = '../data/companies/%s/docum_cp_campo1.sql' % dbcomp.database
     p2o.export_to_csv_file(file_name)
-    #~ print p2o.data
+
+
+def export_payment_orders_data(dbcomp, dbprofit):
+    '''
+    '''
+    p2o = profit_2_openerp('Export docum_cp campo1', dbcomp, dbprofit)
+    p2o.set_sql(
+        '''
+select 'update docum_cp set campo1 = |' + rtrim(op.campo1) +
+       '| where ord_num = ' +
+       cast(ord_num as varchar) + ';' as '--update_str'
+from ord_pago op
+where op.fecha >= '2017-01-01' and op.anulada = 0
+order by op.ord_num
+        ''')
+    #~ p2o.test_data_file()
+    p2o.load_data()
+    for l in p2o.data:
+        l['--update_str'] = l['--update_str'].replace('|', "'")
+    file_name = '../data/companies/%s/ord_pago_campo1.sql' % dbcomp.database
+    p2o.export_to_csv_file(file_name)
 
 
 for database in dbdata['databases']:
@@ -48,3 +68,4 @@ for database in dbdata['databases']:
         dbdata['openerp_password'])
 
     export_purchase_data(lnk_dbcom, lnk_dbprofit)
+    export_payment_orders_data(lnk_dbcom, lnk_dbprofit)

@@ -15,7 +15,7 @@ class openerp_link(object):
         self.password = password
         self.postgresql_login = postgresql_login
         self.postgresql_password = postgresql_password
-        print 'Conectado a: %s\%s' % (host, database)
+        print 'Conectado al servidor OpenERP: %s\%s' % (host, database)
         self.open_link()
 
     def open_link(self):

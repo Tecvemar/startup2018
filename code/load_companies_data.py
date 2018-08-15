@@ -28,7 +28,7 @@ for database in dbdata['databases']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    if True:
+    if True:  # Added to split process for deguging
         companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -42,40 +42,45 @@ for database in dbdata['databases']:
         companies.load_product_product(lnk_dbcom)
         companies.load_res_partner_address(lnk_dbcom)
         companies.load_res_partner(lnk_dbcom)
-        # Purchases ---------------------------------------------------------------
+        # Purchases -----------------------------------------------------------
         companies.load_res_partner_profit_pruchase(lnk_dbcom, lnk_dbprofit)
         companies.load_purchase_order_extra(lnk_dbcom, lnk_dbprofit)
         companies.load_purchase_order(lnk_dbcom, lnk_dbprofit)
-        companies.load_purchase_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
+        companies.load_purchase_order_line_profit_detail(lnk_dbcom,
+                                                         lnk_dbprofit)
         companies.load_purchase_order_no_details(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_purchase_order(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_inventory_line(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_stock_inventory(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_stock_picking(lnk_dbcom, lnk_dbprofit)
         companies.load_tcv_stock_changes(lnk_dbcom, lnk_dbprofit)
-        # ~ # Sales -------------------------------------------------------------------
+        # ~ # Sales -----------------------------------------------------------
         companies.load_res_partner_profit_sale(lnk_dbcom, lnk_dbprofit)
         companies.load_res_partner_companies_extra_data(lnk_dbcom)
         companies.load_sale_order(lnk_dbcom, lnk_dbprofit)
         companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_sale_order(lnk_dbcom, lnk_dbprofit)
-        # Stock.moves -------------------------------------------------------------
+        # Stock.moves ---------------------------------------------------------
         companies.postprocess_stock_move(lnk_dbcom)
-        # Payments ----------------------------------------------------------------
+        # Payments ------------------------------------------------------------
+    else:  # before this all Ok
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
-        companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom, lnk_dbprofit)
+        companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
+                                                          lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
-        companies.load_res_partner_profit_payment_orders(lnk_dbcom, lnk_dbprofit)
+        companies.load_res_partner_profit_payment_orders(lnk_dbcom,
+                                                         lnk_dbprofit)
         companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
-        companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom, lnk_dbprofit)
-        # Books -------------------------------------------------------------------
+        companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
+                                                          lnk_dbprofit)
+        # Books ---------------------------------------------------------------
         companies.load_fiscal_book(lnk_dbcom)
         companies.load_tcv_stock_book(lnk_dbcom)
-        # Deposits ----------------------------------------------------------------
+        # Deposits ------------------------------------------------------------
         companies.load_tcv_bank_config(lnk_dbcom)
         companies.load_tcv_bank_deposit(lnk_dbcom, lnk_dbprofit)
 

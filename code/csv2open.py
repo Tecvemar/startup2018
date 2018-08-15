@@ -20,6 +20,9 @@ __special_field_cases__ = {
     'monagas': {
         u'partner_id14012670': u'140126701',
         },
+    'valencia': {
+        u'partner_id3135549360': u'313554936',
+        },
     }
 
 
@@ -62,6 +65,7 @@ class csv_2_openerp(object):
         if not value and item[field]:
             print '\tNo encontrado! -> %s: "%s"' % (field, item[field])
             print item
+            print self.relations[field]['search_fields']
         return value and len(value) == 1 and value[0] or 0
 
     def format_data_row(self, item):
