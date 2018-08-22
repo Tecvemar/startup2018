@@ -80,8 +80,10 @@ SELECT rtrim(cast(year(a.fec_emis) as varchar) + '-' +
        right(100 + month(a.fec_emis), 2) + '-' + a.nro_che) as retention_id,
        a.observa as name, ltrim(rtrim(b.nro_fact)) as invoice_id,
        ltrim(rtrim(b.nro_fact)) as nro_fact,
+       ltrim(rtrim(b.nro_fact)) as supplier_invoice_number,
        ltrim(rtrim(a.co_cli)) as partner_id,
-       cast(round((a.monto_net / b.monto_imp) *100, 0) as Int) as pct_ret
+       cast(round((a.monto_net / b.monto_imp) *100, 0) as Int) as pct_ret,
+       a.fec_emis as date_invoice
 FROM docum_cp a
      left join docum_cp b on A.nro_orig = B.nro_doc and
      A.doc_orig = B.tipo_doc
@@ -93,7 +95,8 @@ WHERE ltrim(rtrim(a.campo8))='IVA' and a.anulado=0 and
     p2o.set_search_fields(['invoice_id'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
-        ('invoice_id', 'account.invoice', ['supplier_invoice_number', 'partner_id']),
+        ('invoice_id', 'account.invoice', ['supplier_invoice_number',
+                                           'partner_id']),
         ('retention_id', 'account.wh.iva', ['number']),
         ])
     p2o.load_data()

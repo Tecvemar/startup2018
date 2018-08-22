@@ -59,8 +59,12 @@ class csv_2_openerp(object):
                 csv.DictReader(open(self.csv_file)))
 
     def find_related_field_value(self, item, field):
+        search_value = item[field]
+        if type(self.relations[field]['search_fields']) in (dict, list) and \
+                len(self.relations[field]['search_fields']) > 1:
+            search_value = item
         value = self.find_duplicated(
-            item[field], self.relations[field]['model'],
+            search_value, self.relations[field]['model'],
             self.relations[field]['search_fields'])
         if not value and item[field]:
             print '\tNo encontrado! -> %s: "%s"' % (field, item[field])

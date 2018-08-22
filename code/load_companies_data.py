@@ -28,7 +28,7 @@ for database in dbdata['databases']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    if True:  # Added to split process for deguging
+    if False:  # Added to split process for deguging
         companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot_extra(lnk_dbcom)
