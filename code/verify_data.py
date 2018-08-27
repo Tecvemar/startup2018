@@ -28,6 +28,7 @@ for database in dbdata['databases'][:1]:
         dbdata['openerp_login'],
         dbdata['openerp_password'])
 
-    print 'Verificano datos: %s...' % database
+    print 'Verificando datos: %s...' % database
 
-    verify.check_account_invoice_purchases(lnk_dbcom, lnk_dbprofit)
+    #~ verify.check_account_invoice_purchases(lnk_dbcom, lnk_dbprofit)
+    verify.stock_profit_open_inventory(lnk_dbcom, lnk_dbprofit)
