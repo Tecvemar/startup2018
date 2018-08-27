@@ -63,9 +63,9 @@ for database in dbdata['databases']:
         # Stock.moves ---------------------------------------------------------
         companies.postprocess_stock_move(lnk_dbcom)
         # Payments ------------------------------------------------------------
-    else:  # before this all Ok
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
+    else:  # before this all Ok
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
@@ -86,3 +86,5 @@ for database in dbdata['databases']:
 
     if lnk_dbprofit:
         lnk_dbprofit.close()
+
+    print 'listo. Base de datos: %s' % database

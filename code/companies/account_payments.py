@@ -17,14 +17,18 @@ def load_account_voucher_purchase(dbcomp, dbprofit):
 select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
        case rtrim(rd.cod_caja) when '002' then 'DCHI'
                                when '001' then 'DCEF'
+                               when '004' then 'DCHI'
                                when '999' then '9999'
                                else rtrim(rd.cod_caja) end as journal_id,
        pg.fec_cob as date, 'payment' as type, tip_cob, pg.cob_num,
        'PAG '+cast(pg.cob_num as varchar) as name,
        rtrim(descrip) as narration,
-       rtrim(tip_cob)+' '+rtrim(num_doc) as reference,
+       case num_doc when ''
+            Then rtrim(tip_cob)+'/'+cast(pg.cob_num as varchar)
+            else rtrim(tip_cob)+' '+rtrim(num_doc) end as reference,
        case rtrim(rd.cod_caja) when '002' then 'cash'
                        when '001' then 'cash'
+                       when '004' then 'cash'
                        when '999' then 'cash'
                        else 'transfer' end as payment_doc,
        0 as account_id
@@ -236,7 +240,9 @@ select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
        pg.fec_cob as date, 'receipt' as type, tip_cob, pg.cob_num,
        'COB '+cast(pg.cob_num as varchar) as name,
        rtrim(descrip) as narration,
-       rtrim(tip_cob)+' '+rtrim(num_doc) as reference,
+       case num_doc when ''
+            Then rtrim(tip_cob)+'/'+cast(pg.cob_num as varchar)
+            else rtrim(tip_cob)+' '+rtrim(num_doc) end as reference,
        rd.cod_caja, 0 as account_id
 from cobros pg
 left join reng_tip rd on pg.cob_num = rd.cob_num
