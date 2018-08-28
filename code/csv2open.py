@@ -22,6 +22,7 @@ __special_field_cases__ = {
         },
     'valencia': {
         u'partner_id3135549360': u'313554936',
+        u'partner_id001': u'9683960',
         },
     }
 

@@ -305,6 +305,7 @@ order by rd.reng_num
             ])
         p2o.set_child_model_fields(['line_ids'])
         p2o.load_data()
+        move_lines = []
         for line in p2o.data:
             if line['nro_fact'] and line['tp_doc_cob'] == 'FACT':
                 invoice_id = dbcomp.execute(
@@ -340,6 +341,7 @@ order by rd.reng_num
                         'debit': line['amount'],
                         'credit': 0,
                         }
+                    move_lines.append(move_line)
         op_key = '_'.join((x['tp_doc_cob'] for x in p2o.data))
         if op_key == 'ADEL':
             values = {
@@ -347,7 +349,7 @@ order by rd.reng_num
                 'voucher_type': 'advance',
                 }
             p2o.write_data_row(values)
-        if op_key in ('ADEL', 'FACT') and voucher['amount'] and not move_line:
+        if op_key in ('ADEL', 'FACT') and voucher['amount'] and not move_lines:
             try:
                 dbcomp.execute_workflow(
                     'account.voucher', 'proforma_voucher', voucher['id'])
