@@ -18,6 +18,3 @@ def load_tcv_bank_config(dbcomp):
         ])
     c2o.set_child_model_fields(['detail_ids'])
     c2o.process_csv()
-    # ~ c2o.load_data()
-    # ~ for line in c2o.data:
-        # ~ print line

@@ -14,13 +14,13 @@ def export_purchase_data(dbcomp, dbprofit):
     key = '--update_str_%s' % dbprofit.database
     p2o.set_sql(
         '''
-select 'update docum_cp set campo1 = |' + rtrim(c.campo1) +
-       '| where tipo_doc = |FACT| and nro_doc = ' +
-       cast(nro_doc as varchar) + ';' as '%s'
-from docum_cp c
-where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
-      and c.nro_doc not in (select distinct fact_num from reng_com)
-      order by c.nro_doc
+    select 'update docum_cp set campo1 = |' + rtrim(c.campo1) +
+           '| where tipo_doc = |FACT| and nro_doc = ' +
+           cast(nro_doc as varchar) + ';' as '%s'
+    from docum_cp c
+    where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
+          and c.nro_doc not in (select distinct fact_num from reng_com)
+          order by c.nro_doc
         ''' % key)
     #~ p2o.test_data_file()
     p2o.load_data()
@@ -28,6 +28,7 @@ where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
         l[key] = l[key].replace('|', "'")
     file_name = '../data/companies/%s/docum_cp_campo1.sql' % dbcomp.database
     p2o.export_to_csv_file(file_name)
+    print
 
 
 def export_payment_orders_data(dbcomp, dbprofit):
@@ -37,12 +38,12 @@ def export_payment_orders_data(dbcomp, dbprofit):
     key = '--update_str_%s' % dbprofit.database
     p2o.set_sql(
         '''
-select 'update ord_pago set campo1 = |' + rtrim(op.campo1) +
-       '| where ord_num = ' +
-       cast(ord_num as varchar) + ';' as '%s'
-from ord_pago op
-where op.fecha >= '2017-01-01' and op.anulada = 0
-order by op.ord_num
+    select 'update ord_pago set campo1 = |' + rtrim(op.campo1) +
+           '| where ord_num = ' +
+           cast(ord_num as varchar) + ';' as '%s'
+    from ord_pago op
+    where op.fecha >= '2017-01-01' and op.anulada = 0
+    order by op.ord_num
         ''' % key)
     #~ p2o.test_data_file()
     p2o.load_data()
@@ -50,6 +51,7 @@ order by op.ord_num
         l[key] = l[key].replace('|', "'")
     file_name = '../data/companies/%s/ord_pago_campo1.sql' % dbcomp.database
     p2o.export_to_csv_file(file_name)
+    print
 
 
 for database in dbdata['databases']:
