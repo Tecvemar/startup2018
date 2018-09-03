@@ -14,7 +14,7 @@ def load_account_wh_iva(dbcomp, dbprofit):
     p2o.set_sql(
         '''
         SELECT a.tipo_doc +'-'+cast(a.nro_doc as varchar) as code,
-            isnull(b.fec_emis,getdate()) as date,a.fec_emis as date_ret,
+            isnull(a.fec_emis,getdate()) as date,a.fec_emis as date_ret,
             year(a.fec_emis) as y, MONTH(a.fec_emis) as m,
             rtrim(cast(year(a.fec_emis) as varchar) + '-' +
             right(100 + month(a.fec_emis), 2) + '-' + a.nro_che) as number,

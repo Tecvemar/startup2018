@@ -9,6 +9,7 @@ from rif import calcular_rif
 __animation__ = "|/-\\"
 
 
+# Used to consolidate clientes, proveedores & beneficiarios tables from profit
 __special_field_cases__ = {
     'barcelona': {
         u'partner_id9867027': u'31234393',
@@ -16,6 +17,7 @@ __special_field_cases__ = {
         },
     'guayana': {
         u'partner_id088878848': u'08887884',
+        u'partner_id177480483': u'17748048',
         },
     'monagas': {
         u'partner_id14012670': u'140126701',
