@@ -67,8 +67,7 @@ def split_invoice_line(dbcomp, ret, inv_lines):
                 ivl = line
                 maxmnt = line['price_subtotal']
         print '\n',ret
-        print inv_lines
-        print 'split_invoice_line: More than 1 line to split'
+        print 'split_invoice_line: More than 1 line to split using', ivl
     else:
         ivl = inv_lines[0]
     if not ivl:
