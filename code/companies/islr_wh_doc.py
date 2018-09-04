@@ -59,9 +59,20 @@ def load_islr_wh_doc(dbcomp, dbprofit):
 
 
 def split_invoice_line(dbcomp, ret, inv_lines):
+    ivl = False
     if len(inv_lines) != 1:
-        raise ValueError('split_invoice_line: More than 1 line to split')
-    ivl = inv_lines[0]
+        maxmnt = 0
+        for line in inv_lines:
+            if line['price_subtotal'] > maxmnt:
+                ivl = line
+                maxmnt = line['price_subtotal']
+        print '\n',ret
+        print inv_lines
+        print 'split_invoice_line: More than 1 line to split'
+    else:
+        ivl = inv_lines[0]
+    if not ivl:
+         raise ValueError('split_invoice_line: No lines to split')
     amount = ret['monto_obj']
     amount_diff = ivl['price_subtotal'] - amount
     sql = '''
