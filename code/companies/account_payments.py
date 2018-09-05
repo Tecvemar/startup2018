@@ -11,14 +11,16 @@ def load_account_voucher_purchase(dbcomp, dbprofit):
     Process & export payments
 
     '''
+    work_dir = '../data/companies/%s/' % dbcomp.database
+    work_txt = work_dir + 'cajas.txt'
+    cajas_file = open(work_txt, 'r')
+    cajas = cajas_file.read()
+    cajas_file.close()
     p2o = profit_2_openerp('account.voucher', dbcomp, dbprofit)
     p2o.set_sql(
         '''
 select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
-       case rtrim(rd.cod_caja) when '003' then 'DCHI'
-                               when '001' then 'DCEF'
-                               when '004' then 'DCHI'
-                               when '999' then '9999'
+       case rtrim(rd.cod_caja) %(cajas)s
                                else rtrim(rd.cod_caja) end as journal_id,
        pg.fec_cob as date, 'payment' as type, tip_cob, pg.cob_num,
        'PAG '+cast(pg.cob_num as varchar) as name,
@@ -27,6 +29,7 @@ select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
             Then rtrim(tip_cob)+'/'+cast(pg.cob_num as varchar)
             else rtrim(tip_cob)+' '+rtrim(num_doc) end as reference,
        case rtrim(rd.cod_caja) when '003' then 'cash'
+                       when '0001' then 'cash'
                        when '001' then 'cash'
                        when '004' then 'cash'
                        when '999' then 'cash'
@@ -36,7 +39,7 @@ from pagos pg
 left join reng_tcp rd on pg.cob_num = rd.cob_num
 where pg.fec_cob >= '2017-01-01' and pg.anulado = 0 --and pg.monto != 0
 order by pg.fec_cob, pg.cob_num
-        ''')
+        ''' % {'cajas': cajas})
     p2o.set_search_fields(['name', 'amount'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
@@ -44,6 +47,8 @@ order by pg.fec_cob, pg.cob_num
         ])
     p2o.load_data()
     for vou in p2o.data:
+        if not vou['journal_id']:
+            print vou['journal_id'], vou
         # ~ partner = dbcomp.execute(
             # ~ 'res.partner', 'read', vou['partner_id'], [])
         journal = dbcomp.execute(
@@ -226,16 +231,16 @@ def load_account_voucher_sale(dbcomp, dbprofit):
     Process & export payments
 
     '''
+    work_dir = '../data/companies/%s/' % dbcomp.database
+    work_txt = work_dir + 'cajas.txt'
+    cajas_file = open(work_txt, 'r')
+    cajas = cajas_file.read()
+    cajas_file.close()
     p2o = profit_2_openerp('account.voucher', dbcomp, dbprofit)
     p2o.set_sql(
         '''
 select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
-       case rtrim(rd.cod_caja) when '002' then 'DCHI'
-                               when '001' then 'DCEF'
-                               when '005' then 'DTDEB01'
-                               when '007' then 'DTDEB01'
-                               when '999' then '9999'
-
+       case rtrim(rd.cod_caja) %(cajas)s
                                else rtrim(rd.cod_caja) end as journal_id,
        pg.fec_cob as date, 'receipt' as type, tip_cob, pg.cob_num,
        'COB '+cast(pg.cob_num as varchar) as name,
@@ -248,7 +253,7 @@ from cobros pg
 left join reng_tip rd on pg.cob_num = rd.cob_num
 where pg.fec_cob >= '2017-01-01' and pg.anulado = 0 --and pg.monto != 0
 order by pg.fec_cob, pg.cob_num
-        ''')
+        ''' % {'cajas': cajas})
     p2o.set_search_fields(['name', 'amount'])
     p2o.set_relational_fields([
         ('partner_id', 'res.partner', ['ref']),
@@ -256,6 +261,8 @@ order by pg.fec_cob, pg.cob_num
         ])
     p2o.load_data()
     for vou in p2o.data:
+        if not vou['journal_id']:
+            print vou['journal_id'], vou
         journal = dbcomp.execute(
             'account.journal', 'read', vou['journal_id'], [])
         if not vou['reference']:

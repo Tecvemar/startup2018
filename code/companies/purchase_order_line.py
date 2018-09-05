@@ -96,8 +96,9 @@ select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
         rtrim(p.prov_des) as "x"
 from docum_cp c
 left join prov p on c.co_cli = p.co_prov
-where c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
-      and c.nro_doc not in (select distinct fact_num from reng_com)
+where (c.tipo_doc = 'FACT' and c.fec_emis >= '2017-01-01' and c.anulado = 0
+      and c.nro_doc not in (select distinct fact_num from reng_com))
+      or c.campo8='openerp'
 union
 select rtrim(c.tipo_doc) + '-' + ltrim(str(c.nro_doc)) as order_id,
        rtrim(c.campo1) as product_id,

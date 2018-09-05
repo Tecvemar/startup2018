@@ -17,7 +17,8 @@ select c.fec_emis as date_order, rtrim(nro_fact) as partner_ref,
        rtrim(co_cli) as partner_id, 'Stock' as location_id,
        'Default Purchase Pricelist' as pricelist_id
 from docum_cp c
-where tipo_doc = 'FACT' and fec_emis >= '2017-01-01' and anulado = 0
+where (tipo_doc = 'FACT' and fec_emis >= '2017-01-01' and anulado = 0) or
+    (c.campo8='openerp')
 order by nro_doc
         ''')
     p2o.set_search_fields(['origin'])
