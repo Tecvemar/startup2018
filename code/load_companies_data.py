@@ -28,7 +28,7 @@ for database in dbdata['databases']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    if True:  # Added to split process for deguging
+    if False:  # Added to split process for deguging
         companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -64,6 +64,7 @@ for database in dbdata['databases']:
         companies.postprocess_stock_move(lnk_dbcom)
         # Payments ------------------------------------------------------------
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
+    else:  # before this all Ok
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
@@ -82,7 +83,6 @@ for database in dbdata['databases']:
         # Deposits ------------------------------------------------------------
         companies.load_tcv_bank_config(lnk_dbcom)
         companies.load_tcv_bank_deposit(lnk_dbcom, lnk_dbprofit)
-    else:  # before this all Ok
         print 'Else...'
 
     if lnk_dbprofit:

@@ -15,7 +15,7 @@ def load_account_voucher_purchase(dbcomp, dbprofit):
     p2o.set_sql(
         '''
 select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
-       case rtrim(rd.cod_caja) when '002' then 'DCHI'
+       case rtrim(rd.cod_caja) when '003' then 'DCHI'
                                when '001' then 'DCEF'
                                when '004' then 'DCHI'
                                when '999' then '9999'
@@ -26,7 +26,7 @@ select rtrim(pg.co_cli) as partner_id, rd.mont_doc as amount,
        case num_doc when ''
             Then rtrim(tip_cob)+'/'+cast(pg.cob_num as varchar)
             else rtrim(tip_cob)+' '+rtrim(num_doc) end as reference,
-       case rtrim(rd.cod_caja) when '002' then 'cash'
+       case rtrim(rd.cod_caja) when '003' then 'cash'
                        when '001' then 'cash'
                        when '004' then 'cash'
                        when '999' then 'cash'

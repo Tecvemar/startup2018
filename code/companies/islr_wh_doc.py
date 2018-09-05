@@ -60,10 +60,14 @@ def load_islr_wh_doc(dbcomp, dbprofit):
 
 def split_invoice_line(dbcomp, ret, inv_lines):
     ivl = False
+    lind_idx = 0  # used to store line index when multiline
     if len(inv_lines) != 1:
         maxmnt = 0
+        lidx = -1
         for line in inv_lines:
+            lidx += 1
             if line['price_subtotal'] > maxmnt:
+                lind_idx = lidx
                 ivl = line
                 maxmnt = line['price_subtotal']
         print '\n',ret
@@ -93,7 +97,7 @@ def split_invoice_line(dbcomp, ret, inv_lines):
     dbcomp.execute_sql(sql, {'id': ivl['id']})
     new_line_ids = dbcomp.execute(
         'account.invoice.line', 'search',
-        [('invoice_id', '=', ivl['invoice_id'][0])])
+        [('invoice_id', '=', ivl['invoice_id'][lind_idx])])
     upd_sql = '''
         update account_invoice_line set
         price_unit = %(new_price)s,
