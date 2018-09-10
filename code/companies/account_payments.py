@@ -49,8 +49,6 @@ order by pg.fec_cob, pg.cob_num
     for vou in p2o.data:
         if not vou['journal_id']:
             print vou['journal_id'], vou
-        # ~ partner = dbcomp.execute(
-            # ~ 'res.partner', 'read', vou['partner_id'], [])
         journal = dbcomp.execute(
             'account.journal', 'read', vou['journal_id'], [])
         if not vou['reference']:
@@ -127,8 +125,11 @@ order by rd.reng_num
                 }
             p2o.write_data_row(values)
         if op_key in ('ADEL', 'FACT', 'FACT_ISLR_AJNM') and voucher['amount']:
-            dbcomp.execute_workflow(
-                'account.voucher', 'proforma_voucher', voucher['id'])
+            try:
+                dbcomp.execute_workflow(
+                    'account.voucher', 'proforma_voucher', voucher['id'])
+            except:
+                pass
         elif op_key in ('FACT_ISLR', 'FACT_AJNM', 'FACT_ISLR_AJNM',) and \
                 not voucher['amount']:
             dbcomp.execute_workflow(
@@ -147,6 +148,8 @@ def postprocess_acc_voucher_purchase_manual(dbcomp, dbprofit):
         voucher_id = dbcomp.execute(
             'account.voucher', 'search', [
                 ('name', '=', item['name'])])
+        if not voucher_id['journal_id']:
+            print voucher_id['journal_id'], item
         voucher = dbcomp.execute(
             'account.voucher', 'read', voucher_id[0], ['state'])
         if item['state'] == 'aprovee' and voucher['state'] == 'draft':

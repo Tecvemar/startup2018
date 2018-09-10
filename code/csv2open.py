@@ -10,6 +10,7 @@ __animation__ = "|/-\\"
 
 
 # Used to consolidate clientes, proveedores & beneficiarios tables from profit
+# [field_id][profit.actual.code]: [openerp.real.code]
 __special_field_cases__ = {
     'barcelona': {
         u'partner_id9867027': u'31234393',
@@ -18,6 +19,7 @@ __special_field_cases__ = {
     'guayana': {
         u'partner_id088878848': u'08887884',
         u'partner_id177480483': u'17748048',
+        u'partner_id298744944': u'13177',  # DIST ACROPOLIS BARQUISIMETO, C.A.
         },
     'monagas': {
         u'partner_id14012670': u'140126701',
