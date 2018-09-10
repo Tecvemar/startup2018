@@ -74,6 +74,7 @@ for database in dbdata['databases']:
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.load_res_partner_profit_payment_orders(lnk_dbcom,
                                                          lnk_dbprofit)
+        print stopsss
         companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
                                                           lnk_dbprofit)

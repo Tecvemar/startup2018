@@ -214,6 +214,8 @@ order by op.fecha, op.ord_num
         ])
     p2o.load_data()
     for vou in p2o.data:
+        if not vou['journal_id']:
+            print vou['journal_id'], vou
         journal = dbcomp.execute(
             'account.journal', 'read', vou['journal_id'], [])
         if not vou['reference']:
