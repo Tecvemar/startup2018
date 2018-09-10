@@ -65,7 +65,6 @@ for database in dbdata['databases']:
         # Payments ------------------------------------------------------------
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
-    else:  # before this all Ok
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
@@ -74,7 +73,7 @@ for database in dbdata['databases']:
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.load_res_partner_profit_payment_orders(lnk_dbcom,
                                                          lnk_dbprofit)
-        print stopsss
+    else:  # before this all Ok
         companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
                                                           lnk_dbprofit)

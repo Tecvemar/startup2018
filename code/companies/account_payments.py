@@ -191,7 +191,9 @@ select
     rtrim(op.cod_ben) as partner_id, op.monto as amount,
     op.forma_pag, op.ord_num,
     case rtrim(op.forma_pag) when 'TR' then rtrim(op.cod_cta)
-                      when 'EF' then 'DCHI' end as journal_id,
+                      when 'EF' then 'DCHI'
+                      when 'CH' then rtrim(op.cod_cta)
+                      end as journal_id,
     op.fecha as date, 'payment' as type, 'other' as voucher_type,
     case rtrim(op.forma_pag) when 'TR' then 'transfer'
                       when 'EF' then 'cash' end as payment_doc,
