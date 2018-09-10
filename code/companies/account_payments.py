@@ -196,7 +196,8 @@ select
                       end as journal_id,
     op.fecha as date, 'payment' as type, 'other' as voucher_type,
     case rtrim(op.forma_pag) when 'TR' then 'transfer'
-                      when 'EF' then 'cash' end as payment_doc,
+                      when 'EF' then 'cash'
+                      when 'CH' then 'transfer' end as payment_doc,
     'O/P '+cast(op.ord_num as varchar) as name,
     op.descrip as narration,
     rtrim(op.forma_pag)+' '+rtrim(op.cheque)+' M/BAN '+
@@ -223,7 +224,10 @@ order by op.fecha, op.ord_num
         if not vou['reference']:
             vou['reference'] = '%s' % vou['cob_num']
         vou['account_id'] = journal['default_debit_account_id'][0]
-        vou['id'] = p2o.write_data_row(vou) or 0
+        try:
+            vou['id'] = p2o.write_data_row(vou) or 0
+        except:
+            print vou
         dbcomp.execute_workflow(
             'account.voucher', 'proforma_voucher', vou['id'])
     p2o.done
