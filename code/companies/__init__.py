@@ -30,7 +30,7 @@ from stock_picking import postprocess_stock_picking
 from fiscal_book import load_fiscal_book
 from account_wh_iva import load_account_wh_iva
 from stock_move import postprocess_stock_move
-from tcv_stock_book  import load_tcv_stock_book
+from tcv_stock_book import load_tcv_stock_book
 from islr_wh_doc import load_islr_wh_doc
 from account_payments import load_account_voucher_purchase
 from account_payments import postprocess_acc_voucher_purchase
@@ -40,4 +40,4 @@ from account_payments import postprocess_acc_voucher_sale
 from account_payments import load_account_voucher_payment_ordes
 from tcv_bank_deposit import load_tcv_bank_deposit
 from tcv_bank_config import load_tcv_bank_config
-
+from bank_moves import load_bank_moves
