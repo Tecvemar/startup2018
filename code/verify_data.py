@@ -30,4 +30,5 @@ for database in dbdata['databases'][:1]:
 
     print 'Verificano datos: %s...' % database
 
-    verify.check_account_invoice_purchases(lnk_dbcom, lnk_dbprofit)
+    #~ verify.check_account_invoice_purchases(lnk_dbcom, lnk_dbprofit)
+    verify.check_tcv_voucher_advance(lnk_dbcom, lnk_dbprofit)
