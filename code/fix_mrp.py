@@ -25,7 +25,7 @@ def get_operator_and_factory_cost_by_m2(dbopen):
     for item in costs:
         template_id = item['param_id'][0]
         res[template_id][item['name']] = item['float_val']
-    print res
+    return res
 
 
 def cost_distribution(dbopen, model, item):
@@ -80,11 +80,12 @@ def read_task(dbopen, task_id, res_model):
     inputs_model = res_model + '.inputs'
     output_model = res_model + '.output'
     costs_model = res_model + '.costs'
-    parent = dbopen.execute(
+    subprocess = dbopen.execute(
         'tcv.mrp.subprocess', 'read', task['parent_id'][0])
     io_slabs_ids = dbopen.execute(
-        'tcv.mrp.io.slab', 'search', [('task_ref', '=', task['id']),
-                                      ('subprocess_ref', '=', parent['id'])])
+        'tcv.mrp.io.slab', 'search', [
+            ('task_ref', '=', task['id']),
+            ('subprocess_ref', '=', subprocess['id'])])
     io_slabs = dbopen.execute(
         'tcv.mrp.io.slab', 'read', io_slabs_ids)
     inputs = dbopen.execute(
@@ -99,7 +100,7 @@ def read_task(dbopen, task_id, res_model):
         'move_lines': dbopen.execute(
             'account.move.line', 'read', move['line_id'])})
     task.update({
-        'tcv.mrp.subprocess': parent,
+        'subprocess': subprocess,
         'io_slabs': io_slabs,
         'inputs': inputs,
         'output': output,
@@ -126,9 +127,11 @@ def execute_fix_wkf(dbopen, res_model, method, id):
 
 
 def fix_base_model(dbopen, task):
+    template_cost = get_operator_and_factory_cost_by_m2(dbopen)
+    mrp_cost = template_cost[task['subprocess']['template_id'][0]]
     data = {
-        'operator_cost': task['operator_cost'] / 100,
-        'factory_overhead': task['factory_overhead'] / 100,
+        'operator_cost': mrp_cost['operator_cost_m2'],
+        'factory_overhead': mrp_cost['factory_overhead_m2'],
         'valid_cost': True,
         }
     write_model_fix(
@@ -139,10 +142,12 @@ def fix_base_model(dbopen, task):
 
 def fix_costs_model(dbopen, task):
     for cost in task['costs']:
-        print
+        template_cost = get_operator_and_factory_cost_by_m2(dbopen)
+        mrp_cost = template_cost[task['subprocess']['template_id'][0]]
+        area = cost['total_area']
         data = {
-            'operator_cost': cost['operator_cost'] / 100,
-            'factory_overhead': cost['factory_overhead'] / 100,
+            'operator_cost': mrp_cost['operator_cost_m2'] * area,
+            'factory_overhead': mrp_cost['factory_overhead_m2'] * area,
             }
         total_cost = data['operator_cost'] + data['operator_cost']
         total_cost += cost['supplies_cost'] + cost['cumulative_cost']
@@ -175,8 +180,9 @@ def fix_acc_move_resin(dbopen, task):
     return
 
 def fix_acc_move_model(dbopen, task):
+    move_id = task['move_id'][0]
     execute_fix_wkf(
-        dbopen, 'account.move', 'button_cancel', task['move_id'][0])
+        dbopen, 'account.move', 'button_cancel', move_id)
     if task['res_model'] == 'tcv.mrp.polish':
         print
     elif task['res_model'] == 'tcv.mrp.resin':
@@ -184,7 +190,7 @@ def fix_acc_move_model(dbopen, task):
     else:
         print 'Unknow model %s' % task['res_model']
     execute_fix_wkf(
-        dbopen, 'account.move', 'post', task['move_id'][0])
+        dbopen, 'account.move', 'post', move_id)
 
 def process_fix():
     for group in get_groups_to_fix():
@@ -194,6 +200,5 @@ def process_fix():
             fix_costs_model(dbopen, task)
             fix_io_slabs_model(dbopen, task)
             fix_acc_move_model(dbopen, task)
-
 
 process_fix()
