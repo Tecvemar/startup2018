@@ -11,7 +11,7 @@ dbopen = openerp_link(
     dbdata['openerp_password'],
     )
 
-__fix_mode__ = False
+__fix_mode__ = True
 
 
 def get_operator_and_factory_cost_by_m2(dbopen):
@@ -69,14 +69,22 @@ def get_groups_to_fix():
     list of task manually created
 
     '''
-    return [[(2660, 'tcv.mrp.polish'),
-             (1182, 'tcv.mrp.resin'),
-             ]
-            ]
+    return [
+        [(1181, 'tcv.mrp.resin'),
+         (2675, 'tcv.mrp.polish'),
+         (1399, 'tcv.mrp.finished.slab'),
+         ],
+        [(2660, 'tcv.mrp.polish'),
+         (1182, 'tcv.mrp.resin'),
+         (2676, 'tcv.mrp.polish'),
+         (1407, 'tcv.mrp.finished.slab'),
+         ],
+        ]
 
 
 def read_task(dbopen, task_id, res_model):
     task = dbopen.execute(res_model, 'read', task_id)
+    # ~ print res_model, task_id, task
     inputs_model = res_model + '.inputs'
     output_model = res_model + '.output'
     costs_model = res_model + '.costs'
@@ -92,8 +100,16 @@ def read_task(dbopen, task_id, res_model):
         inputs_model, 'read', task['input_ids'])
     output = dbopen.execute(
         output_model, 'read', task['output_ids'])
-    costs = dbopen.execute(
-        costs_model, 'read', task['costs_ids'])
+    costs = []
+    if res_model not in ('tcv.mrp.finished.slab',):
+        costs = dbopen.execute(
+            costs_model, 'read', task['costs_ids'])
+        # Read associated input and output
+        for item in costs:
+            item['output'] = dbopen.execute(
+                output_model, 'read', item['output_id'][0])
+            item['input'] = dbopen.execute(
+                inputs_model, 'read', item['output']['input_id'][0])
     move = dbopen.execute(
         'account.move', 'read', task['move_id'][0])
     move.update({
@@ -119,24 +135,26 @@ def write_model_fix(dbopen, res_model, id, data):
     else:  # test_mode
         print res_model, id, data
 
+
 def execute_fix_wkf(dbopen, res_model, method, id):
     if __fix_mode__:
-        dbopen.execute(res_model, method, id)
+        dbopen.execute(res_model, method, [id])
     else:  # test_mode
         print res_model, id, method
 
 
 def fix_base_model(dbopen, task):
     template_cost = get_operator_and_factory_cost_by_m2(dbopen)
-    mrp_cost = template_cost[task['subprocess']['template_id'][0]]
-    data = {
-        'operator_cost': mrp_cost['operator_cost_m2'],
-        'factory_overhead': mrp_cost['factory_overhead_m2'],
-        'valid_cost': True,
-        }
-    write_model_fix(
-        dbopen, task['res_model'], task['id'], data)
-    task.update(data)
+    if task['subprocess']['template_id'][0] in template_cost:
+        mrp_cost = template_cost[task['subprocess']['template_id'][0]]
+        data = {
+            'operator_cost': mrp_cost['operator_cost_m2'],
+            'factory_overhead': mrp_cost['factory_overhead_m2'],
+            'valid_cost': True,
+            }
+        write_model_fix(
+            dbopen, task['res_model'], task['id'], data)
+        task.update(data)
     return True
 
 
@@ -145,20 +163,28 @@ def fix_costs_model(dbopen, task):
         template_cost = get_operator_and_factory_cost_by_m2(dbopen)
         mrp_cost = template_cost[task['subprocess']['template_id'][0]]
         area = cost['total_area']
+        output = cost['output']
+        inputs = cost['input']
+        cumulative_cost = ((inputs['total_cost'] * output['pieces']) /
+                           inputs['pieces'])
         data = {
             'operator_cost': mrp_cost['operator_cost_m2'] * area,
             'factory_overhead': mrp_cost['factory_overhead_m2'] * area,
+            'cumulative_cost': cumulative_cost,
             }
         total_cost = data['operator_cost'] + data['operator_cost']
-        total_cost += cost['supplies_cost'] + cost['cumulative_cost']
+        total_cost += cost['supplies_cost'] + cumulative_cost
+        # fix cumulative_cost  // original code
+        #cumulative_cost = ((output.input_id.total_cost * output.pieces) /
+        #                   output.input_id.pieces)
         data.update({
             'total_cost': total_cost,
             'real_unit_cost': total_cost / cost['total_area']
             })
+        print cost
         write_model_fix(
             dbopen, task['res_model'] + '.costs', cost['id'], data)
         cost.update(data)
-
     return True
 
 
@@ -177,20 +203,31 @@ def fix_io_slabs_model(dbopen, task):
 
 
 def fix_acc_move_resin(dbopen, task):
+    lines = dbopen.execute(
+        task['res_model'], 'create_account_move_lines', task['id'])
+    print lines
     return
+
 
 def fix_acc_move_model(dbopen, task):
     move_id = task['move_id'][0]
     execute_fix_wkf(
         dbopen, 'account.move', 'button_cancel', move_id)
-    if task['res_model'] == 'tcv.mrp.polish':
-        print
-    elif task['res_model'] == 'tcv.mrp.resin':
-         fix_acc_move_resin(dbopen, task)
-    else:
-        print 'Unknow model %s' % task['res_model']
+    print 'fix_acc_move_model', task['res_model']
+    lines = dbopen.execute(
+        task['res_model'], 'call_create_account_move_lines', task['id'])
+    print lines
+
+
+    # ~ if task['res_model'] == 'tcv.mrp.polish':
+        # ~ print
+    # ~ elif task['res_model'] == 'tcv.mrp.resin':
+        # ~ fix_acc_move_resin(dbopen, task)
+    # ~ else:
+        # ~ print 'Unknow model %s' % task['res_model']
     execute_fix_wkf(
         dbopen, 'account.move', 'post', move_id)
+
 
 def process_fix():
     for group in get_groups_to_fix():
@@ -200,5 +237,6 @@ def process_fix():
             fix_costs_model(dbopen, task)
             fix_io_slabs_model(dbopen, task)
             fix_acc_move_model(dbopen, task)
+
 
 process_fix()
