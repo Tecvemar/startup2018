@@ -70,14 +70,50 @@ def get_groups_to_fix():
 
     '''
     return [
-        [(1181, 'tcv.mrp.resin'),
+        [#  Bl-3175 LEONA
+         (1181, 'tcv.mrp.resin'),
          (2675, 'tcv.mrp.polish'),
          (1399, 'tcv.mrp.finished.slab'),
          ],
-        [(2660, 'tcv.mrp.polish'),
+        [#  BL-3210 LEONA
+         (1177, 'tcv.mrp.resin'),
+         (2671, 'tcv.mrp.polish'),
+         (1395, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3224 LEONA
+         (1186, 'tcv.mrp.resin'),
+         (2680, 'tcv.mrp.polish'),
+         (1404, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3226 LEONA
+         (2681, 'tcv.mrp.polish'),
+         (1405, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3231 LEONA
+         (1178, 'tcv.mrp.resin'),
+         (2672, 'tcv.mrp.polish'),
+         (1396, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3241 LEONA
+         (2660, 'tcv.mrp.polish'),
          (1182, 'tcv.mrp.resin'),
          (2676, 'tcv.mrp.polish'),
          (1407, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3248 LEONA
+         (1183, 'tcv.mrp.resin'),
+         (2677, 'tcv.mrp.polish'),
+         (1401, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-3255 LEONA
+         (1185, 'tcv.mrp.resin'),
+         (2679, 'tcv.mrp.polish'),
+         (1403, 'tcv.mrp.finished.slab'),
+         ],
+        [#  BL-1500 AMARA
+         (1179, 'tcv.mrp.resin'),
+         (2673, 'tcv.mrp.polish'),
+         (1397, 'tcv.mrp.finished.slab'),
          ],
         ]
 
@@ -201,18 +237,66 @@ def fix_io_slabs_model(dbopen, task):
     return True
 
 
+def fix_account_invoice_move(dbopen, task, lot):
+        invoice_lines = dbopen.execute(
+            'account.invoice.line', 'read', lot['invoice_lines_ids'], [])
+        for line in invoice_lines:
+            invoice = dbopen.execute(
+                'account.invoice', 'read', line['invoice_id'][0], [])
+            if invoice['move_id']:
+                reconcile_ids = []
+                move_id = invoice['move_id'][0]
+                execute_fix_wkf(
+                    dbopen, 'account.move', 'button_cancel', move_id)
+                move = dbopen.execute(
+                    'account.move', 'read', move_id, [])
+                move_lines = dbopen.execute(
+                    'account.move.line', 'read', move['line_id'], [])
+                for mline in move_lines:
+                    if mline['reconcile_id'] or mline['reconcile_partial_id']:
+                        reconcile_ids.append({
+                            'id': mline['id'],
+                            'reconcile_id': mline['reconcile_id'] and mline['reconcile_id'][0] or 0,
+                            'reconcile_partial_id': mline['reconcile_partial_id'] and mline['reconcile_partial_id'][0] or 0,
+                            })
+                        dbopen.execute(
+                            'account.move.line', 'write', [mline['id']],
+                            {'reconcile_id': 0, 'reconcile_partial_id': 0})
+                for mline in move_lines:
+                    if lot['name'] in mline['name']:
+                        data = {'debit': 0.0, 'credit': 0.0}
+                        amount = round(
+                            lot['property_cost_price'] * mline['quantity'], 2)
+                        data['debit'] = amount if mline['debit'] else 0.0
+                        data['credit'] = amount if mline['credit'] else 0.0
+                        dbopen.execute(
+                            'account.move.line', 'write', [mline['id']], data)
+                        print [mline[x] for x in (
+                            'name', 'debit', 'credit')], data
+                for rline in reconcile_ids:
+                    dbopen.execute(
+                        'account.move.line', 'write', [rline['id']], rline)
+                execute_fix_wkf(
+                    dbopen, 'account.move', 'post', move_id)
+
+
 def fix_finished_model(dbopen, task):
     dbopen.execute(
         task['res_model'], 'call_compute_average_cost', task['id'])
-    lot_ids = []
     outputs = dbopen.execute(
         'tcv.mrp.finished.slab.output', 'read', task['output_ids'])
     for item in outputs:
+        # Fix lot cost
+        prod_lot_id = item['prod_lot_id'][0]
         dbopen.execute(
-            'stock.production.lot', 'write', item['prod_lot_id'][0],
+            'stock.production.lot', 'write', prod_lot_id,
             {'property_cost_price': item['real_unit_cost']})
-        lot_ids.append([item['prod_lot_id'][0]])
-    return lot_ids
+        # Check sale and fix costs (if needed)
+        lot = dbopen.execute(
+            'stock.production.lot', 'read', prod_lot_id, [])
+        if lot['invoice_lines_ids']:
+            fix_account_invoice_move(dbopen, task, lot)
+    return True
 
 
 def fix_acc_move_model(dbopen, task):
@@ -234,7 +318,6 @@ def fix_acc_move_model(dbopen, task):
 
 
 def process_fix():
-    lot_ids = []
     for group in get_groups_to_fix():
         for task_id, res_model in group:
             task = read_task(dbopen, task_id, res_model)
@@ -242,7 +325,7 @@ def process_fix():
             fix_costs_model(dbopen, task)
             fix_io_slabs_model(dbopen, task)
             if res_model == 'tcv.mrp.finished.slab':
-                lot_ids.extend(fix_finished_model(dbopen, task))
+                fix_finished_model(dbopen, task)
             fix_acc_move_model(dbopen, task)
 
 
