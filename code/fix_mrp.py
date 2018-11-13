@@ -4,9 +4,9 @@ from definitions import dbdata
 
 # login with migration's user
 dbopen = openerp_link(
-    'localhost',
+    '192.168.0.9',
     8069,
-    'prueba2',
+    'operaciones',
     dbdata['openerp_login'],
     dbdata['openerp_password'],
     )

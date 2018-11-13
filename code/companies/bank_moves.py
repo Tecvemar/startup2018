@@ -19,7 +19,11 @@ select 'MB '+lTRIM(STR(mov_num))+ ' - '+tipo_op+' '+doc_num as ref,
         when '11320' then '8110600002'
         when '11403' then '1110400002'
         when '71301' then '7310200005'
+        when 'COMB' then '7230300002'
         when '91130' then '7230300002'
+        when '11320' then '1110199999'
+        when '21201' then '2120199999'
+        when '521023' then '7230700025'
         end as 'line_id.account_id',
     monto_d+idb as 'line_id.debit',
     monto_h as 'line_id.credit',

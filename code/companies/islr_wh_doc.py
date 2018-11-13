@@ -4,8 +4,8 @@ from profit2open import profit_2_openerp
 
 
 __islr_wh_concepts__ = {
-    '1002': 2, '1005': 12, '1006': 3, '1020': 4, '1021': 25, '1022': 25,
-    '1023': 26, '1025': 5, '1029': 32, '1030': 6,
+    '1002': 2, '1003': 2, '1005': 12, '1006': 3, '1020': 4, '1021': 25,
+    '1022': 25, '1023': 26, '1025': 5, '1029': 32, '1030': 6, '1032': 6,
     }
 
 
@@ -61,6 +61,7 @@ def load_islr_wh_doc(dbcomp, dbprofit):
 def split_invoice_line(dbcomp, ret, inv_lines):
     ivl = False
     lind_idx = 0  # used to store line index when multiline
+    totmnt = 0
     if len(inv_lines) != 1:
         maxmnt = 0
         lidx = -1
@@ -70,45 +71,47 @@ def split_invoice_line(dbcomp, ret, inv_lines):
                 lind_idx = lidx
                 ivl = line
                 maxmnt = line['price_subtotal']
+            totmnt += line['price_subtotal']
         print '\n',ret
         print 'split_invoice_line: More than 1 line to split using', ivl
     else:
         ivl = inv_lines[0]
     if not ivl:
          raise ValueError('split_invoice_line: No lines to split')
-    amount = ret['monto_obj']
-    amount_diff = ivl['price_subtotal'] - amount
-    sql = '''
-    insert into account_invoice_line (
-           create_uid, create_date, write_date, write_uid,
-           origin, uos_id, account_id, name, invoice_id, price_unit,
-           price_subtotal, company_id, note, discount,
-           account_analytic_id, partner_id, product_id,
-           concept_id, apply_wh, wh_xml_id,
-           pieces, prod_lot_id, quantity)
-    select create_uid, create_date, write_date, write_uid,
-           origin, uos_id, account_id, name, invoice_id, price_unit,
-           price_subtotal, company_id, note, discount,
-           account_analytic_id, partner_id, product_id,
-           concept_id, apply_wh, wh_xml_id,
-           pieces, prod_lot_id, quantity
-    from account_invoice_line where id = %(id)s
-    '''
-    dbcomp.execute_sql(sql, {'id': ivl['id']})
-    new_line_ids = dbcomp.execute(
-        'account.invoice.line', 'search',
-        [('invoice_id', '=', ivl['invoice_id'][lind_idx])])
-    upd_sql = '''
-        update account_invoice_line set
-        price_unit = %(new_price)s,
-        price_subtotal = %(new_price)s
-        where id = %(id)s
+    if ret['monto_obj'] != totmnt:  #  Else apply wh to all lines
+        amount = ret['monto_obj']
+        amount_diff = ivl['price_subtotal'] - amount
+        sql = '''
+        insert into account_invoice_line (
+               create_uid, create_date, write_date, write_uid,
+               origin, uos_id, account_id, name, invoice_id, price_unit,
+               price_subtotal, company_id, note, discount,
+               account_analytic_id, partner_id, product_id,
+               concept_id, apply_wh, wh_xml_id,
+               pieces, prod_lot_id, quantity)
+        select create_uid, create_date, write_date, write_uid,
+               origin, uos_id, account_id, name, invoice_id, price_unit,
+               price_subtotal, company_id, note, discount,
+               account_analytic_id, partner_id, product_id,
+               concept_id, apply_wh, wh_xml_id,
+               pieces, prod_lot_id, quantity
+        from account_invoice_line where id = %(id)s
         '''
-    for new_id in new_line_ids:
-        params = {'id': new_id,
-                  'new_price': (amount if new_id == ivl['id'] else
-                                amount_diff)}
-        dbcomp.execute_sql(upd_sql, params)
+        dbcomp.execute_sql(sql, {'id': ivl['id']})
+        new_line_ids = dbcomp.execute(
+            'account.invoice.line', 'search',
+            [('invoice_id', '=', ivl['invoice_id'][lind_idx])])
+        upd_sql = '''
+            update account_invoice_line set
+            price_unit = %(new_price)s,
+            price_subtotal = %(new_price)s
+            where id = %(id)s
+            '''
+        for new_id in new_line_ids:
+            params = {'id': new_id,
+                      'new_price': (amount if new_id == ivl['id'] else
+                                    amount_diff)}
+            dbcomp.execute_sql(upd_sql, params)
 
 
 def create_islr_doc(dbcomp, ret, inv_lines):
