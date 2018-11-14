@@ -61,15 +61,14 @@ for database in dbdata['databases']:
         companies.load_sale_order_line_profit_detail(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_sale_order(lnk_dbcom, lnk_dbprofit)
         # Stock.moves ---------------------------------------------------------
-        companies.postprocess_stock_move(lnk_dbcom)  # Backup!
-    else:
-        print 'Else...'
+        companies.postprocess_stock_move(lnk_dbcom)
         # Payments ------------------------------------------------------------
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
-        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
-    if False:
+        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)  # Backup!
+    else:
+        print 'Else...'
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
                                                           lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
