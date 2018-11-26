@@ -28,6 +28,12 @@ __special_field_cases__ = {
         u'partner_id3135549360': u'313554936',
         u'partner_id001': u'9683960',
         },
+    'falcon': {
+        u'partner_id12496509': u'124965094',
+        u'partner_id17500328': u'175003289',
+        u'partner_id16259989': u'V16259989',
+        u'partner_id7565793': u'V7565793',
+        },
     }
 
 
