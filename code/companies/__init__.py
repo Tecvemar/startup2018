@@ -41,3 +41,4 @@ from account_payments import load_account_voucher_payment_ordes
 from tcv_bank_deposit import load_tcv_bank_deposit
 from tcv_bank_config import load_tcv_bank_config
 from bank_moves import load_bank_moves
+from sequences import update_secuences
