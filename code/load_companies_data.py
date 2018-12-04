@@ -66,7 +66,8 @@ for database in dbdata['databases']:
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
-        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
+        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)  # Backup!
+
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
                                                           lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
@@ -82,9 +83,10 @@ for database in dbdata['databases']:
         # Deposits ------------------------------------------------------------
         companies.load_tcv_bank_config(lnk_dbcom)
         companies.load_tcv_bank_deposit(lnk_dbcom, lnk_dbprofit)
-    else:  # before this all Ok
         companies.load_bank_moves(lnk_dbcom, lnk_dbprofit)
+    else:
         print 'Else...'
+        ##  companies.update__secuences(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
         lnk_dbprofit.close()
