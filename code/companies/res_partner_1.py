@@ -76,9 +76,12 @@ where p.co_prov in (
         select distinct co_cli from docum_cp
         where tipo_doc = 'FACT' and fec_emis >= '2017-01-01'
         union
+        select distinct co_cli from clientes where campo8='openerp'
+        union
         select distinct co_cli from pagos
         where fec_cob >= '2017-01-01'
         ) as f)
+    And campo7 != 'NO'
 order by 3
         ''')
     p2o.set_search_fields(['vat'])

@@ -28,7 +28,7 @@ for database in dbdata['databases']:
 
     print 'Cargando datos de compañias: %s...' % database
 
-    if False:  # Added to split process for deguging
+    if True:  # Added to split process for deguging
         companies.load_bank_account_journal(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_production_lot_extra(lnk_dbcom)
@@ -66,12 +66,12 @@ for database in dbdata['databases']:
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
-        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)  # Backup!
-
+        companies.postprocess_acc_voucher_purchase(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_purchase_manual(lnk_dbcom,
                                                           lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
+    else:
         companies.load_res_partner_profit_payment_orders(lnk_dbcom,
                                                          lnk_dbprofit)
         companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)
@@ -84,9 +84,8 @@ for database in dbdata['databases']:
         companies.load_tcv_bank_config(lnk_dbcom)
         companies.load_tcv_bank_deposit(lnk_dbcom, lnk_dbprofit)
         companies.load_bank_moves(lnk_dbcom, lnk_dbprofit)
-    else:
         print 'Else...'
-        ##  companies.update__secuences(lnk_dbcom, lnk_dbprofit)
+        #  companies.update__secuences(lnk_dbcom, lnk_dbprofit)
 
     if lnk_dbprofit:
         lnk_dbprofit.close()

@@ -23,10 +23,14 @@ __special_field_cases__ = {
         },
     'monagas': {
         u'partner_id14012670': u'140126701',
+        u'partner_id10353158': u'103531582',
         },
     'valencia': {
         u'partner_id3135549360': u'313554936',
         u'partner_id001': u'9683960',
+        },
+    'barquisimeto': {
+        u'partner_id298744944': u'401448380',
         },
     'falcon': {
         u'partner_id12496509': u'124965094',

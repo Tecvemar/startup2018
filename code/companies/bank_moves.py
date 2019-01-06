@@ -15,15 +15,26 @@ select 'MB '+lTRIM(STR(mov_num))+ ' - '+tipo_op+' '+doc_num as ref,
     1 as 'line_id.company_id',
     case cta_egre
     -- Ajustar en cada acropolis segun corresponda
-        when '01501' then '5212025030'
-        when '11404' then '1110799999'
-        when '21501' then '1110599999'
-        when '51201' then '7220100100'
-        when '521001' then '7220100150'
-        when '61405' then '7220100260'
-        when '71301' then '7310200005'
-        when '91130' then '7230300002'
-        when 'NO' then '7230700025'
+    -- ver query: load_bank_moves.sql
+--  Falcon
+--        when '01501' then '5212025030'
+--        when '11404' then '1110799999'
+--        when '21501' then '1110599999'
+--        when '51201' then '7220100100'
+--        when '521001' then '7220100150'
+--        when '61405' then '7220100260'
+--        when '71301' then '7310200005'
+--        when '91130' then '7230300002'
+--        when 'NO' then '7230700025'
+--  Monagas
+        when '10001' then '7230700025' -- C X C. ARBELO JESUS
+        when '11001' then '7230700025' -- C X C. BARRIOS NAVAS
+        when '11002' then '7230700025' -- CAJAS VARIAS Y TRANSFERENCIAS
+        when '11320' then '7230700025' -- CUENTAS POR COBRAR CLIENTES
+        when '22103' then '7230700025' -- CUENTAS DE AFILIACION
+        when '71301' then '7310200005' -- IMPUESTOS A LAS TRANSACCIONES FINANCIERAS
+        when '91110' then '7230700025' -- EGRESOS VARIOS
+        when '91130' then '7230300002' -- COMISIONES BANCARIAS
         end as 'line_id.account_id',
     monto_d+idb as 'line_id.debit',
     monto_h as 'line_id.credit',
