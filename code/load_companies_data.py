@@ -49,6 +49,7 @@ for database in dbdata['databases']:
         companies.load_purchase_order_line_profit_detail(lnk_dbcom,
                                                          lnk_dbprofit)
         companies.load_purchase_order_no_details(lnk_dbcom, lnk_dbprofit)
+        companies.load_extra_purchase_detail(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_purchase_order(lnk_dbcom, lnk_dbprofit)
         companies.load_stock_inventory_line(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_stock_inventory(lnk_dbcom, lnk_dbprofit)
@@ -63,6 +64,7 @@ for database in dbdata['databases']:
         # Stock.moves ---------------------------------------------------------
         companies.postprocess_stock_move(lnk_dbcom)
         # Payments ------------------------------------------------------------
+    else:
         companies.load_account_wh_iva(lnk_dbcom, lnk_dbprofit)
         companies.load_islr_wh_doc(lnk_dbcom, lnk_dbprofit)
         companies.load_account_voucher_purchase(lnk_dbcom, lnk_dbprofit)
@@ -71,7 +73,6 @@ for database in dbdata['databases']:
                                                           lnk_dbprofit)
         companies.load_account_voucher_sale(lnk_dbcom, lnk_dbprofit)
         companies.postprocess_acc_voucher_sale(lnk_dbcom, lnk_dbprofit)
-    else:
         companies.load_res_partner_profit_payment_orders(lnk_dbcom,
                                                          lnk_dbprofit)
         companies.load_account_voucher_payment_ordes(lnk_dbcom, lnk_dbprofit)

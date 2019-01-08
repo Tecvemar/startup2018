@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import os
+from csv2open import csv_2_openerp
 from profit2open import profit_2_openerp
 
 
@@ -168,3 +170,38 @@ order by r.fact_num, r.reng_num
     p2o.set_m2m_fields([('taxes_id', 'link', 'account.tax', ['name'])])
     #~ p2o.process_csv()
     p2o.test_data_file(False)
+
+
+def load_extra_purchase_detail(dbcomp, dbprofit):
+    '''
+    Profit's adjustements migration
+    Need a csv list manually created with "extra purchase detail"
+    '''
+    work_dir = '../data/companies/%s/' % dbcomp.database
+    work_csv = work_dir + 'extra_purchase_detail.csv'
+    if not os.path.isfile(work_csv):
+        return
+    c2o = csv_2_openerp(work_csv, 'purchase.order.line', dbcomp)
+    c2o.set_search_fields([])
+    c2o.set_relational_fields([
+        ('order_id', 'purchase.order', ['origin']),
+        ('product_id', 'product.product', ['default_code']),
+        ('concept_id', 'islr.wh.concept', ['name']),
+        ('product_uom', 'product.uom', ['name']),
+        ])
+    c2o.aux02_field = 'aux02'
+    c2o.set_aux02_fields(['pieces'])
+    c2o.set_m2m_fields([('taxes_id', 'link', 'account.tax', ['name'])])
+    procesed = []
+    c2o.load_data()
+    for line in c2o.data:
+        order_id = line.get('order_id')
+        if order_id not in procesed:
+            #  First time, delete any existing sale order line
+            procesed.append(order_id)
+            line_ids = dbcomp.execute(
+                'purchase.order.line', 'search', [('order_id', '=', order_id)])
+            dbcomp.execute(
+                'purchase.order.line', 'unlink', line_ids)
+        c2o.write_data_row(line)
+    c2o.done
