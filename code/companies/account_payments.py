@@ -53,6 +53,8 @@ order by pg.fec_cob, pg.cob_num
             'account.journal', 'read', vou['journal_id'], [])
         if not vou['reference']:
             vou['reference'] = '%s' % vou['cob_num']
+        if not journal['default_credit_account_id']:
+            print vou['journal_id'], vou
         vou['account_id'] = journal['default_credit_account_id'][0]
         vou['id'] = p2o.write_data_row(vou) or 0
     p2o.done

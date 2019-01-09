@@ -31,6 +31,9 @@ __special_field_cases__ = {
         },
     'barquisimeto': {
         u'partner_id298744944': u'401448380',
+        u'partner_id7326305': u'073263057',
+        u'partner_id16796112': u'V167961122',
+        u'partner_id7464703': u'074647037',
         },
     'falcon': {
         u'partner_id12496509': u'124965094',
