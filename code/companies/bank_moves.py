@@ -17,24 +17,48 @@ select 'MB '+lTRIM(STR(mov_num))+ ' - '+tipo_op+' '+doc_num as ref,
     -- Ajustar en cada acropolis segun corresponda
     -- ver query: load_bank_moves.sql
 --  Falcon
---        when '01501' then '5212025030'
---        when '11404' then '1110799999'
---        when '21501' then '1110599999'
---        when '51201' then '7220100100'
---        when '521001' then '7220100150'
---        when '61405' then '7220100260'
---        when '71301' then '7310200005'
---        when '91130' then '7230300002'
---        when 'NO' then '7230700025'
+--        when '01501' then '5212025030' -- INVENTARIO DE MATERIA PRIMA
+--        when '11404' then '1110799999' -- PRESTAMOS A EMPLEADOS
+--        when '21501' then '1110599999' -- DIRECTORES Y ACCIONISTAS POR PAGAR
+--        when '51201' then '7220100100' -- REMUNERACIONES DIRECTOS
+--        when '521001' then '7220100150' -- BONIFICACIONES AL PERSONAL
+--        when '61405' then '7220100260' -- I.N.C.E. POR ENTERAR
+--        when '71301' then '7310200005' -- IMPUESTOS A LAS TRANSACCIONES FINANCIERAS
+--        when '91130' then '7230300002' -- COMISIONES BANCARIAS
+--        when 'NO' then '7230700025' -- NO CONFIGURADO
 --  Monagas
-        when '10001' then '7230700025' -- C X C. ARBELO JESUS
-        when '11001' then '7230700025' -- C X C. BARRIOS NAVAS
+--        when '10001' then '7230700025' -- C X C. ARBELO JESUS
+--        when '11001' then '7230700025' -- C X C. BARRIOS NAVAS
+--        when '11002' then '7230700025' -- CAJAS VARIAS Y TRANSFERENCIAS
+--        when '11320' then '7230700025' -- CUENTAS POR COBRAR CLIENTES
+--        when '22103' then '7230700025' -- CUENTAS DE AFILIACION
+--        when '71301' then '7310200005' -- IMPUESTOS A LAS TRANSACCIONES FINANCIERAS
+--        when '91110' then '7230700025' -- EGRESOS VARIOS
+--        when '91130' then '7230300002' -- COMISIONES BANCARIAS
+--        end as 'line_id.account_id',
+--  Barquisimeto
+        when '01501' then '7230700025' -- INVENTARIO DE MATERIA PRIMA
         when '11002' then '7230700025' -- CAJAS VARIAS Y TRANSFERENCIAS
         when '11320' then '7230700025' -- CUENTAS POR COBRAR CLIENTES
-        when '22103' then '7230700025' -- CUENTAS DE AFILIACION
+        when '11620' then '7230700025' -- ANTICIPOS A PROVEEDORES
+        when '13402' then '7230700025' -- PATENTE
+        when '21201' then '7230700025' -- CUENTAS POR PAGAR COMERCIALES
+        when '21409' then '7230700025' -- OTRAS CUENTAS POR PAGAR
+        when '51312' then '7230700025' -- ALQUILERES
+        when '51606' then '7230700025' -- RETENCIONES FIEL CUPLIMIENTO
+        when '61302' then '7230300002' -- COMISIONES Y GASTOS BANCARIOS
+        when '61401' then '7230700025' -- ISLR POR ENTERAR
+        when '61403' then '7230700025' -- L.P.H. POR ENTERAR
+        when '61405' then '7220100260' -- I.N.C.E. POR ENTERAR
+        when '61412' then '7230700025' -- IVA RETENIDO POR ENTERAR
+        when '621071' then '7230700025' -- SEGURIDAD INDUSTRIAL
+        when '661408' then '7230700025' -- DECLARACION DE RENTAS DEFINITIVAS
         when '71301' then '7310200005' -- IMPUESTOS A LAS TRANSACCIONES FINANCIERAS
-        when '91110' then '7230700025' -- EGRESOS VARIOS
+        when '71302' then '7230300002' -- COMISIONES Y GASTOS BANCARIOS
+        when '721074' then '7220100100' -- DIETAS DIRECTORES Y ACCIONISTAS
+        when '81140' then '7230700025' -- REINTEGROS
         when '91130' then '7230300002' -- COMISIONES BANCARIAS
+        when 'ISLRXP' then '7230700025' -- ISLR POR PAGAR
         end as 'line_id.account_id',
     monto_d+idb as 'line_id.debit',
     monto_h as 'line_id.credit',
