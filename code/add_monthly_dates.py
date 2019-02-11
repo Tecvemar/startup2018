@@ -6,7 +6,7 @@ from definitions import dbdata
 dbopen = openerp_link(
     'localhost',
     8069,
-    'prueba2',
+    'reconversionbarcelona',
     dbdata['openerp_login'],
     dbdata['openerp_password'],
     )
